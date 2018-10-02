@@ -96,7 +96,7 @@ class DashboardsPage extends PureComponent<Props, State> {
             </Page.Header.Left>
             <Page.Header.Right>
               <SearchWidget
-                placeholderText="Filter dashboards by name..."
+                placeholderText="Filter dashboards by name or tag..."
                 onSearch={this.filterDashboards}
               />
               <Button

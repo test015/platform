@@ -1,0 +1,98 @@
+/*
+  Dashboard Card Styles
+  ------------------------------------------------------------------------------
+*/
+
+.dashboard-card {
+  padding: $ix-marg-a;
+  width: 50%;
+  min-width: 400px;
+  flex-grow: 1;
+  flex-shrink: 1;
+  box-sizing: border-box;
+  
+  .dashboard-card--container {
+    display: inline-flex;
+    padding: 10px;
+    background-color: $g3-castle;
+    border-radius: $radius;
+  }
+}
+
+.dashboard-card--preview {
+  width: 200px;
+  height: 150px;
+  margin-right: 10px;
+  flex-shrink: 0;
+  background-color: $g2-kevlar;
+  border-radius: $radius;
+}
+
+.dashboard-card--content {
+  width: 100%;
+  height: 150px;
+  margin: 0 10px;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.dashboard-card--header {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  .dashboard-card--owner {
+    background-color: rgb(random(255), random(255), random(255));
+    display: inline-block;
+    margin-right: 10px; 
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+  }
+}
+
+.dashboard-card--description {
+  flex-grow: 1;
+}
+
+.tag-flag {
+  background-color: aqua;
+  font-size: $ix-text-tiny;
+  color: $g0-obsidian;
+  font-weight: 600;
+  margin-right: 2px;
+  padding: 0 $ix-marg-a;
+  border-radius: $ix-radius-sm;
+}
+
+.dashboard-card--footer {
+  margin-top: 20px;
+  font-size: $ix-text-tiny;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  color: $g7-graphite;
+
+  .dashboard-card--status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-weight: 600;
+
+    .dashboard-card--status-indicator {
+      background-color: $c-rainforest;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      display: inline-block;
+      margin-left: 5px; 
+    }
+  }
+
+  .dashboard-card--modified {
+    font-weight: 600;
+    font-style: italic;
+    margin-left: 10px; 
+  }
+}
