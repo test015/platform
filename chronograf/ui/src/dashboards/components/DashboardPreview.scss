@@ -1,0 +1,34 @@
+/*
+  Dashboard Preview Styles
+  ------------------------------------------------------------------------------
+*/
+
+.dashboard-preview {
+  width: 178px;
+  height: 150px;
+  margin-right: 10px;
+  flex-shrink: 0;
+  background-color: $g2-kevlar;
+  border-radius: $radius;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  .dashboard-preview--layout {
+    display: grid;
+    grid-gap: 2px;
+    grid-template-columns: repeat(12, 12px);
+    grid-template-rows: repeat(10, 12px);
+
+    .dashboard-preview--cell {
+      background-color: $g5-pepper;
+      border-radius: 2px;
+    }
+  }
+
+  .dashboard-preview--no-cells {
+    align-self: center;
+    color: $g5-pepper;
+    font-weight: 600;
+  }
+}

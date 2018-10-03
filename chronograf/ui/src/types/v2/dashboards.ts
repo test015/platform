@@ -227,6 +227,20 @@ export interface Dashboard {
   default: boolean
   links: DashboardLinks
   meta?: {[x: string]: any}
+  ownerID?: string
+  modified?: DashboardModified
+  connected: boolean
+  description: string
+  tags: Tag[]
+}
+
+export interface Tag {
+  color: string
+  name: string
+}
+export interface DashboardModified {
+  date: number
+  userID: string
 }
 
 export interface DashboardFile {

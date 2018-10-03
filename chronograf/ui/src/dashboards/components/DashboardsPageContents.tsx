@@ -15,6 +15,8 @@ import {ErrorHandling} from 'src/shared/decorators/errors'
 import {Dashboard} from 'src/types/v2'
 import {Notification} from 'src/types/notifications'
 
+import {dash} from 'src/dashboards/components/dash'
+
 interface Props {
   dashboards: Dashboard[]
   defaultDashboardLink: string
@@ -63,7 +65,7 @@ class DashboardsPageContents extends Component<Props> {
     if (dashboards.length < 1) {
       return (
         <>
-          <h4>Looks like you don't have any dashboards</h4>
+          <h4>Looks like you don't have any dashboards...</h4>
           <br />
           <Button
             text="Create a Dashboard"
@@ -75,7 +77,7 @@ class DashboardsPageContents extends Component<Props> {
       )
     }
 
-    return <DashboardsDeck dashboards={this.filteredDashboards} />
+    return <DashboardsDeck dashboards={[dash, ...this.filteredDashboards]} />
   }
 
   private get filteredDashboards(): Dashboard[] {
