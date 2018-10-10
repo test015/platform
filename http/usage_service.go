@@ -27,20 +27,36 @@ func NewUsageHandler() *UsageHandler {
 	return h
 }
 
+type ValueResponse struct {
+	Value int `json:"value"`
+}
+
+type UsageResponse struct {
+	Writes  ValueResponse `json:"usage_write_request_bytes"`
+	Reads   ValueResponse `json:"usage_query_request_bytes"`
+	Storage string        `json:"storage"`
+}
+
 // handleGetUsage is the HTTP handler for the GET /api/v2/usage route.
 func (h *UsageHandler) handleGetUsage(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	req, err := decodeGetUsageRequest(ctx, r)
+	_, err := decodeGetUsageRequest(ctx, r)
 	if err != nil {
 		EncodeError(ctx, err, w)
 		return
 	}
 
-	b, err := h.UsageService.GetUsage(ctx, req.filter)
-	if err != nil {
-		EncodeError(ctx, err, w)
-		return
+	// b, err := h.UsageService.GetUsage(ctx, req.filter)
+	// if err != nil {
+	// 	EncodeError(ctx, err, w)
+	// 	return
+	// }
+
+	b := UsageResponse{
+		ValueResponse{0},
+		ValueResponse{0},
+		"0",
 	}
 
 	if err := encodeResponse(ctx, w, http.StatusOK, b); err != nil {

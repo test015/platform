@@ -28,6 +28,7 @@ type APIHandler struct {
 	WriteHandler         *WriteHandler
 	SetupHandler         *SetupHandler
 	SessionHandler       *SessionHandler
+	UsageHandler         *UsageHandler
 }
 
 // APIBackend is all services and associated parameters required to construct
@@ -42,6 +43,7 @@ type APIBackend struct {
 	AuthorizationService       platform.AuthorizationService
 	BucketService              platform.BucketService
 	SessionService             platform.SessionService
+	UsageService               platform.UsageService
 	UserService                platform.UserService
 	OrganizationService        platform.OrganizationService
 	UserResourceMappingService platform.UserResourceMappingService
@@ -63,6 +65,9 @@ func NewAPIHandler(b *APIBackend) *APIHandler {
 	h.SessionHandler = NewSessionHandler()
 	h.SessionHandler.BasicAuthService = b.BasicAuthService
 	h.SessionHandler.SessionService = b.SessionService
+
+	h.UsageHandler = NewUsageHandler()
+	h.UsageHandler.UsageService = b.UsageService
 
 	h.BucketHandler = NewBucketHandler()
 	h.BucketHandler.BucketService = b.BucketService
@@ -172,6 +177,11 @@ func (h *APIHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	if r.URL.Path == "/api/v2/signin" || r.URL.Path == "/api/v2/signout" {
 		h.SessionHandler.ServeHTTP(w, r)
+		return
+	}
+
+	if strings.HasPrefix(r.URL.Path, "/api/v2/usage") {
+		h.UsageHandler.ServeHTTP(w, r)
 		return
 	}
 
