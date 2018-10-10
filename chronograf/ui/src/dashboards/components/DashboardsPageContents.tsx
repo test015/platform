@@ -15,7 +15,7 @@ import {ErrorHandling} from 'src/shared/decorators/errors'
 import {Dashboard} from 'src/types/v2'
 import {Notification} from 'src/types/notifications'
 
-import {dash} from 'src/dashboards/components/dash'
+import {mockdash} from './mockdash'
 
 interface Props {
   dashboards: Dashboard[]
@@ -77,7 +77,9 @@ class DashboardsPageContents extends Component<Props> {
       )
     }
 
-    return <DashboardsDeck dashboards={[dash, ...this.filteredDashboards]} />
+    return (
+      <DashboardsDeck dashboards={[mockdash, ...this.filteredDashboards]} />
+    )
   }
 
   private get filteredDashboards(): Dashboard[] {

@@ -48,7 +48,7 @@
 .dashboard-card--description {
   flex-grow: 1;
   flex-shrink: 1;
-  overflow: scroll;
+  overflow: hidden;
 
   p {
     margin: 0;
