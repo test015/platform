@@ -7,6 +7,7 @@ import classnames from 'classnames'
 // Components
 import DashboardPreview from 'src/dashboards/components/DashboardPreview'
 import Avatar from 'src/shared/components/avatar/Avatar'
+import DashboardCardMenu from 'src/dashboards/components/DashboardCardMenu'
 
 // MOCK DATA
 import {LeroyJenkins} from 'src/user/mockUserData'
@@ -16,6 +17,9 @@ import {Dashboard} from 'src/types/v2'
 
 interface Props {
   dashboard: Dashboard
+  onDeleteDashboard: () => void
+  onCloneDashboard: () => void
+  onExportDashboard: () => void
 }
 class DashboardsCard extends PureComponent<Props & WithRouterProps> {
   public render() {
@@ -30,6 +34,9 @@ class DashboardsCard extends PureComponent<Props & WithRouterProps> {
         description,
         tags,
       },
+      onDeleteDashboard,
+      onCloneDashboard,
+      onExportDashboard,
     } = this.props
 
     return (
@@ -44,6 +51,12 @@ class DashboardsCard extends PureComponent<Props & WithRouterProps> {
                 customClass="dashboard-card--owner"
               />
               <Link to={`/dashboards/${id}?${this.sourceParam}`}>{name}</Link>
+              <DashboardCardMenu
+                dashboard={this.props.dashboard}
+                onDelete={onDeleteDashboard}
+                onClone={onCloneDashboard}
+                onExport={onExportDashboard}
+              />
             </div>
             <div className="dashboard-card--description">
               <p>{description}</p>

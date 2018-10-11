@@ -5,6 +5,9 @@ import {Dashboard} from 'src/types/v2'
 
 interface Props {
   dashboards: Dashboard[]
+  onDeleteDashboard: (dashboard: Dashboard) => () => void
+  onCloneDashboard: (dashboard: Dashboard) => () => void
+  onExportDashboard: (dashboard: Dashboard) => () => void
 }
 
 class DashboardsDeck extends PureComponent<Props> {
@@ -13,11 +16,22 @@ class DashboardsDeck extends PureComponent<Props> {
   }
 
   private get dashboardCards(): JSX.Element | JSX.Element[] {
-    const {dashboards} = this.props
+    const {
+      dashboards,
+      onDeleteDashboard,
+      onCloneDashboard,
+      onExportDashboard,
+    } = this.props
 
     if (dashboards) {
       return dashboards.map(d => (
-        <DashboardsCard key={`${d.id}`} dashboard={d} />
+        <DashboardsCard
+          key={`${d.id}`}
+          dashboard={d}
+          onDeleteDashboard={onDeleteDashboard(d)}
+          onCloneDashboard={onCloneDashboard(d)}
+          onExportDashboard={onExportDashboard(d)}
+        />
       ))
     }
 

@@ -23,9 +23,7 @@ interface Props {
   onSetDefaultDashboard: (dashboardLink: string) => void
   onDeleteDashboard: (dashboard: Dashboard) => () => void
   onCreateDashboard: () => void
-  onCloneDashboard: (
-    dashboard: Dashboard
-  ) => (event: MouseEvent<HTMLButtonElement>) => void
+  onCloneDashboard: (dashboard: Dashboard) => () => void
   onExportDashboard: (dashboard: Dashboard) => () => void
   notify: (message: Notification) => void
   searchTerm: string
@@ -34,33 +32,17 @@ interface Props {
 @ErrorHandling
 class DashboardsPageContents extends Component<Props> {
   public render() {
-    // const {
-    //   onDeleteDashboard,
-    //   onCloneDashboard,
-    //   onExportDashboard,
-    //   defaultDashboardLink,
-    //   onSetDefaultDashboard,
-    // } = this.props
-
-    return (
-      <div className="col-sm-12 col-md-12">
-        {this.dashboardsList}
-        {/* <DashboardsTable
-          dashboards={this.filteredDashboards}
-          onDeleteDashboard={onDeleteDashboard}
-          onCloneDashboard={onCloneDashboard}
-          onExportDashboard={onExportDashboard}
-          defaultDashboardLink={defaultDashboardLink}
-          onSetDefaultDashboard={onSetDefaultDashboard}
-          onCreateDashboard={onCreateDashboard}
-          searchTerm={searchTerm}
-        /> */}
-      </div>
-    )
+    return <div className="col-sm-12 col-md-12">{this.dashboardsList}</div>
   }
 
   private get dashboardsList(): JSX.Element {
-    const {dashboards, onCreateDashboard} = this.props
+    const {
+      dashboards,
+      onCreateDashboard,
+      onDeleteDashboard,
+      onCloneDashboard,
+      onExportDashboard,
+    } = this.props
 
     if (dashboards.length < 1) {
       return (
@@ -78,7 +60,13 @@ class DashboardsPageContents extends Component<Props> {
     }
 
     return (
-      <DashboardsDeck dashboards={[mockdash, ...this.filteredDashboards]} />
+      <DashboardsDeck
+        // dashboards={this.filteredDashboards}
+        dashboards={[mockdash, ...this.filteredDashboards]}
+        onDeleteDashboard={onDeleteDashboard}
+        onCloneDashboard={onCloneDashboard}
+        onExportDashboard={onExportDashboard}
+      />
     )
   }
 

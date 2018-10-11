@@ -6,7 +6,7 @@
 .dashboard-card {
   padding: $ix-marg-a;
   width: 50%;
-  min-width: 400px;
+  min-width: 500px;
   flex-grow: 1;
   flex-shrink: 1;
   box-sizing: border-box;
@@ -37,6 +37,7 @@
   align-items: center;
   justify-content: flex-start;
   flex-shrink: 0;
+  height: 24px;
   margin-bottom: $ix-marg-b;
 
   .dashboard-card--owner {
@@ -59,7 +60,7 @@
   margin-top: $ix-marg-c;
 
   .tag-flag {
-    background-color: aqua;
+    background-color: $g7-graphite;
     font-size: $ix-text-tiny;
     color: $g0-obsidian;
     font-weight: 600;
