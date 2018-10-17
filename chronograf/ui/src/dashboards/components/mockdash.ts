@@ -8,6 +8,7 @@ export const mockdash = {
       y: 0,
       w: 4,
       h: 4,
+      viewType: 'gauge',
       viewID: 'z2b87e4df48c3001',
       links: {
         self: '/api/v2/dashboards/z2b48be0390c3000/cells/z2b87e4df48c3000',
@@ -20,6 +21,7 @@ export const mockdash = {
       y: 0,
       w: 7,
       h: 4,
+      viewType: 'bar',
       viewID: 'z2b97a0a0d0c3001',
       links: {
         self: '/api/v2/dashboards/z2b48be0390c3000/cells/z2b97a0a0d0c3000',
@@ -32,6 +34,7 @@ export const mockdash = {
       y: 4,
       w: 2,
       h: 4,
+      viewType: 'line',
       viewID: 'z2b97a0ff6cc3001',
       links: {
         self: '/api/v2/dashboards/z2b48be0390c3000/cells/z2b97a0ff6cc3000',
@@ -44,6 +47,7 @@ export const mockdash = {
       y: 4,
       w: 4,
       h: 4,
+      viewType: 'step-plot',
       viewID: 'z2b97a14a78c3001',
       links: {
         self: '/api/v2/dashboards/z2b48be0390c3000/cells/z2b97a14a78c3000',
@@ -56,6 +60,7 @@ export const mockdash = {
       y: 4,
       w: 6,
       h: 4,
+      viewType: 'single-stat',
       viewID: 'z2b97a172c0c3001',
       links: {
         self: '/api/v2/dashboards/z2b48be0390c3000/cells/z2b97a172c0c3000',
@@ -73,9 +78,9 @@ export const mockdash = {
   description:
     "Raclette bushwick 90's kombucha, gentrify austin kogi beard crucifix irony freegan dreamcatcher. Cardigan meditation post-ironic, keffiyeh disrupt taxidermy raw denim distillery put a bird on it lyft. Skateboard leggings artisan, pug viral deep v readymade dreamcatcher.",
   tags: [
-    {color: '#0f0e15', name: 'pinned'},
-    {color: '#BF3D5E', name: 'first'},
-    {color: '#4591ED', name: 'second'},
-    {color: '#4ED8A0', name: 'third'},
+    {color: '#FFD255', name: 'pinned'},
+    {color: '#00C9FF', name: 'taglike'},
+    {color: '#9394FF', name: 'taggish'},
+    {color: '#7CE490', name: 'taggy'},
   ],
 }

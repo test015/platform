@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41">
+  <defs>
+    <style>
+      .a {
+        fill: #202028;
+      }
+
+      .b {
+        fill: none;
+        stroke: #202028;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    </style>
+  </defs>
+  <title>cell_type_bar</title>
+  <g>
+    <rect class="a" x="4.94" y="27.17" width="8.89" height="13.33"/>
+    <rect class="a" x="16.06" y="9.39" width="8.89" height="31.11"/>
+    <rect class="a" x="27.17" y="18.28" width="8.89" height="22.22"/>
+    <polyline class="b" points="0.5 0.5 0.5 40.5 40.5 40.5"/>
+  </g>
+</svg>

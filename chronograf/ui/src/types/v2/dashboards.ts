@@ -259,6 +259,7 @@ export interface Cell {
   y: number
   w: number
   h: number
+  viewType?: string
   links: {
     self: string
     view: string

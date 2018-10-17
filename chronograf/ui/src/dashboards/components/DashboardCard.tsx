@@ -24,16 +24,7 @@ interface Props {
 class DashboardsCard extends PureComponent<Props & WithRouterProps> {
   public render() {
     const {
-      dashboard: {
-        id,
-        name,
-        cells,
-        ownerID,
-        modified,
-        connected,
-        description,
-        tags,
-      },
+      dashboard: {id, name, cells, modified, description, tags},
       onDeleteDashboard,
       onCloneDashboard,
       onExportDashboard,
@@ -64,7 +55,11 @@ class DashboardsCard extends PureComponent<Props & WithRouterProps> {
             <div className="dashboard-card--tags">
               {tags &&
                 tags.map(tag => (
-                  <span className="tag-flag" key={`${id}_${tag.name}`}>
+                  <span
+                    className="tag-flag"
+                    style={{backgroundColor: tag.color}}
+                    key={`${id}_${tag.name}`}
+                  >
                     {tag.name}
                   </span>
                 ))}

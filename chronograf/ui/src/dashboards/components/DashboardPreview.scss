@@ -23,6 +23,29 @@
     .dashboard-preview--cell {
       background-color: $g5-pepper;
       border-radius: 2px;
+      padding: 5px;
+      position: relative;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+
+      .cell-type {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-position: center center;
+      }
+
+      .cell-type.gauge {
+        background-image: url('../../assets/images/cell_type_gauge.svg');
+      }
+
+      .cell-type.single-stat {
+        width: 80%;
+        height: 80%;
+        background-image: url('../../assets/images/cell_type_single_stat.svg');
+      }
     }
   }
 

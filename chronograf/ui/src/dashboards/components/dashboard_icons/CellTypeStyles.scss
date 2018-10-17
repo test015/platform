@@ -1,0 +1,16 @@
+.cell-type--svg {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.bar {
+  fill: #202028;
+}
+
+.chart-line {
+  fill: none;
+  stroke: #202028;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
