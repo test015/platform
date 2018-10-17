@@ -99,25 +99,28 @@ func decodeGetTasksRequest(ctx context.Context, r *http.Request) (*getTasksReque
 	qp := r.URL.Query()
 	req := &getTasksRequest{}
 
-	if id := qp.Get("after"); id != "" {
-		req.filter.After = &platform.ID{}
-		if err := req.filter.After.DecodeFromString(id); err != nil {
+	if after := qp.Get("after"); after != "" {
+		id, err := platform.IDFromString(after)
+		if err != nil {
 			return nil, err
 		}
+		req.filter.After = id
 	}
 
-	if id := qp.Get("organization"); id != "" {
-		req.filter.Organization = &platform.ID{}
-		if err := req.filter.Organization.DecodeFromString(id); err != nil {
+	if orgID := qp.Get("organization"); orgID != "" {
+		id, err := platform.IDFromString(orgID)
+		if err != nil {
 			return nil, err
 		}
+		req.filter.Organization = id
 	}
 
-	if id := qp.Get("user"); id != "" {
-		req.filter.User = &platform.ID{}
-		if err := req.filter.User.DecodeFromString(id); err != nil {
+	if userID := qp.Get("user"); userID != "" {
+		id, err := platform.IDFromString(userID)
+		if err != nil {
 			return nil, err
 		}
+		req.filter.User = id
 	}
 
 	return req, nil
@@ -294,7 +297,20 @@ func decodeDeleteTaskRequest(ctx context.Context, r *http.Request) (*deleteTaskR
 func (h *TaskHandler) handleGetLogs(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	req, err := decodeGetLogsRequest(ctx, r)
+	tok, err := GetToken(r)
+	if err != nil {
+		EncodeError(ctx, err, w)
+		return
+	}
+
+	auth, err := h.AuthorizationService.FindAuthorizationByToken(ctx, tok)
+	if err != nil {
+		EncodeError(ctx, kerrors.Wrap(err, "invalid token", kerrors.InvalidData), w)
+		return
+	}
+	ctx = pcontext.SetAuthorization(ctx, auth)
+
+	req, err := decodeGetLogsRequest(ctx, r, h.OrganizationService)
 	if err != nil {
 		EncodeError(ctx, err, w)
 		return
@@ -316,7 +332,7 @@ type getLogsRequest struct {
 	filter platform.LogFilter
 }
 
-func decodeGetLogsRequest(ctx context.Context, r *http.Request) (*getLogsRequest, error) {
+func decodeGetLogsRequest(ctx context.Context, r *http.Request, orgs platform.OrganizationService) (*getLogsRequest, error) {
 	params := httprouter.ParamsFromContext(ctx)
 	id := params.ByName("tid")
 	if id == "" {
@@ -324,16 +340,29 @@ func decodeGetLogsRequest(ctx context.Context, r *http.Request) (*getLogsRequest
 	}
 
 	req := &getLogsRequest{}
-	req.filter.Task = &platform.ID{}
-	if err := req.filter.Task.DecodeFromString(id); err != nil {
+	taskID, err := platform.IDFromString(id)
+	if err != nil {
 		return nil, err
 	}
+	req.filter.Task = taskID
 
-	if id := params.ByName("rid"); id != "" {
-		req.filter.Run = &platform.ID{}
-		if err := req.filter.Run.DecodeFromString(id); err != nil {
+	qp := r.URL.Query()
+
+	if orgName := qp.Get("org"); orgName != "" {
+		o, err := orgs.FindOrganization(ctx, platform.OrganizationFilter{Name: &orgName})
+		if err != nil {
 			return nil, err
 		}
+
+		req.filter.Org = &o.ID
+	}
+
+	if runID := params.ByName("rid"); id != "" {
+		id, err := platform.IDFromString(runID)
+		if err != nil {
+			return nil, err
+		}
+		req.filter.Run = id
 	}
 
 	return req, nil
@@ -385,10 +414,11 @@ func decodeGetRunsRequest(ctx context.Context, r *http.Request, orgs platform.Or
 	}
 
 	req := &getRunsRequest{}
-	req.filter.Task = &platform.ID{}
-	if err := req.filter.Task.DecodeFromString(id); err != nil {
+	taskID, err := platform.IDFromString(id)
+	if err != nil {
 		return nil, err
 	}
+	req.filter.Task = taskID
 
 	qp := r.URL.Query()
 
@@ -402,10 +432,11 @@ func decodeGetRunsRequest(ctx context.Context, r *http.Request, orgs platform.Or
 	}
 
 	if id := qp.Get("after"); id != "" {
-		req.filter.After = &platform.ID{}
-		if err := req.filter.After.DecodeFromString(id); err != nil {
+		afterID, err := platform.IDFromString(id)
+		if err != nil {
 			return nil, err
 		}
+		req.filter.After = afterID
 	}
 
 	if limit := qp.Get("limit"); limit != "" {

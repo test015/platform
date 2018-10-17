@@ -15,13 +15,13 @@ import (
 
 	"github.com/influxdata/flux/control"
 	"github.com/influxdata/flux/execute"
-	influxlogger "github.com/influxdata/influxdb/logger"
 	"github.com/influxdata/platform"
 	"github.com/influxdata/platform/bolt"
 	"github.com/influxdata/platform/chronograf/server"
 	"github.com/influxdata/platform/gather"
 	"github.com/influxdata/platform/http"
 	"github.com/influxdata/platform/kit/prom"
+	influxlogger "github.com/influxdata/platform/logger"
 	"github.com/influxdata/platform/nats"
 	"github.com/influxdata/platform/query"
 	_ "github.com/influxdata/platform/query/builtin"
@@ -68,8 +68,8 @@ func influxDir() (string, error) {
 	u, err := user.Current()
 	if err == nil {
 		dir = u.HomeDir
-	} else if os.Getenv("HOME") != "" {
-		dir = os.Getenv("HOME")
+	} else if home := os.Getenv("HOME"); home != "" {
+		dir = home
 	} else {
 		wd, err := os.Getwd()
 		if err != nil {
@@ -83,6 +83,12 @@ func influxDir() (string, error) {
 }
 
 func init() {
+	dir, err := influxDir()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to determine influx directory: %v", err)
+		os.Exit(1)
+	}
+
 	viper.SetEnvPrefix("INFLUX")
 
 	platformCmd.Flags().StringVar(&httpBindAddress, "http-bind-address", ":9999", "bind address for the rest http api")
@@ -97,7 +103,7 @@ func init() {
 		authorizationPath = h
 	}
 
-	platformCmd.Flags().StringVar(&boltPath, "bolt-path", "influxd.bolt", "path to boltdb database")
+	platformCmd.Flags().StringVar(&boltPath, "bolt-path", filepath.Join(dir, "influxd.bolt"), "path to boltdb database")
 	viper.BindEnv("BOLT_PATH")
 	if h := viper.GetString("BOLT_PATH"); h != "" {
 		boltPath = h
@@ -107,12 +113,6 @@ func init() {
 	viper.BindEnv("DEV_MODE")
 	if h := viper.GetBool("DEV_MODE"); h {
 		developerMode = h
-	}
-
-	dir, err := influxDir()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to determine influx directory: %v", err)
-		os.Exit(1)
 	}
 
 	// TODO(edd): do we need NATS for anything?
@@ -146,6 +146,7 @@ func platformF(cmd *cobra.Command, args []string) {
 
 	c := bolt.NewClient()
 	c.Path = boltPath
+	c.WithLogger(logger)
 
 	if err := c.Open(ctx); err != nil {
 		logger.Error("failed opening bolt", zap.Error(err))
@@ -217,8 +218,9 @@ func platformF(cmd *cobra.Command, args []string) {
 		config.EngineOptions.WALEnabled = true // Enable a disk-based WAL.
 		config.EngineOptions.Config = config.Config
 
-		engine := storage.NewEngine(enginePath, config)
+		engine := storage.NewEngine(enginePath, config, storage.WithRetentionEnforcer(bucketSvc))
 		engine.WithLogger(logger)
+		reg.MustRegister(engine.PrometheusCollectors()...)
 
 		if err := engine.Open(); err != nil {
 			logger.Error("failed to open engine", zap.Error(err))

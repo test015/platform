@@ -6,10 +6,10 @@ import (
 	"github.com/influxdata/flux"
 	"github.com/influxdata/flux/control"
 	"github.com/influxdata/flux/execute"
-	"github.com/influxdata/flux/functions/inputs"
-	fstorage "github.com/influxdata/flux/functions/inputs/storage"
 	"github.com/influxdata/platform"
 	"github.com/influxdata/platform/query"
+	"github.com/influxdata/platform/query/functions/inputs"
+	fstorage "github.com/influxdata/platform/query/functions/inputs/storage"
 	"github.com/influxdata/platform/storage"
 	"github.com/influxdata/platform/storage/reads"
 	"go.uber.org/zap"
@@ -29,14 +29,17 @@ func NewProxyQueryService(engine *storage.Engine, bucketSvc platform.BucketServi
 		Verbose:              false,
 	}
 
+	lookupSvc := query.FromBucketService(bucketSvc)
 	err := inputs.InjectFromDependencies(cc.ExecutorDependencies, fstorage.Dependencies{
 		Reader:             reads.NewReader(newStore(engine)),
-		BucketLookup:       query.FromBucketService(bucketSvc),
+		BucketLookup:       lookupSvc,
 		OrganizationLookup: query.FromOrganizationService(orgSvc),
 	})
 	if err != nil {
 		return nil, err
 	}
+
+	err = inputs.InjectBucketDependencies(cc.ExecutorDependencies, lookupSvc)
 
 	return query.ProxyQueryServiceBridge{
 		QueryService: query.QueryServiceBridge{

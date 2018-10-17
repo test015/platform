@@ -9,9 +9,9 @@ import (
 	"github.com/gogo/protobuf/types"
 	"github.com/influxdata/flux"
 	"github.com/influxdata/flux/execute"
-	fstorage "github.com/influxdata/flux/functions/inputs/storage"
 	"github.com/influxdata/flux/values"
 	"github.com/influxdata/platform/models"
+	fstorage "github.com/influxdata/platform/query/functions/inputs/storage"
 	"github.com/influxdata/platform/storage/reads/datatypes"
 	"github.com/influxdata/platform/tsdb/cursors"
 )
@@ -166,12 +166,16 @@ READ:
 			continue
 		}
 
+		// Evaluate table.Done early to avoid a data race if table.Close() is run on another goroutine
+		// and reassigns the underlying channel.
+		done := table.Done()
+
 		if err := f(table); err != nil {
 			table.Close()
 			return err
 		}
 		select {
-		case <-table.Done():
+		case <-done:
 		case <-bi.ctx.Done():
 			break READ
 		}
