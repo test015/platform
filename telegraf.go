@@ -55,8 +55,8 @@ type telegrafConfigEncode struct {
 	ID        ID        `json:"id"`
 	Name      string    `json:"name"`
 	Created   time.Time `json:"created"`
-	LastMod   time.Time `json:"last_modified"`
-	LastModBy ID        `json:"last_modified_by"`
+	LastMod   time.Time `json:"lastModified"`
+	LastModBy ID        `json:"lastModifiedBy"`
 
 	Agent TelegrafAgentConfig `json:"agent"`
 
@@ -77,8 +77,8 @@ type telegrafConfigDecode struct {
 	ID        ID        `json:"id"`
 	Name      string    `json:"name"`
 	Created   time.Time `json:"created"`
-	LastMod   time.Time `json:"last_modified"`
-	LastModBy ID        `json:"last_modified_by"`
+	LastMod   time.Time `json:"lastModified"`
+	LastModBy ID        `json:"lastModifiedBy"`
 
 	Agent TelegrafAgentConfig `json:"agent"`
 
