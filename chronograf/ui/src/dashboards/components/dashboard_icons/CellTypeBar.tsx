@@ -11,21 +11,21 @@ const CellTypeBar: SFC<Props> = ({ratio}) => {
     <svg className="cell-type--svg" viewBox={`0 0 100 ${scale(100)}`}>
       <g>
         <rect
-          className="bar"
+          className="poly"
           x="12"
           y={scale(66)}
           width="22"
           height={scale(33)}
         />
         <rect
-          className="bar"
+          className="poly"
           x="39"
           y={scale(23)}
           width="22"
           height={scale(76)}
         />
         <rect
-          className="bar"
+          className="poly"
           x="66"
           y={scale(45)}
           width="22"
@@ -35,7 +35,7 @@ const CellTypeBar: SFC<Props> = ({ratio}) => {
           vectorEffect="non-scaling-stroke"
           strokeWidth="2"
           className="chart-line"
-          points={`2 ${scale(2)} 2 ${scale(99)} 99 ${scale(99)}`}
+          points={`2 ${scale(2)} 2 ${scale(98)} 98 ${scale(98)}`}
         />
       </g>
     </svg>

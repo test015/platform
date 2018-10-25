@@ -3,6 +3,7 @@ import React, {PureComponent} from 'react'
 
 // Components
 import CellTypeBar from './dashboard_icons/CellTypeBar'
+import CellTypeStepPlot from './dashboard_icons/CellTypeStepPlot'
 
 // types
 import {Cell} from 'src/types/v2'
@@ -56,7 +57,6 @@ class DashboardPreview extends PureComponent<Props> {
       case 'bar':
       case 'line':
       case 'stacked':
-      case 'step-plot':
       case 'line-plus-single-stat':
       case 'table':
       case 'markdown':
@@ -64,6 +64,12 @@ class DashboardPreview extends PureComponent<Props> {
         return (
           <div className="cell-type">
             <CellTypeBar ratio={cell.w / cell.h} />
+          </div>
+        )
+      case 'step-plot':
+        return (
+          <div className="cell-type">
+            <CellTypeStepPlot ratio={cell.w / cell.h} />
           </div>
         )
       case 'single-stat':
@@ -74,16 +80,3 @@ class DashboardPreview extends PureComponent<Props> {
   }
 }
 export default DashboardPreview
-
-// export enum ViewType {
-//   Bar = 'bar',
-//   Line = 'line',
-//   Stacked = 'stacked',
-//   StepPlot = 'step-plot',
-//   LinePlusSingleStat = 'line-plus-single-stat',
-//   SingleStat = 'single-stat',
-//   Gauge = 'gauge',
-//   Table = 'table',
-//   Markdown = 'markdown',
-//   LogViewer = 'log-viewer',
-// }

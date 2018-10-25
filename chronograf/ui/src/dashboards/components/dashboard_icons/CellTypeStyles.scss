@@ -4,13 +4,17 @@
   position: relative;
 }
 
-.bar {
-  fill: #202028;
+.poly {
+  fill: $g2-kevlar;
+}
+
+.poly.fade {
+  opacity: 0.5;
 }
 
 .chart-line {
   fill: none;
-  stroke: #202028;
+  stroke: $g2-kevlar;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
