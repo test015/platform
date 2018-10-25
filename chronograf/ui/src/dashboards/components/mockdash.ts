@@ -77,7 +77,7 @@ export const mockdash = {
   connected: true,
   description:
     "Raclette bushwick 90's kombucha, gentrify austin kogi beard crucifix irony freegan dreamcatcher. Cardigan meditation post-ironic, keffiyeh disrupt taxidermy raw denim distillery put a bird on it lyft. Skateboard leggings artisan, pug viral deep v readymade dreamcatcher.",
-  tags: [
+  labels: [
     {color: '#FFD255', name: 'pinned'},
     {color: '#00C9FF', name: 'taglike'},
     {color: '#9394FF', name: 'taggish'},

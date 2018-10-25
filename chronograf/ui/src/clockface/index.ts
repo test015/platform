@@ -17,6 +17,7 @@ import ProgressBar from './components/wizard/ProgressBar'
 import ComponentSpacer from './components/component_spacer/ComponentSpacer'
 import EmptyState from './components/empty_state/EmptyState'
 import Spinner from './components/spinners/Spinner'
+import Label from './components/label/Label'
 
 // Import Types
 import {
@@ -64,4 +65,5 @@ export {
   WizardProgressHeader,
   ProgressBar,
   Spinner,
+  Label,
 }

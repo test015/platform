@@ -56,19 +56,8 @@
   }
 }
 
-.dashboard-card--tags {
+.dashboard-card--labels {
   margin-top: $ix-marg-c;
-
-  .tag-flag {
-    background-color: $g7-graphite;
-    font-size: $ix-text-tiny;
-    font-style: italic;
-    color: $g0-obsidian;
-    font-weight: 500;
-    margin-right: 2px;
-    padding: 2px $ix-marg-b;
-    border-radius: $ix-radius-sm;
-  }
 }
 
 .dashboard-card--footer {

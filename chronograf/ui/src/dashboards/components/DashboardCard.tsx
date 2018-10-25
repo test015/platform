@@ -8,6 +8,7 @@ import classnames from 'classnames'
 import DashboardPreview from 'src/dashboards/components/DashboardPreview'
 import Avatar from 'src/shared/components/avatar/Avatar'
 import DashboardCardMenu from 'src/dashboards/components/DashboardCardMenu'
+import {Label} from 'src/clockface'
 
 // MOCK DATA
 import {LeroyJenkins} from 'src/user/mockUserData'
@@ -24,7 +25,7 @@ interface Props {
 class DashboardsCard extends PureComponent<Props & WithRouterProps> {
   public render() {
     const {
-      dashboard: {id, name, cells, modified, description, tags},
+      dashboard: {id, name, cells, modified, description},
       onDeleteDashboard,
       onCloneDashboard,
       onExportDashboard,
@@ -52,18 +53,7 @@ class DashboardsCard extends PureComponent<Props & WithRouterProps> {
             <div className="dashboard-card--description">
               <p>{description}</p>
             </div>
-            <div className="dashboard-card--tags">
-              {tags &&
-                tags.map(tag => (
-                  <span
-                    className="tag-flag"
-                    style={{backgroundColor: tag.color}}
-                    key={`${id}_${tag.name}`}
-                  >
-                    {tag.name}
-                  </span>
-                ))}
-            </div>
+            <div className="dashboard-card--labels">{this.labels}</div>
             <div className="dashboard-card--footer">
               <span className="dashboard-card--status">
                 status <span className={this.statusClassNames} />
@@ -101,6 +91,22 @@ class DashboardsCard extends PureComponent<Props & WithRouterProps> {
     }
 
     return `sourceID=${query.sourceID}`
+  }
+
+  private get labels(): JSX.Element[] {
+    const {
+      dashboard: {id, labels},
+    } = this.props
+
+    if (labels) {
+      return labels.map(label => (
+        <Label
+          key={`${id}_${label.name}`}
+          text={label.name}
+          color={label.color}
+        />
+      ))
+    }
   }
 }
 

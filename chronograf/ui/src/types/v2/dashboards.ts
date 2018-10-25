@@ -231,10 +231,10 @@ export interface Dashboard {
   modified?: DashboardModified
   connected: boolean
   description: string
-  tags: Tag[]
+  labels: Label[]
 }
 
-export interface Tag {
+export interface Label {
   color: string
   name: string
 }

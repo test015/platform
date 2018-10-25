@@ -1,0 +1,19 @@
+/*
+  Label Styles
+  ------------------------------------------------------------------------------
+*/
+
+.label--flag {
+  background-color: $g7-graphite;
+  font-size: $ix-text-tiny;
+  font-style: italic;
+  font-weight: 500;
+  margin-right: 2px;
+  padding: 2px $ix-marg-b;
+  border-radius: $ix-radius-sm;
+}
+
+.label--text {
+  color: $g0-obsidian;
+  filter: invert(1) grayscale(1) contrast(9);
+}
