@@ -3,7 +3,7 @@ package http
 import (
 	"net/http"
 
-	"github.com/influxdata/platform"
+	plat "github.com/influxdata/platform"
 	platcontext "github.com/influxdata/platform/context"
 	"github.com/julienschmidt/httprouter"
 )
@@ -14,11 +14,11 @@ const (
 
 type ResourcesHandler struct {
 	*httprouter.Router
-	UserResourceMappingService platform.UserResourceMappingService
-	BucketService              platform.BucketService
-	DashboardService           platform.DashboardService
-	TaskService                platform.TaskService
-	ViewService                platform.ViewService
+	UserResourceMappingService plat.UserResourceMappingService
+	BucketService              plat.BucketService
+	DashboardService           plat.DashboardService
+	TaskService                plat.TaskService
+	ViewService                plat.ViewService
 }
 
 func NewResourcesHandler() *ResourcesHandler {
@@ -47,18 +47,43 @@ func (h *ResourcesHandler) handleGetResources(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	var id platform.ID
+	var userID plat.ID
 	switch s := a.(type) {
-	case *platform.Session:
-		id = s.UserID
-	case *platform.Authorization:
-		id = s.UserID
+	case *plat.Session:
+		userID = s.UserID
+	case *plat.Authorization:
+		userID = s.UserID
 	}
 
-	mappings, _, err := h.UserResourceMappingService.FindUserResourceMappings(ctx, platform.UserResourceMappingFilter{
-		UserID: id,
+	mappings, _, err := h.UserResourceMappingService.FindUserResourceMappings(ctx, plat.UserResourceMappingFilter{
+		UserID: userID,
 	})
 	if err != nil {
 		EncodeError(ctx, err, w)
+	}
+
+	var bf plat.BucketFilter
+	var df plat.DashboardFilter
+	var tf plat.TaskFilter
+	var vf plat.ViewFilter
+
+	for _, m := range mappings {
+		switch m.ResourceType {
+		case plat.BucketResourceType:
+			bf.IDs = append(bf.IDs, m.ResourceID)
+		case plat.DashboardResourceType:
+			df.IDs = apend(df.IDs, m.ResourceID)
+		case plat.TaskResourceType:
+			tf.IDs = append(tf.IDs, m.ResourceID)
+		case plat.ViewResourceType:
+			vf.IDs = append(vf.IDs, m.ResourceID)
+		}
+	}
+
+	response := &resourcesResponse{}
+
+	if err := encodeResponse(ctx, w, http.StatusOK, response); err != nil {
+		EncodeError(ctx, err, w)
+		return
 	}
 }
