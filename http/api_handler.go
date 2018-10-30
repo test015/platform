@@ -135,6 +135,7 @@ var apiLinks = map[string]interface{}{
 	"orgs":           "/api/v2/orgs",
 	"authorizations": "/api/v2/authorizations",
 	"buckets":        "/api/v2/buckets",
+	"resources":      "/api/v2/resources",
 	"users":          "/api/v2/users",
 	"me":             "/api/v2/me",
 	"tasks":          "/api/v2/tasks",
