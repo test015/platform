@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/influxdata/platform"
+	platcontext "github.com/influxdata/platform/context"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -38,5 +39,26 @@ type resourcesResponse struct {
 }
 
 func (h *ResourcesHandler) handleGetResources(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
 
+	a, err := platcontext.GetAuthorizer(ctx)
+	if err != nil {
+		EncodeError(ctx, err, w)
+		return
+	}
+
+	var id platform.ID
+	switch s := a.(type) {
+	case *platform.Session:
+		id = s.UserID
+	case *platform.Authorization:
+		id = s.UserID
+	}
+
+	mappings, _, err := h.UserResourceMappingService.FindUserResourceMappings(ctx, platform.UserResourceMappingFilter{
+		UserID: id,
+	})
+	if err != nil {
+		EncodeError(ctx, err, w)
+	}
 }
