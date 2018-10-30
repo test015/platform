@@ -76,13 +76,13 @@ func (s *Service) filterBuckets(ctx context.Context, fn func(b *platform.Bucket)
 
 // FindBucket returns the first bucket that matches filter.
 func (s *Service) FindBucket(ctx context.Context, filter platform.BucketFilter) (*platform.Bucket, error) {
-	if filter.ID == nil && filter.Name == nil && filter.OrganizationID == nil {
+	if len(filter.IDs) > 0 && filter.Name == nil && filter.OrganizationID == nil {
 		return nil, fmt.Errorf("no filter parameters provided")
 	}
 
 	// filter by bucket id
-	if filter.ID != nil {
-		return s.FindBucketByID(ctx, *filter.ID)
+	if len(filter.IDs) > 0 {
+		return s.FindBucketByID(ctx, *filter.IDs[0])
 	}
 
 	bs, n, err := s.FindBuckets(ctx, filter)
@@ -99,8 +99,8 @@ func (s *Service) FindBucket(ctx context.Context, filter platform.BucketFilter) 
 
 func (s *Service) findBuckets(ctx context.Context, filter platform.BucketFilter, opt ...platform.FindOptions) ([]*platform.Bucket, error) {
 	// filter by bucket id
-	if filter.ID != nil {
-		b, err := s.FindBucketByID(ctx, *filter.ID)
+	if len(filter.IDs) == 1 {
+		b, err := s.FindBucketByID(ctx, *filter.IDs[0])
 		if err != nil {
 			return nil, err
 		}

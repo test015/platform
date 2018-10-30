@@ -3,6 +3,7 @@ package inmem
 import (
 	"context"
 	"fmt"
+	"sync"
 
 	"github.com/influxdata/platform"
 )
@@ -25,20 +26,25 @@ func (s *Service) FindViewByID(ctx context.Context, id platform.ID) (*platform.V
 	return s.loadView(ctx, id)
 }
 
-func filterViewFn(filter platform.ViewFilter) func(d *platform.View) bool {
-	if filter.ID != nil {
-		return func(d *platform.View) bool {
-			return d.ID == *filter.ID
+func filterViewFn(filter platform.ViewFilter) func(v *platform.View) bool {
+	if len(filter.IDs) > 0 {
+		var sm sync.Map
+		for _, id := range filter.IDs {
+			sm.Store(id.String(), true)
+		}
+		return func(v *platform.View) bool {
+			_, ok := sm.Load(v.ID.String())
+			return ok
 		}
 	}
 
-	return func(d *platform.View) bool { return true }
+	return func(v *platform.View) bool { return true }
 }
 
 // FindViews implements platform.ViewService interface.
 func (s *Service) FindViews(ctx context.Context, filter platform.ViewFilter) ([]*platform.View, int, error) {
-	if filter.ID != nil {
-		d, err := s.FindViewByID(ctx, *filter.ID)
+	if len(filter.IDs) == 1 {
+		d, err := s.FindViewByID(ctx, *filter.IDs[0])
 		if err != nil {
 			return nil, 0, err
 		}

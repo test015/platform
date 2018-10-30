@@ -110,7 +110,7 @@ func (h *WriteHandler) handleWrite(w http.ResponseWriter, r *http.Request) {
 		// Decoded ID successfully. Make sure it's a real bucket.
 		b, err := h.BucketService.FindBucket(ctx, platform.BucketFilter{
 			OrganizationID: &org.ID,
-			ID:             id,
+			IDs:            []*platform.ID{id},
 		})
 		if err == nil {
 			bucket = b

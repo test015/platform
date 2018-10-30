@@ -865,6 +865,13 @@ paths:
             required: true
             schema:
               type: string
+          - in: query
+            name: id
+            description: ID list of views to return
+            schema:
+              type: array
+              items:
+                type: string
       responses:
         '200':
           description: all views
@@ -1828,6 +1835,13 @@ paths:
             required: true
             schema:
               type: string
+          - in: query
+            name: id
+            description: ID list of dashboards to return
+            schema:
+              type: array
+              items:
+                type: string
       responses:
         '200':
           description: a list of buckets

@@ -706,7 +706,7 @@ func FindBuckets(
 
 			filter := platform.BucketFilter{}
 			if tt.args.ID.Valid() {
-				filter.ID = &tt.args.ID
+				filter.IDs = append(filter.IDs, &tt.args.ID)
 			}
 			if tt.args.organizationID.Valid() {
 				filter.OrganizationID = &tt.args.organizationID

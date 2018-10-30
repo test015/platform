@@ -35,8 +35,8 @@ type resourcesResponse struct {
 	Links      map[string]string   `json:"links"`
 	Buckets    *bucketsResponse    `json:"buckets"`
 	Dashboards *dashboardsResponse `json:"dashboards"`
-	Tasks      *tasksResponse      `json:"tasks"`
-	Views      *viewsResponse      `json:"views"`
+	// Tasks      *tasksResponse      `json:"tasks"`
+	Views *viewsResponse `json:"views"`
 }
 
 func (h *ResourcesHandler) handleGetResources(w http.ResponseWriter, r *http.Request) {
@@ -65,7 +65,7 @@ func (h *ResourcesHandler) handleGetResources(w http.ResponseWriter, r *http.Req
 
 	var bf plat.BucketFilter
 	var df plat.DashboardFilter
-	var tf plat.TaskFilter
+	// var tf plat.TaskFilter
 	var vf plat.ViewFilter
 
 	for _, m := range mappings {
@@ -74,8 +74,8 @@ func (h *ResourcesHandler) handleGetResources(w http.ResponseWriter, r *http.Req
 			bf.IDs = append(bf.IDs, &m.ResourceID)
 		case plat.DashboardResourceType:
 			df.IDs = append(df.IDs, &m.ResourceID)
-		case plat.TaskResourceType:
-			tf.IDs = append(tf.IDs, &m.ResourceID)
+		// case plat.TaskResourceType:
+		// 	tf.IDs = append(tf.IDs, &m.ResourceID)
 		case plat.ViewResourceType:
 			vf.IDs = append(vf.IDs, &m.ResourceID)
 		}
@@ -97,13 +97,13 @@ func (h *ResourcesHandler) handleGetResources(w http.ResponseWriter, r *http.Req
 		}
 		response.Dashboards = newDashboardsResponse(dashboards)
 	}
-	if len(tf.IDs) > 0 {
-		tasks, _, err := h.TaskService.FindTasks(ctx, tf)
-		if err != nil {
-			EncodeError(ctx, err, w)
-			response.Tasks = newTasksResponse(tasks)
-		}
-	}
+	// if len(tf.IDs) > 0 {
+	// 	tasks, _, err := h.TaskService.FindTasks(ctx, tf)
+	// 	if err != nil {
+	// 		EncodeError(ctx, err, w)
+	// 		response.Tasks = newTasksResponse(tasks)
+	// 	}
+	// }
 	if len(vf.IDs) > 0 {
 		views, _, err := h.ViewService.FindViews(ctx, vf)
 		if err != nil {

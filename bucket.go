@@ -59,7 +59,7 @@ type BucketUpdate struct {
 
 // BucketFilter represents a set of filter that restrict the returned results.
 type BucketFilter struct {
-	ID             *ID
+	IDs            []*ID
 	Name           *string
 	OrganizationID *ID
 	Organization   *string

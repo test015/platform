@@ -337,7 +337,7 @@ func FindViews(
 
 			filter := platform.ViewFilter{}
 			if tt.args.ID.Valid() {
-				filter.ID = &tt.args.ID
+				filter.IDs = append(filter.IDs, &tt.args.ID)
 			}
 
 			views, _, err := s.FindViews(ctx, filter)
