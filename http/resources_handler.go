@@ -87,27 +87,27 @@ func (h *ResourcesHandler) handleGetResources(w http.ResponseWriter, r *http.Req
 		if err != nil {
 			EncodeError(ctx, err, w)
 		}
-		response.Buckets = newBucketsResponse(plat.FindOptions{}, bf, buckets)
+		response.Buckets = newBucketsResponse(buckets)
 	}
 	if len(df.IDs) > 0 {
 		dashboards, _, err := h.DashboardService.FindDashboards(ctx, df, plat.FindOptions{})
 		if err != nil {
 			EncodeError(ctx, err, w)
 		}
-		response.Dashboards = dashboards
+		response.Dashboards = newDashboardsResponse(dashboards)
 	}
 	if len(tf.IDs) > 0 {
 		tasks, _, err := h.TaskService.FindTasks(ctx, tf)
 		if err != nil {
 			EncodeError(ctx, err, w)
-			response.Tasks = tasks
+			response.Tasks = newTasksResponse(tasks)
 		}
 	}
 	if len(vf.IDs) > 0 {
 		views, _, err := h.ViewService.FindViews(ctx, vf)
 		if err != nil {
 			EncodeError(ctx, err, w)
-			response.Views = views
+			response.Views = newViewsResponse(views)
 		}
 	}
 

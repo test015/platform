@@ -113,7 +113,7 @@ type viewsResponse struct {
 	Views []viewResponse `json:"views"`
 }
 
-func newViewsResponse(views []*platform.View) viewsResponse {
+func newViewsResponse(views []*platform.View) *viewsResponse {
 	res := viewsResponse{
 		Links: getViewsLinks{
 			Self: "/api/v2/views",
@@ -125,7 +125,7 @@ func newViewsResponse(views []*platform.View) viewsResponse {
 		res.Views = append(res.Views, newViewResponse(view))
 	}
 
-	return res
+	return &res
 }
 
 // handlePostViews creates a new view.

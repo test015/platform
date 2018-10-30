@@ -35,7 +35,7 @@ const (
 // NewBucketHandler returns a new instance of BucketHandler.
 func NewBucketHandler(mappingService platform.UserResourceMappingService) *BucketHandler {
 	h := &BucketHandler{
-		Router:                     httprouter.New(),
+		Router: httprouter.New(),
 		UserResourceMappingService: mappingService,
 	}
 
@@ -187,7 +187,7 @@ type bucketsResponse struct {
 	Buckets []*bucketResponse `json:"buckets"`
 }
 
-func newBucketsResponse(opts platform.FindOptions, f platform.BucketFilter, bs []*platform.Bucket) *bucketsResponse {
+func newBucketsResponse(bs []*platform.Bucket) *bucketsResponse {
 	rs := make([]*bucketResponse, 0, len(bs))
 	for _, b := range bs {
 		rs = append(rs, newBucketResponse(b))
@@ -360,7 +360,7 @@ func (h *BucketHandler) handleGetBuckets(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	if err := encodeResponse(ctx, w, http.StatusOK, newBucketsResponse(opts, req.filter, bs)); err != nil {
+	if err := encodeResponse(ctx, w, http.StatusOK, newBucketsResponse(bs)); err != nil {
 		EncodeError(ctx, err, w)
 		return
 	}

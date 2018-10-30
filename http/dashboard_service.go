@@ -228,10 +228,10 @@ func (d dashboardsResponse) toPlatform() []*platform.Dashboard {
 	return res
 }
 
-func newDashboardsResponse(dashboards []*platform.Dashboard) dashboardsResponse {
+func newDashboardsResponse(dashboards []*platform.Dashboard) *dashboardsResponse {
 	res := dashboardsResponse{
 		Links: map[string]string{
-			Self: "/api/v2/dashboards",
+			"self": "/api/v2/dashboards",
 		},
 		Dashboards: make([]dashboardResponse, 0, len(dashboards)),
 	}
@@ -240,7 +240,7 @@ func newDashboardsResponse(dashboards []*platform.Dashboard) dashboardsResponse 
 		res.Dashboards = append(res.Dashboards, newDashboardResponse(dashboard))
 	}
 
-	return res
+	return &res
 }
 
 // handlePostDashboard creates a new dashboard.

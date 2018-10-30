@@ -83,8 +83,8 @@ type taskResponse struct {
 	Task  platform.Task     `json:"task"`
 }
 
-func newTaskResponse(t platform.Task) taskResponse {
-	return taskResponse{
+func newTaskResponse(t platform.Task) *taskResponse {
+	return &taskResponse{
 		Links: map[string]string{
 			"self":    fmt.Sprintf("/api/v2/tasks/%s", t.ID),
 			"members": fmt.Sprintf("/api/v2/tasks/%s/members", t.ID),
@@ -100,8 +100,8 @@ type tasksResponse struct {
 	Tasks []*platform.Task  `json:"tasks"`
 }
 
-func newTasksResponse(ts []*platform.Task) tasksResponse {
-	return tasksResponse{
+func newTasksResponse(ts []*platform.Task) *tasksResponse {
+	return &tasksResponse{
 		Links: map[string]string{
 			"self": tasksPath,
 		},
