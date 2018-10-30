@@ -21,9 +21,10 @@ type ResourcesHandler struct {
 	ViewService                plat.ViewService
 }
 
-func NewResourcesHandler() *ResourcesHandler {
+func NewResourcesHandler(mappingService plat.UserResourceMappingService) *ResourcesHandler {
 	h := &ResourcesHandler{
 		Router: httprouter.New(),
+		UserResourceMappingService: mappingService,
 	}
 
 	h.HandlerFunc("GET", resourcesPath, h.handleGetResources)

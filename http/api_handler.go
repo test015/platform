@@ -28,6 +28,7 @@ type APIHandler struct {
 	WriteHandler         *WriteHandler
 	SetupHandler         *SetupHandler
 	SessionHandler       *SessionHandler
+	ResourcesHandler     *ResourcesHandler
 }
 
 // APIBackend is all services and associated parameters required to construct
@@ -111,6 +112,12 @@ func NewAPIHandler(b *APIBackend) *APIHandler {
 	h.QueryHandler.OrganizationService = b.OrganizationService
 	h.QueryHandler.Logger = b.Logger.With(zap.String("handler", "query"))
 	h.QueryHandler.ProxyQueryService = b.ProxyQueryService
+
+	h.ResourcesHandler = NewResourcesHandler(b.UserResourceMappingService)
+	h.ResourcesHandler.BucketService = b.BucketService
+	h.ResourcesHandler.DashboardService = b.DashboardService
+	h.ResourcesHandler.TaskService = b.TaskService
+	h.ResourcesHandler.ViewService = b.ViewService
 
 	h.ChronografHandler = NewChronografHandler(b.ChronografService)
 
