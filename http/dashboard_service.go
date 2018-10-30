@@ -36,7 +36,7 @@ const (
 // NewDashboardHandler returns a new instance of DashboardHandler.
 func NewDashboardHandler(mappingService platform.UserResourceMappingService) *DashboardHandler {
 	h := &DashboardHandler{
-		Router:                     httprouter.New(),
+		Router: httprouter.New(),
 		UserResourceMappingService: mappingService,
 	}
 
@@ -174,7 +174,7 @@ func (h *DashboardHandler) handleGetDashboards(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	if err := encodeResponse(ctx, w, http.StatusOK, newGetDashboardsResponse(dashboards)); err != nil {
+	if err := encodeResponse(ctx, w, http.StatusOK, newDashboardsResponse(dashboards)); err != nil {
 		EncodeError(ctx, err, w)
 		return
 	}
@@ -215,16 +215,12 @@ func decodeGetDashboardsRequest(ctx context.Context, r *http.Request) (*getDashb
 	return req, nil
 }
 
-type getDashboardsLinks struct {
-	Self string `json:"self"`
-}
-
-type getDashboardsResponse struct {
-	Links      getDashboardsLinks  `json:"links"`
+type dashboardsResponse struct {
+	Links      map[string]string   `json:"links"`
 	Dashboards []dashboardResponse `json:"dashboards"`
 }
 
-func (d getDashboardsResponse) toPlatform() []*platform.Dashboard {
+func (d dashboardsResponse) toPlatform() []*platform.Dashboard {
 	res := make([]*platform.Dashboard, len(d.Dashboards))
 	for i := range d.Dashboards {
 		res[i] = d.Dashboards[i].toPlatform()
@@ -232,9 +228,9 @@ func (d getDashboardsResponse) toPlatform() []*platform.Dashboard {
 	return res
 }
 
-func newGetDashboardsResponse(dashboards []*platform.Dashboard) getDashboardsResponse {
-	res := getDashboardsResponse{
-		Links: getDashboardsLinks{
+func newDashboardsResponse(dashboards []*platform.Dashboard) dashboardsResponse {
+	res := dashboardsResponse{
+		Links: map[string]string{
 			Self: "/api/v2/dashboards",
 		},
 		Dashboards: make([]dashboardResponse, 0, len(dashboards)),
@@ -720,7 +716,7 @@ func (s *DashboardService) FindDashboards(ctx context.Context, filter platform.D
 		return nil, 0, err
 	}
 
-	var dr getDashboardsResponse
+	var dr dashboardsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&dr); err != nil {
 		return nil, 0, err
 	}

@@ -31,7 +31,7 @@ const (
 // NewViewHandler returns a new instance of ViewHandler.
 func NewViewHandler(mappingService platform.UserResourceMappingService) *ViewHandler {
 	h := &ViewHandler{
-		Router:                     httprouter.New(),
+		Router: httprouter.New(),
 		UserResourceMappingService: mappingService,
 	}
 
@@ -98,7 +98,7 @@ func (h *ViewHandler) handleGetViews(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := encodeResponse(ctx, w, http.StatusOK, newGetViewsResponse(views)); err != nil {
+	if err := encodeResponse(ctx, w, http.StatusOK, newViewsResponse(views)); err != nil {
 		EncodeError(ctx, err, w)
 		return
 	}
@@ -108,13 +108,13 @@ type getViewsLinks struct {
 	Self string `json:"self"`
 }
 
-type getViewsResponse struct {
+type viewsResponse struct {
 	Links getViewsLinks  `json:"links"`
 	Views []viewResponse `json:"views"`
 }
 
-func newGetViewsResponse(views []*platform.View) getViewsResponse {
-	res := getViewsResponse{
+func newViewsResponse(views []*platform.View) viewsResponse {
+	res := viewsResponse{
 		Links: getViewsLinks{
 			Self: "/api/v2/views",
 		},

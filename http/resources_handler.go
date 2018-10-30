@@ -31,11 +31,11 @@ func NewResourcesHandler() *ResourcesHandler {
 }
 
 type resourcesResponse struct {
-	Links      map[string]string    `json:"links"`
-	Buckets    []*bucketResponse    `json:"buckets"`
-	Dashboards []*dashboardResponse `json:"dashboards"`
-	Tasks      []*taskResponse      `json:"tasks"`
-	Views      []*viewResponse      `json:"views"`
+	Links      map[string]string   `json:"links"`
+	Buckets    *bucketsResponse    `json:"buckets"`
+	Dashboards *dashboardsResponse `json:"dashboards"`
+	Tasks      *tasksResponse      `json:"tasks"`
+	Views      *viewsResponse      `json:"views"`
 }
 
 func (h *ResourcesHandler) handleGetResources(w http.ResponseWriter, r *http.Request) {
@@ -70,17 +70,46 @@ func (h *ResourcesHandler) handleGetResources(w http.ResponseWriter, r *http.Req
 	for _, m := range mappings {
 		switch m.ResourceType {
 		case plat.BucketResourceType:
-			bf.IDs = append(bf.IDs, m.ResourceID)
+			bf.IDs = append(bf.IDs, &m.ResourceID)
 		case plat.DashboardResourceType:
-			df.IDs = apend(df.IDs, m.ResourceID)
+			df.IDs = append(df.IDs, &m.ResourceID)
 		case plat.TaskResourceType:
-			tf.IDs = append(tf.IDs, m.ResourceID)
+			tf.IDs = append(tf.IDs, &m.ResourceID)
 		case plat.ViewResourceType:
-			vf.IDs = append(vf.IDs, m.ResourceID)
+			vf.IDs = append(vf.IDs, &m.ResourceID)
 		}
 	}
 
 	response := &resourcesResponse{}
+
+	if len(bf.IDs) > 0 {
+		buckets, _, err := h.BucketService.FindBuckets(ctx, bf)
+		if err != nil {
+			EncodeError(ctx, err, w)
+		}
+		response.Buckets = newBucketsResponse(plat.FindOptions{}, bf, buckets)
+	}
+	if len(df.IDs) > 0 {
+		dashboards, _, err := h.DashboardService.FindDashboards(ctx, df, plat.FindOptions{})
+		if err != nil {
+			EncodeError(ctx, err, w)
+		}
+		response.Dashboards = dashboards
+	}
+	if len(tf.IDs) > 0 {
+		tasks, _, err := h.TaskService.FindTasks(ctx, tf)
+		if err != nil {
+			EncodeError(ctx, err, w)
+			response.Tasks = tasks
+		}
+	}
+	if len(vf.IDs) > 0 {
+		views, _, err := h.ViewService.FindViews(ctx, vf)
+		if err != nil {
+			EncodeError(ctx, err, w)
+			response.Views = views
+		}
+	}
 
 	if err := encodeResponse(ctx, w, http.StatusOK, response); err != nil {
 		EncodeError(ctx, err, w)
