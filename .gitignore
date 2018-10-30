@@ -17,6 +17,9 @@ influxd.bolt
 /transpilerd
 /bin
 
+# Binaries built with go test -c.
+/*.test
+
 ui/node_modules
 ui/yarn-error.log
 ui/build
