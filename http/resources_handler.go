@@ -17,7 +17,6 @@ type ResourcesHandler struct {
 	UserResourceMappingService plat.UserResourceMappingService
 	BucketService              plat.BucketService
 	DashboardService           plat.DashboardService
-	TaskService                plat.TaskService
 	ViewService                plat.ViewService
 }
 
@@ -35,8 +34,7 @@ type resourcesResponse struct {
 	Links      map[string]string   `json:"links"`
 	Buckets    *bucketsResponse    `json:"buckets"`
 	Dashboards *dashboardsResponse `json:"dashboards"`
-	// Tasks      *tasksResponse      `json:"tasks"`
-	Views *viewsResponse `json:"views"`
+	Views      *viewsResponse      `json:"views"`
 }
 
 func (h *ResourcesHandler) handleGetResources(w http.ResponseWriter, r *http.Request) {
@@ -97,13 +95,6 @@ func (h *ResourcesHandler) handleGetResources(w http.ResponseWriter, r *http.Req
 		}
 		response.Dashboards = newDashboardsResponse(dashboards)
 	}
-	// if len(tf.IDs) > 0 {
-	// 	tasks, _, err := h.TaskService.FindTasks(ctx, tf)
-	// 	if err != nil {
-	// 		EncodeError(ctx, err, w)
-	// 		response.Tasks = newTasksResponse(tasks)
-	// 	}
-	// }
 	if len(vf.IDs) > 0 {
 		views, _, err := h.ViewService.FindViews(ctx, vf)
 		if err != nil {

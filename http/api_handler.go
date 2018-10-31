@@ -116,7 +116,6 @@ func NewAPIHandler(b *APIBackend) *APIHandler {
 	h.ResourcesHandler = NewResourcesHandler(b.UserResourceMappingService)
 	h.ResourcesHandler.BucketService = b.BucketService
 	h.ResourcesHandler.DashboardService = b.DashboardService
-	h.ResourcesHandler.TaskService = b.TaskService
 	h.ResourcesHandler.ViewService = b.ViewService
 
 	h.ChronografHandler = NewChronografHandler(b.ChronografService)

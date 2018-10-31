@@ -2403,10 +2403,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Dashboards"
-                  tasks:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/Tasks"
                   views:
                     type: array
                     items:
