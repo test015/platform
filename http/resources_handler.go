@@ -22,7 +22,7 @@ type ResourcesHandler struct {
 
 func NewResourcesHandler(mappingService plat.UserResourceMappingService) *ResourcesHandler {
 	h := &ResourcesHandler{
-		Router: httprouter.New(),
+		Router:                     httprouter.New(),
 		UserResourceMappingService: mappingService,
 	}
 
