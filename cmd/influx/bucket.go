@@ -144,7 +144,7 @@ func bucketFindF(cmd *cobra.Command, args []string) {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		filter.ID = id
+		filter.IDs = append(filter.IDs, id)
 	}
 
 	if bucketFindFlags.orgID != "" && bucketFindFlags.org != "" {

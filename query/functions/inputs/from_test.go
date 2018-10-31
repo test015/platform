@@ -134,7 +134,7 @@ func TestFromOpSpec_BucketsAccessed(t *testing.T) {
 		{
 			Name:             "From with bucketID",
 			Raw:              `from(bucketID:"deadbeef")`,
-			WantReadBuckets:  &[]platform.BucketFilter{{ID: bucketID}},
+			WantReadBuckets:  &[]platform.BucketFilter{{IDs: []*platform.ID{bucketID}}},
 			WantWriteBuckets: &[]platform.BucketFilter{},
 		},
 	}

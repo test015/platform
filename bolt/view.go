@@ -3,6 +3,7 @@ package bolt
 import (
 	"context"
 	"encoding/json"
+	"sync"
 
 	bolt "github.com/coreos/bbolt"
 	"github.com/influxdata/platform"
@@ -81,8 +82,8 @@ func (c *Client) copyView(ctx context.Context, tx *bolt.Tx, id platform.ID) (*pl
 
 // FindView retrieves a view using an arbitrary view filter.
 func (c *Client) FindView(ctx context.Context, filter platform.ViewFilter) (*platform.View, error) {
-	if filter.ID != nil {
-		return c.FindViewByID(ctx, *filter.ID)
+	if len(filter.IDs) == 1 {
+		return c.FindViewByID(ctx, *filter.IDs[0])
 	}
 
 	var d *platform.View
@@ -108,20 +109,25 @@ func (c *Client) FindView(ctx context.Context, filter platform.ViewFilter) (*pla
 	return d, nil
 }
 
-func filterViewsFn(filter platform.ViewFilter) func(d *platform.View) bool {
-	if filter.ID != nil {
-		return func(d *platform.View) bool {
-			return d.ID == *filter.ID
+func filterViewsFn(filter platform.ViewFilter) func(v *platform.View) bool {
+	if len(filter.IDs) > 0 {
+		var sm sync.Map
+		for _, id := range filter.IDs {
+			sm.Store(id.String(), true)
+		}
+		return func(v *platform.View) bool {
+			_, ok := sm.Load(v.ID.String())
+			return ok
 		}
 	}
 
-	return func(d *platform.View) bool { return true }
+	return func(v *platform.View) bool { return true }
 }
 
 // FindViews retrives all views that match an arbitrary view filter.
 func (c *Client) FindViews(ctx context.Context, filter platform.ViewFilter) ([]*platform.View, int, error) {
-	if filter.ID != nil {
-		d, err := c.FindViewByID(ctx, *filter.ID)
+	if len(filter.IDs) == 1 {
+		d, err := c.FindViewByID(ctx, *filter.IDs[0])
 		if err != nil {
 			return nil, 0, err
 		}

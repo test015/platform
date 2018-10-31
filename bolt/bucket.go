@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"sync"
 
 	"github.com/coreos/bbolt"
 	"github.com/influxdata/platform"
@@ -122,8 +123,8 @@ func (c *Client) findBucketByName(ctx context.Context, tx *bolt.Tx, orgID platfo
 // Filters using ID, or OrganizationID and bucket Name should be efficient.
 // Other filters will do a linear scan across buckets until it finds a match.
 func (c *Client) FindBucket(ctx context.Context, filter platform.BucketFilter) (*platform.Bucket, error) {
-	if filter.ID != nil {
-		return c.FindBucketByID(ctx, *filter.ID)
+	if len(filter.IDs) > 0 {
+		return c.FindBucketByID(ctx, *filter.IDs[0])
 	}
 
 	if filter.Name != nil && filter.OrganizationID != nil {
@@ -162,9 +163,14 @@ func (c *Client) FindBucket(ctx context.Context, filter platform.BucketFilter) (
 }
 
 func filterBucketsFn(filter platform.BucketFilter) func(b *platform.Bucket) bool {
-	if filter.ID != nil {
+	if len(filter.IDs) > 0 {
+		var sm sync.Map
+		for _, id := range filter.IDs {
+			sm.Store(id.String(), true)
+		}
 		return func(b *platform.Bucket) bool {
-			return b.ID == *filter.ID
+			_, ok := sm.Load(b.ID.String())
+			return ok
 		}
 	}
 
@@ -193,8 +199,8 @@ func filterBucketsFn(filter platform.BucketFilter) func(b *platform.Bucket) bool
 // Filters using ID, or OrganizationID and bucket Name should be efficient.
 // Other filters will do a linear scan across all buckets searching for a match.
 func (c *Client) FindBuckets(ctx context.Context, filter platform.BucketFilter, opt ...platform.FindOptions) ([]*platform.Bucket, int, error) {
-	if filter.ID != nil {
-		b, err := c.FindBucketByID(ctx, *filter.ID)
+	if len(filter.IDs) == 1 {
+		b, err := c.FindBucketByID(ctx, *filter.IDs[0])
 		if err != nil {
 			return nil, 0, err
 		}

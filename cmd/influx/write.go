@@ -92,10 +92,11 @@ func fluxWriteF(cmd *cobra.Command, args []string) error {
 	filter := platform.BucketFilter{}
 
 	if writeFlags.BucketID != "" {
-		filter.ID, err = platform.IDFromString(writeFlags.BucketID)
+		id, err := platform.IDFromString(writeFlags.BucketID)
 		if err != nil {
 			return err
 		}
+		filter.IDs = []*platform.ID{id}
 	}
 	if writeFlags.Bucket != "" {
 		filter.Name = &writeFlags.Bucket
