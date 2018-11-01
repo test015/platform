@@ -4,12 +4,11 @@ import (
 	"net/http"
 
 	plat "github.com/influxdata/platform"
-	platcontext "github.com/influxdata/platform/context"
 	"github.com/julienschmidt/httprouter"
 )
 
 const (
-	resourcesPath = "/api/v2/resources"
+	resourcesPath = "/api/v2/users/:userID/resources"
 )
 
 type ResourcesHandler struct {
@@ -22,7 +21,7 @@ type ResourcesHandler struct {
 
 func NewResourcesHandler(mappingService plat.UserResourceMappingService) *ResourcesHandler {
 	h := &ResourcesHandler{
-		Router:                     httprouter.New(),
+		Router: httprouter.New(),
 		UserResourceMappingService: mappingService,
 	}
 
@@ -40,22 +39,14 @@ type resourcesResponse struct {
 func (h *ResourcesHandler) handleGetResources(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	a, err := platcontext.GetAuthorizer(ctx)
+	req, err := decodeGetUserRequest(ctx, r)
 	if err != nil {
 		EncodeError(ctx, err, w)
 		return
 	}
 
-	var userID plat.ID
-	switch s := a.(type) {
-	case *plat.Session:
-		userID = s.UserID
-	case *plat.Authorization:
-		userID = s.UserID
-	}
-
 	mappings, _, err := h.UserResourceMappingService.FindUserResourceMappings(ctx, plat.UserResourceMappingFilter{
-		UserID: userID,
+		UserID: req.UserID,
 	})
 	if err != nil {
 		EncodeError(ctx, err, w)

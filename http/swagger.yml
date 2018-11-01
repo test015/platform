@@ -2384,37 +2384,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /resources:
-    get:
-      summary: List all resources a user is a member or owner of.
-      responses:
-        '200':
-          description: All resources a user is a member or owner of.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  buckets:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/Buckets"
-                  dashboards:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/Dashboards"
-                  views:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/Views"
-                  links:
-                    $ref: "#/components/schemas/Links"
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
   /tasks:
     get:
       tags:
@@ -3042,6 +3011,46 @@ paths:
       responses:
         '204':
           description: user deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  '/users/{userID}/resources':
+    get:
+      tags:
+        - Users
+      summary: List all resources a user is a member or owner of.
+      parameters:
+        - in: path
+          name: userID
+          schema:
+            type: string
+          required: true
+          description: ID of user to get resources for
+      responses:
+        '200':
+          description: All resources a user is a member or owner of.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  buckets:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Buckets"
+                  dashboards:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Dashboards"
+                  views:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Views"
+                  links:
+                    $ref: "#/components/schemas/Links"
         default:
           description: unexpected error
           content:
