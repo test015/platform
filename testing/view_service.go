@@ -226,7 +226,7 @@ func FindViews(
 	t *testing.T,
 ) {
 	type args struct {
-		ID   platform.ID
+		IDs  []*platform.ID
 		name string
 	}
 
@@ -310,7 +310,9 @@ func FindViews(
 				},
 			},
 			args: args{
-				ID: MustIDBase16(viewTwoID),
+				IDs: []*platform.ID{
+					idPtr(MustIDBase16(viewTwoID)),
+				},
 			},
 			wants: wants{
 				views: []*platform.View{
@@ -388,8 +390,8 @@ func FindViews(
 			ctx := context.TODO()
 
 			filter := platform.ViewFilter{}
-			if tt.args.ID.Valid() {
-				filter.IDs = append(filter.IDs, &tt.args.ID)
+			if len(tt.args.IDs) > 0 {
+				filter.IDs = tt.args.IDs
 			}
 
 			views, _, err := s.FindViews(ctx, filter)

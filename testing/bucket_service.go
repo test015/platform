@@ -446,7 +446,7 @@ func FindBuckets(
 	t *testing.T,
 ) {
 	type args struct {
-		ID             platform.ID
+		IDs            []*platform.ID
 		name           string
 		organization   string
 		organizationID platform.ID
@@ -744,8 +744,8 @@ func FindBuckets(
 			ctx := context.TODO()
 
 			filter := platform.BucketFilter{}
-			if tt.args.ID.Valid() {
-				filter.IDs = append(filter.IDs, &tt.args.ID)
+			if len(tt.args.IDs) > 0 {
+				filter.IDs = tt.args.IDs
 			}
 			if tt.args.organizationID.Valid() {
 				filter.OrganizationID = &tt.args.organizationID
