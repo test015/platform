@@ -327,6 +327,58 @@ func FindViews(
 				},
 			},
 		},
+		{
+			name: "find multiple views by id",
+			fields: ViewFields{
+				Views: []*platform.View{
+					{
+						ViewContents: platform.ViewContents{
+							ID:   MustIDBase16(viewOneID),
+							Name: "view1",
+						},
+						Properties: platform.EmptyViewProperties{},
+					},
+					{
+						ViewContents: platform.ViewContents{
+							ID:   MustIDBase16(viewTwoID),
+							Name: "view2",
+						},
+						Properties: platform.EmptyViewProperties{},
+					},
+					{
+						ViewContents: platform.ViewContents{
+							ID:   MustIDBase16(viewThreeID),
+							Name: "view3",
+						},
+						Properties: platform.EmptyViewProperties{},
+					},
+				},
+			},
+			args: args{
+				IDs: []*platform.ID{
+					idPtr(MustIDBase16(viewOneID)),
+					idPtr(MustIDBase16(viewThreeID)),
+				},
+			},
+			wants: wants{
+				views: []*platform.View{
+					{
+						ViewContents: platform.ViewContents{
+							ID:   MustIDBase16(viewOneID),
+							Name: "view1",
+						},
+						Properties: platform.EmptyViewProperties{},
+					},
+					{
+						ViewContents: platform.ViewContents{
+							ID:   MustIDBase16(viewThreeID),
+							Name: "view3",
+						},
+						Properties: platform.EmptyViewProperties{},
+					},
+				},
+			},
+		},
 	}
 
 	for _, tt := range tests {
