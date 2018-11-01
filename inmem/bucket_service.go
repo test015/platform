@@ -3,6 +3,7 @@ package inmem
 import (
 	"context"
 	"fmt"
+	"sync"
 
 	"github.com/influxdata/platform"
 )
@@ -97,6 +98,37 @@ func (s *Service) FindBucket(ctx context.Context, filter platform.BucketFilter) 
 	return bs[0], nil
 }
 
+// filterFunc := func(b *platform.Bucket) bool { return true }
+
+func filterBucketFn(filter platform.BucketFilter) func(b *platform.Bucket) bool {
+	if len(filter.IDs) > 0 {
+		var sm sync.Map
+		for _, id := range filter.IDs {
+			sm.Store(id.String(), true)
+		}
+		return func(b *platform.Bucket) bool {
+			_, ok := sm.Load(b.ID.String())
+			return ok
+		}
+	} else if filter.Name != nil && filter.OrganizationID != nil {
+		return func(b *platform.Bucket) bool {
+			return b.Name == *filter.Name && b.OrganizationID == *filter.OrganizationID
+		}
+	} else if filter.Name != nil {
+		// filter by bucket name
+		return func(b *platform.Bucket) bool {
+			return b.Name == *filter.Name
+		}
+	} else if filter.OrganizationID != nil {
+		// filter by organization id
+		return func(b *platform.Bucket) bool {
+			return b.OrganizationID == *filter.OrganizationID
+		}
+	}
+
+	return func(b *platform.Bucket) bool { return true }
+}
+
 func (s *Service) findBuckets(ctx context.Context, filter platform.BucketFilter, opt ...platform.FindOptions) ([]*platform.Bucket, error) {
 	// filter by bucket id
 	if len(filter.IDs) == 1 {
@@ -116,29 +148,7 @@ func (s *Service) findBuckets(ctx context.Context, filter platform.BucketFilter,
 		filter.OrganizationID = &o.ID
 	}
 
-	filterFunc := func(b *platform.Bucket) bool { return true }
-
-	if filter.Name != nil && filter.OrganizationID != nil {
-		filterFunc = func(b *platform.Bucket) bool {
-			return b.Name == *filter.Name && b.OrganizationID == *filter.OrganizationID
-		}
-	} else if filter.Name != nil {
-		// filter by bucket name
-		filterFunc = func(b *platform.Bucket) bool {
-			return b.Name == *filter.Name
-		}
-	} else if filter.OrganizationID != nil {
-		// filter by organization id
-		filterFunc = func(b *platform.Bucket) bool {
-			return b.OrganizationID == *filter.OrganizationID
-		}
-	}
-
-	bs, err := s.filterBuckets(ctx, filterFunc)
-	if err != nil {
-		return nil, err
-	}
-	return bs, nil
+	return s.filterBuckets(ctx, filterBucketFn(filter))
 }
 
 // FindBuckets returns a list of buckets that match filter and the total count of matching buckets.
