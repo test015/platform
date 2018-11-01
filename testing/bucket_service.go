@@ -649,18 +649,27 @@ func FindBuckets(
 		{
 			name: "find multiple buckets by id",
 			fields: BucketFields{
+				Organizations: []*platform.Organization{
+					{
+						Name: "theorg",
+						ID:   MustIDBase16(orgOneID),
+					},
+				},
 				Buckets: []*platform.Bucket{
 					{
-						ID:   MustIDBase16(bucketOneID),
-						Name: "abc",
+						ID:             MustIDBase16(bucketOneID),
+						OrganizationID: MustIDBase16(orgOneID),
+						Name:           "abc",
 					},
 					{
-						ID:   MustIDBase16(bucketTwoID),
-						Name: "def",
+						ID:             MustIDBase16(bucketTwoID),
+						OrganizationID: MustIDBase16(orgOneID),
+						Name:           "def",
 					},
 					{
-						ID:   MustIDBase16(bucketThreeID),
-						Name: "xyz",
+						ID:             MustIDBase16(bucketThreeID),
+						OrganizationID: MustIDBase16(orgOneID),
+						Name:           "xyz",
 					},
 				},
 			},
@@ -673,12 +682,16 @@ func FindBuckets(
 			wants: wants{
 				buckets: []*platform.Bucket{
 					{
-						ID:   MustIDBase16(bucketOneID),
-						Name: "abc",
+						ID:             MustIDBase16(bucketOneID),
+						OrganizationID: MustIDBase16(orgOneID),
+						Organization:   "theorg",
+						Name:           "abc",
 					},
 					{
-						ID:   MustIDBase16(bucketThreeID),
-						Name: "xyz",
+						ID:             MustIDBase16(bucketThreeID),
+						OrganizationID: MustIDBase16(orgOneID),
+						Organization:   "theorg",
+						Name:           "xyz",
 					},
 				},
 			},
