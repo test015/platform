@@ -398,6 +398,33 @@ func (d ToDependencies) Validate() error {
 	return nil
 }
 
+type Stats struct {
+	NRows   int
+	MaxTime time.Time
+	MinTime time.Time
+	NFields int
+	NTags   int
+}
+
+func (s Stats) Update(o Stats) {
+	s.NRows += o.NRows
+	if s.MaxTime.IsZero() || o.MaxTime.Unix() > s.MaxTime.Unix() {
+		s.MaxTime = o.MaxTime
+	}
+
+	if s.MinTime.IsZero() || o.MinTime.Unix() < s.MinTime.Unix() {
+		s.MinTime = o.MinTime
+	}
+
+	if o.NFields > s.NFields {
+		s.NFields = o.NFields
+	}
+
+	if o.NTags > s.NTags {
+		s.NTags = o.NTags
+	}
+}
+
 func writeTable(t *ToTransformation, tbl flux.Table) error {
 	var bucketID, orgID *platform.ID
 	var err error
@@ -454,6 +481,14 @@ func writeTable(t *ToTransformation, tbl flux.Table) error {
 
 	}
 
+	builder, new := t.cache.TableBuilder(tbl.Key())
+	if new {
+		if err := execute.AddTableCols(tbl, builder); err != nil {
+			return err
+		}
+	}
+
+	measurementStats := make(map[string]Stats)
 	measurementName := ""
 	return tbl.Do(func(er flux.ColReader) error {
 		var pointTime time.Time
@@ -513,11 +548,28 @@ func writeTable(t *ToTransformation, tbl flux.Table) error {
 				}
 			})
 
+			mstats := Stats{
+				NRows:   1,
+				MaxTime: pointTime,
+				MinTime: pointTime,
+				NFields: len(fields),
+				NTags:   len(tags),
+			}
+			_, ok := measurementStats[measurementName]
+			if !ok {
+				measurementStats[measurementName] = mstats
+			} else {
+				measurementStats[measurementName].Update(mstats)
+			}
+
 			pt, err := models.NewPoint(measurementName, tags, fields, pointTime)
 			if err != nil {
 				return err
 			}
 			points = append(points, pt)
+			if err := execute.AppendRecord(i, er, builder); err != nil {
+				return err
+			}
 		}
 		points, err = tsdb.ExplodePoints(*orgID, *bucketID, points)
 		return d.PointsWriter.WritePoints(points)
