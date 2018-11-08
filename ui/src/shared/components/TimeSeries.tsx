@@ -1,6 +1,6 @@
 // Library
 import {Component} from 'react'
-import _ from 'lodash'
+import {isEqual, flatten} from 'lodash'
 
 // API
 import {executeQueries} from 'src/shared/apis/v2/query'
@@ -63,14 +63,22 @@ class TimeSeries extends Component<Props, State> {
   }
 
   public async componentDidUpdate(prevProps: Props) {
-    if (!this.isPropsDifferent(prevProps)) {
-      return
+    if (this.shouldReload(prevProps)) {
+      this.reload()
     }
-
-    this.reload()
   }
 
-  public reload = async () => {
+  public render() {
+    const {tables, loading, fetchCount} = this.state
+
+    return this.props.children({
+      tables,
+      loading,
+      isInitialFetch: fetchCount === 1,
+    })
+  }
+
+  private reload = async () => {
     const {link, inView, queries} = this.props
 
     if (!inView) {
@@ -84,7 +92,7 @@ class TimeSeries extends Component<Props, State> {
 
     try {
       const results = await this.executeQueries(link, queries)
-      const tables = _.flatten(results.map(r => parseResponse(r.csv)))
+      const tables = flatten(results.map(r => parseResponse(r.csv)))
 
       this.setState({
         tables,
@@ -99,31 +107,16 @@ class TimeSeries extends Component<Props, State> {
     }
   }
 
-  public render() {
-    const {tables, loading, fetchCount} = this.state
+  private shouldReload(prevProps: Props) {
+    if (prevProps.link !== this.props.link) {
+      return true
+    }
 
-    return this.props.children({
-      tables,
-      loading,
-      isInitialFetch: fetchCount === 1,
-    })
-  }
+    if (!isEqual(prevProps.queries, this.props.queries)) {
+      return true
+    }
 
-  private isPropsDifferent(nextProps: Props) {
-    const isSourceDifferent = !_.isEqual(this.props.link, nextProps.link)
-
-    return (
-      this.props.inView !== nextProps.inView ||
-      !!this.queryDifference(this.props.queries, nextProps.queries).length ||
-      isSourceDifferent
-    )
-  }
-
-  private queryDifference = (left, right) => {
-    const mapper = q => `${q.text}`
-    const l = left.map(mapper)
-    const r = right.map(mapper)
-    return _.difference(_.union(l, r), _.intersection(l, r))
+    return false
   }
 }
 
