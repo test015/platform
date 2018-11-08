@@ -10,7 +10,7 @@ import {RemoteDataState, FluxTable} from 'src/types'
 import {DashboardQuery} from 'src/types/v2/dashboards'
 
 // Utils
-import AutoRefresh from 'src/utils/AutoRefresh'
+import {GlobalAutoRefresher} from 'src/utils/AutoRefresher'
 import {parseResponse} from 'src/shared/parsing/flux/response'
 import {restartable, CancellationError} from 'src/utils/restartable'
 
@@ -54,11 +54,11 @@ class TimeSeries extends Component<Props, State> {
   public async componentDidMount() {
     const isFirstFetch = true
     this.reload(isFirstFetch)
-    AutoRefresh.subscribe(this.executeQueries)
+    GlobalAutoRefresher.subscribe(this.executeQueries)
   }
 
   public componentWillUnmount() {
-    AutoRefresh.unsubscribe(this.executeQueries)
+    GlobalAutoRefresher.unsubscribe(this.executeQueries)
   }
 
   public async componentDidUpdate(prevProps: Props) {
