@@ -1,5 +1,5 @@
 // Library
-import React, {Component} from 'react'
+import {Component} from 'react'
 import _ from 'lodash'
 
 // API
@@ -19,6 +19,7 @@ export const DEFAULT_TIME_SERIES = [{response: {results: []}}]
 interface RenderProps {
   tables: FluxTable[]
   loading: RemoteDataState
+  isInitialFetch: boolean
 }
 
 interface Props {
@@ -30,8 +31,8 @@ interface Props {
 
 interface State {
   loading: RemoteDataState
-  isFirstFetch: boolean
   tables: FluxTable[]
+  fetchCount: number
 }
 
 class TimeSeries extends Component<Props, State> {
@@ -46,19 +47,19 @@ class TimeSeries extends Component<Props, State> {
 
     this.state = {
       loading: RemoteDataState.NotStarted,
-      isFirstFetch: false,
       tables: [],
+      fetchCount: 0,
     }
   }
 
   public async componentDidMount() {
-    const isFirstFetch = true
-    this.reload(isFirstFetch)
-    GlobalAutoRefresher.subscribe(this.executeQueries)
+    this.reload()
+
+    GlobalAutoRefresher.subscribe(this.reload)
   }
 
   public componentWillUnmount() {
-    GlobalAutoRefresher.unsubscribe(this.executeQueries)
+    GlobalAutoRefresher.unsubscribe(this.reload)
   }
 
   public async componentDidUpdate(prevProps: Props) {
@@ -69,18 +70,17 @@ class TimeSeries extends Component<Props, State> {
     this.reload()
   }
 
-  public reload = async (isFirstFetch: boolean = false) => {
+  public reload = async () => {
     const {link, inView, queries} = this.props
 
     if (!inView) {
       return
     }
 
-    if (!queries.length) {
-      return this.setState({tables: []})
-    }
-
-    this.setState({loading: RemoteDataState.Loading, isFirstFetch})
+    this.setState({
+      loading: RemoteDataState.Loading,
+      fetchCount: this.state.fetchCount + 1,
+    })
 
     try {
       const results = await this.executeQueries(link, queries)
@@ -100,30 +100,13 @@ class TimeSeries extends Component<Props, State> {
   }
 
   public render() {
-    const {tables, loading, isFirstFetch} = this.state
+    const {tables, loading, fetchCount} = this.state
 
-    const hasValues = _.some(tables, s => {
-      const data = _.get(s, 'data', [])
-      return !!data.length
+    return this.props.children({
+      tables,
+      loading,
+      isInitialFetch: fetchCount === 1,
     })
-
-    if (isFirstFetch && loading === RemoteDataState.Loading) {
-      return (
-        <div className="graph-empty">
-          <h3 className="graph-spinner" />
-        </div>
-      )
-    }
-
-    if (!hasValues) {
-      return (
-        <div className="graph-empty">
-          <p>No Results</p>
-        </div>
-      )
-    }
-
-    return this.props.children({tables, loading})
   }
 
   private isPropsDifferent(nextProps: Props) {

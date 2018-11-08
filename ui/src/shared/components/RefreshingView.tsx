@@ -13,6 +13,7 @@ import SingleStat from 'src/shared/components/SingleStat'
 import TimeSeries from 'src/shared/components/TimeSeries'
 import SingleStatTransform from 'src/shared/components/SingleStatTransform'
 import TimeMachineTables from 'src/shared/components/tables/TimeMachineTables'
+import EmptyGraphMessage from 'src/shared/components/EmptyGraphMessage'
 
 // Constants
 import {emptyGraphCopy} from 'src/shared/copy/cell'
@@ -30,6 +31,7 @@ import {
   LineView,
   SingleStatView,
 } from 'src/types/v2/dashboards'
+import {RemoteDataState} from 'src/types'
 
 interface OwnProps {
   timeRange: TimeRange
@@ -71,11 +73,7 @@ class RefreshingView extends PureComponent<Props> {
     } = this.props
 
     if (!properties.queries.length) {
-      return (
-        <div className="graph-empty">
-          <p data-test="data-explorer-no-results">{emptyGraphCopy}</p>
-        </div>
-      )
+      return <EmptyGraphMessage message={emptyGraphCopy} />
     }
 
     return (
@@ -85,7 +83,15 @@ class RefreshingView extends PureComponent<Props> {
         queries={this.queries}
         key={manualRefresh}
       >
-        {({tables, loading}) => {
+        {({tables, loading, isInitialFetch}) => {
+          if (isInitialFetch && loading === RemoteDataState.Loading) {
+            return <EmptyGraphMessage message="Loading..." />
+          }
+
+          if (!tables.some(d => !!d.data.length)) {
+            return <EmptyGraphMessage message="No Results" />
+          }
+
           switch (properties.type) {
             case ViewType.SingleStat:
               return (
