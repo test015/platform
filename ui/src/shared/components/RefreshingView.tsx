@@ -1,6 +1,5 @@
 // Libraries
 import React, {PureComponent} from 'react'
-import {withRouter, WithRouterProps} from 'react-router'
 import {connect} from 'react-redux'
 import _ from 'lodash'
 
@@ -37,8 +36,6 @@ interface OwnProps {
   timeRange: TimeRange
   viewID: string
   inView: boolean
-  timeFormat: string
-  autoRefresh: number
   manualRefresh: number
   onZoom: (range: TimeRange) => void
   properties: RefreshingViewProperties
@@ -52,7 +49,7 @@ interface DispatchProps {
   handleSetHoverTime: typeof setHoverTime
 }
 
-type Props = OwnProps & StateProps & DispatchProps & WithRouterProps
+type Props = OwnProps & StateProps & DispatchProps
 
 class RefreshingView extends PureComponent<Props> {
   public static defaultProps: Partial<Props> = {
@@ -217,4 +214,4 @@ const mdtp = {
 export default connect<StateProps, DispatchProps, OwnProps>(
   mstp,
   mdtp
-)(withRouter(RefreshingView))
+)(RefreshingView)
