@@ -19,6 +19,7 @@ export const DEFAULT_TIME_SERIES = [{response: {results: []}}]
 interface RenderProps {
   tables: FluxTable[]
   loading: RemoteDataState
+  error: Error | null
   isInitialFetch: boolean
 }
 
@@ -32,6 +33,7 @@ interface Props {
 interface State {
   loading: RemoteDataState
   tables: FluxTable[]
+  error: Error | null
   fetchCount: number
 }
 
@@ -49,6 +51,7 @@ class TimeSeries extends Component<Props, State> {
       loading: RemoteDataState.NotStarted,
       tables: [],
       fetchCount: 0,
+      error: null,
     }
   }
 
@@ -69,11 +72,12 @@ class TimeSeries extends Component<Props, State> {
   }
 
   public render() {
-    const {tables, loading, fetchCount} = this.state
+    const {tables, loading, error, fetchCount} = this.state
 
     return this.props.children({
       tables,
       loading,
+      error,
       isInitialFetch: fetchCount === 1,
     })
   }
@@ -98,12 +102,15 @@ class TimeSeries extends Component<Props, State> {
         tables,
         loading: RemoteDataState.Done,
       })
-    } catch (err) {
-      if (err instanceof CancellationError) {
+    } catch (error) {
+      if (error instanceof CancellationError) {
         return
       }
 
-      console.error(err)
+      this.setState({
+        error,
+        loading: RemoteDataState.Error,
+      })
     }
   }
 

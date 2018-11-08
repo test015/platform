@@ -80,7 +80,11 @@ class RefreshingView extends PureComponent<Props> {
         queries={this.queries}
         key={manualRefresh}
       >
-        {({tables, loading, isInitialFetch}) => {
+        {({tables, loading, error, isInitialFetch}) => {
+          if (error) {
+            return <EmptyGraphMessage message={`Error: ${error.message}`} />
+          }
+
           if (isInitialFetch && loading === RemoteDataState.Loading) {
             return <EmptyGraphMessage message="Loading..." />
           }
