@@ -2,8 +2,7 @@
 import React, {PureComponent} from 'react'
 
 // Components
-import FormElement from 'src/clockface/components/form_layout/FormElement'
-import {Radio, ButtonShape} from 'src/clockface'
+import {Form, Columns, Radio, ButtonShape} from 'src/clockface'
 
 // Constants
 import {AXES_SCALE_OPTIONS} from 'src/dashboards/constants/cellEditor'
@@ -20,7 +19,7 @@ class YAxisBase extends PureComponent<Props> {
     const {base, onUpdateYAxisBase} = this.props
 
     return (
-      <FormElement label="Y-Value's Format">
+      <Form.Element label="Y-Value's Format" colsSM={Columns.Three}>
         <Radio shape={ButtonShape.StretchToFit}>
           <Radio.Button
             id="y-values-format-tab--raw"
@@ -50,7 +49,7 @@ class YAxisBase extends PureComponent<Props> {
             K/M/G
           </Radio.Button>
         </Radio>
-      </FormElement>
+      </Form.Element>
     )
   }
 }

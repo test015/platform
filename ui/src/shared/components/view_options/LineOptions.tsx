@@ -75,7 +75,6 @@ class LineOptions extends PureComponent<Props> {
     return (
       <Form>
         <YAxisTitle label={label} onUpdateYAxisLabel={onUpdateYAxisLabel} />
-        <ColorSelector colors={colors} onUpdateColors={onUpdateColors} />
         <YAxisBounds
           min={min}
           max={max}
@@ -83,6 +82,7 @@ class LineOptions extends PureComponent<Props> {
           onUpdateYAxisMaxBound={onUpdateYAxisMaxBound}
           onUpdateYAxisMinBound={onUpdateYAxisMinBound}
         />
+        <ColorSelector colors={colors} onUpdateColors={onUpdateColors} />
         <YAxisAffixes
           prefix={prefix}
           suffix={suffix}

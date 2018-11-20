@@ -5,7 +5,7 @@ import React, {PureComponent} from 'react'
 import {AXES_SCALE_OPTIONS} from 'src/dashboards/constants/cellEditor'
 
 // Components
-import FormElement from 'src/clockface/components/form_layout/FormElement'
+import {Form, Columns} from 'src/clockface'
 import OptIn from 'src/shared/components/OptIn'
 
 interface Props {
@@ -23,15 +23,15 @@ class YAxisBound extends PureComponent<Props> {
     const {label, bound, scale, onUpdateYAxisBound} = this.props
 
     return (
-      <FormElement label={label}>
+      <Form.Element label={label} colsSM={Columns.Three} colsXS={Columns.Six}>
         <OptIn
-          customPlaceholder={'min'}
+          customPlaceholder={'Enter a number'}
           customValue={bound}
           onSetValue={onUpdateYAxisBound}
           type="number"
           min={getInputMin(scale)}
         />
-      </FormElement>
+      </Form.Element>
     )
   }
 }

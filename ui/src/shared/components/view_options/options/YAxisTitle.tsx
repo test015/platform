@@ -2,7 +2,7 @@
 import React, {PureComponent} from 'react'
 
 // Components
-import FormElement from 'src/clockface/components/form_layout/FormElement'
+import {Form, Columns} from 'src/clockface'
 import OptIn from 'src/shared/components/OptIn'
 
 interface Props {
@@ -14,14 +14,14 @@ class YAxisTitle extends PureComponent<Props> {
     const {label, onUpdateYAxisLabel} = this.props
 
     return (
-      <FormElement label="Title">
+      <Form.Element label="Title" colsSM={Columns.Three}>
         <OptIn
           type="text"
           customValue={label}
           onSetValue={onUpdateYAxisLabel}
           customPlaceholder={this.defaultYLabel || 'y-axis title'}
         />
-      </FormElement>
+      </Form.Element>
     )
   }
 

@@ -2,8 +2,7 @@
 import React, {PureComponent} from 'react'
 
 // Components
-import FormElement from 'src/clockface/components/form_layout/FormElement'
-import {Radio, ButtonShape} from 'src/clockface'
+import {Form, Columns, Radio, ButtonShape} from 'src/clockface'
 
 // Constants
 import {AXES_SCALE_OPTIONS} from 'src/dashboards/constants/cellEditor'
@@ -20,7 +19,7 @@ class YAxisBase extends PureComponent<Props> {
     const {scale, onUpdateYAxisScale} = this.props
 
     return (
-      <FormElement label="Scale">
+      <Form.Element label="Scale" colsSM={Columns.Three}>
         <Radio shape={ButtonShape.StretchToFit}>
           <Radio.Button
             id="y-scale-tab--linear"
@@ -41,7 +40,7 @@ class YAxisBase extends PureComponent<Props> {
             Logarithmic
           </Radio.Button>
         </Radio>
-      </FormElement>
+      </Form.Element>
     )
   }
 }
