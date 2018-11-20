@@ -14,7 +14,23 @@ import {OverlayTechnology} from 'src/clockface'
 import {Page} from 'src/pageLayout'
 
 // Actions
-import * as logActions from 'src/logs/actions'
+import {
+  createLogConfigAsync,
+  addFilter,
+  setConfig,
+  updateLogConfigAsync,
+  getLogConfigAsync,
+  removeFilter,
+  changeFilter,
+  clearFilters,
+  setSearchStatus,
+  setBucketAsync,
+  getSourceAndPopulateBucketsAsync,
+  fetchTailAsync,
+  flushTailBuffer,
+  setNextTailLowerBound,
+  clearSearchData,
+} from 'src/logs/actions'
 import {notify as notifyAction} from 'src/shared/actions/notifications'
 
 // Utils
@@ -57,17 +73,17 @@ interface TableConfigStateProps {
 
 interface DispatchTableConfigProps {
   notify: typeof notifyAction
-  getConfig: typeof logActions.getLogConfigAsync
-  addFilter: typeof logActions.addFilter // TODO: update addFilters
-  setConfig: typeof logActions.setConfig
-  updateConfig: typeof logActions.updateLogConfigAsync
-  createConfig: typeof logActions.createLogConfigAsync
-  removeFilter: typeof logActions.removeFilter
-  changeFilter: typeof logActions.changeFilter
-  clearFilters: typeof logActions.clearFilters
-  setSearchStatus: typeof logActions.setSearchStatus
-  setBucketAsync: typeof logActions.setBucketAsync
-  getSourceAndPopulateBuckets: typeof logActions.getSourceAndPopulateBucketsAsync
+  getConfig: typeof getLogConfigAsync
+  addFilter: typeof addFilter // TODO: update addFilters
+  setConfig: typeof setConfig
+  updateConfig: typeof updateLogConfigAsync
+  createConfig: typeof createLogConfigAsync
+  removeFilter: typeof removeFilter
+  changeFilter: typeof changeFilter
+  clearFilters: typeof clearFilters
+  setSearchStatus: typeof setSearchStatus
+  setBucketAsync: typeof setBucketAsync
+  getSourceAndPopulateBuckets: typeof getSourceAndPopulateBucketsAsync
 }
 
 // Connected Table Data
@@ -81,10 +97,10 @@ interface TableDataStateProps {
 }
 
 interface DispatchTableDataProps {
-  fetchTailAsync: typeof logActions.fetchTailAsync
-  flushTailBuffer: typeof logActions.flushTailBuffer
-  setNextTailLowerBound: typeof logActions.setNextTailLowerBound
-  clearSearchData: typeof logActions.clearSearchData
+  fetchTailAsync: typeof fetchTailAsync
+  flushTailBuffer: typeof flushTailBuffer
+  setNextTailLowerBound: typeof setNextTailLowerBound
+  clearSearchData: typeof clearSearchData
 }
 
 type StateProps = TableConfigStateProps & TableDataStateProps
@@ -596,21 +612,21 @@ const mstp = (state: AppState): StateProps => {
 
 const mdtp: DispatchProps = {
   notify: notifyAction,
-  addFilter: logActions.addFilter,
-  updateConfig: logActions.updateLogConfigAsync,
-  createConfig: logActions.createLogConfigAsync,
-  removeFilter: logActions.removeFilter,
-  changeFilter: logActions.changeFilter,
-  clearFilters: logActions.clearFilters,
-  getConfig: logActions.getLogConfigAsync,
-  setConfig: logActions.setConfig,
-  setSearchStatus: logActions.setSearchStatus,
-  setBucketAsync: logActions.setBucketAsync,
-  getSourceAndPopulateBuckets: logActions.getSourceAndPopulateBucketsAsync,
-  fetchTailAsync: logActions.fetchTailAsync,
-  flushTailBuffer: logActions.flushTailBuffer,
-  setNextTailLowerBound: logActions.setNextTailLowerBound,
-  clearSearchData: logActions.clearSearchData,
+  addFilter,
+  changeFilter,
+  removeFilter,
+  clearFilters,
+  setConfig,
+  setSearchStatus,
+  setBucketAsync,
+  fetchTailAsync,
+  flushTailBuffer,
+  setNextTailLowerBound,
+  clearSearchData,
+  getConfig: getLogConfigAsync,
+  updateConfig: updateLogConfigAsync,
+  createConfig: createLogConfigAsync,
+  getSourceAndPopulateBuckets: getSourceAndPopulateBucketsAsync,
 }
 
 export default connect<StateProps, DispatchProps, {}>(
