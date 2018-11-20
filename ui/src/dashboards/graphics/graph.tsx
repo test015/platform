@@ -524,7 +524,7 @@ const GRAPH_SVGS: GraphSVGs = {
   ),
 }
 
-interface GraphType {
+export interface GraphType {
   type: ViewType
   menuOption: string
   graphic: Graphic

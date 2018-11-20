@@ -7,7 +7,17 @@ import AutoRefreshDropdown from 'src/shared/components/dropdown_auto_refresh/Aut
 import TimeRangeDropdown from 'src/shared/components/TimeRangeDropdown'
 import GraphTips from 'src/shared/components/graph_tips/GraphTips'
 import RenameDashboard from 'src/dashboards/components/rename_dashboard/RenameDashboard'
-import {Button, ButtonShape, ComponentColor, IconFont} from 'src/clockface'
+import {
+  Dropdown,
+  DropdownMode,
+  Button,
+  ButtonShape,
+  ComponentColor,
+  IconFont,
+} from 'src/clockface'
+
+// Constants
+import {GraphType, GRAPH_TYPES} from 'src/dashboards/graphics/graph'
 
 // Types
 import * as AppActions from 'src/types/actions/app'
@@ -23,7 +33,7 @@ interface Props {
   handleChooseAutoRefresh: AppActions.SetAutoRefreshActionCreator
   onManualRefresh: () => void
   handleClickPresentationButton: AppActions.DelayEnablePresentationModeDispatcher
-  onAddCell: () => void
+  onAddCell: (viewType: GraphType) => void
   showTemplateControlBar: boolean
   zoomedTimeRange: QueriesModels.TimeRange
   onRenameDashboard: (name: string) => Promise<void>
@@ -84,19 +94,48 @@ class DashboardHeader extends Component<Props> {
   }
 
   private get addCellButton(): JSX.Element {
-    const {dashboard, onAddCell} = this.props
+    const {dashboard} = this.props
 
     if (dashboard) {
       return (
-        <Button
-          shape={ButtonShape.Square}
+        <Dropdown
+          widthPixels={160}
           icon={IconFont.AddCell}
-          color={ComponentColor.Primary}
-          onClick={onAddCell}
-          titleText="Add cell to dashboard"
-        />
+          buttonColor={ComponentColor.Primary}
+          titleText="Add a Cell"
+          onChange={this.handleAddCell}
+          mode={DropdownMode.ActionList}
+        >
+          {this.organizedViewTypes.map(g => {
+            if (g.type === 'divider') {
+              return (
+                <Dropdown.Divider
+                  key={g.menuOption}
+                  id={g.menuOption}
+                  text={g.menuOption}
+                />
+              )
+            } else {
+              return (
+                <Dropdown.Item
+                  id={`add-cell--${g.menuOption}`}
+                  key={`add-cell--${g.menuOption}`}
+                  value={g}
+                >
+                  {g.menuOption}
+                </Dropdown.Item>
+              )
+            }
+          })}
+        </Dropdown>
       )
     }
+  }
+
+  private handleAddCell = (viewType: GraphType): void => {
+    const {onAddCell} = this.props
+
+    onAddCell(viewType)
   }
 
   private get dashboardTitle(): JSX.Element {
@@ -109,6 +148,31 @@ class DashboardHeader extends Component<Props> {
     }
 
     return <Page.Title title={activeDashboard} />
+  }
+
+  private get organizedViewTypes() {
+    return [
+      {
+        type: 'divider',
+        menuOption: 'Graphs',
+      },
+      GRAPH_TYPES[0],
+      GRAPH_TYPES[1],
+      GRAPH_TYPES[2],
+      GRAPH_TYPES[3],
+      {
+        type: 'divider',
+        menuOption: 'Stats',
+      },
+      GRAPH_TYPES[4],
+      GRAPH_TYPES[5],
+      GRAPH_TYPES[6],
+      {
+        type: 'divider',
+        menuOption: 'Tabular',
+      },
+      GRAPH_TYPES[7],
+    ]
   }
 }
 
