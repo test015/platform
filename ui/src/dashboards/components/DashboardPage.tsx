@@ -270,8 +270,8 @@ class DashboardPage extends Component<Props, State> {
     await updateCells(dashboard, cells)
   }
 
-  private handleAddCell = async (): Promise<void> => {
-    const newView = createView<LineView>(ViewType.Line)
+  private handleAddCell = async (type: ViewType): Promise<void> => {
+    const newView = createView(type)
 
     this.showVEO(newView)
   }

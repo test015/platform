@@ -20,6 +20,7 @@ import {
 import {GraphType, GRAPH_TYPES} from 'src/dashboards/graphics/graph'
 
 // Types
+import {ViewType} from 'src/types/v2'
 import * as AppActions from 'src/types/actions/app'
 import * as QueriesModels from 'src/types/queries'
 import {Dashboard, DashboardSwitcherLinks} from 'src/types/v2/dashboards'
@@ -33,7 +34,7 @@ interface Props {
   handleChooseAutoRefresh: AppActions.SetAutoRefreshActionCreator
   onManualRefresh: () => void
   handleClickPresentationButton: AppActions.DelayEnablePresentationModeDispatcher
-  onAddCell: (viewType: GraphType) => void
+  onAddCell: (viewType: ViewType) => void
   showTemplateControlBar: boolean
   zoomedTimeRange: QueriesModels.TimeRange
   onRenameDashboard: (name: string) => Promise<void>
@@ -132,10 +133,11 @@ class DashboardHeader extends Component<Props> {
     }
   }
 
-  private handleAddCell = (viewType: GraphType): void => {
+  private handleAddCell = (graphType: GraphType): void => {
     const {onAddCell} = this.props
+    const {type} = graphType
 
-    onAddCell(viewType)
+    onAddCell(type)
   }
 
   private get dashboardTitle(): JSX.Element {
