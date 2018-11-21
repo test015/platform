@@ -112,6 +112,7 @@ class DashboardIndex extends PureComponent<Props, State> {
                 icon={IconFont.Plus}
                 text="Create Dashboard"
                 titleText="Create a new dashboard"
+                testID="create-dashboard-button"
               />
             </Page.Header.Right>
           </Page.Header>

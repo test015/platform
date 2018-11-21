@@ -64,6 +64,7 @@ const SourcesListRow: SFC<Props> = ({
       key={source.id}
       disabled={false}
       customClass="sources-list-row"
+      testID="source-row"
     >
       <IndexList.Cell>
         <Button
@@ -72,6 +73,7 @@ const SourcesListRow: SFC<Props> = ({
           size={ComponentSize.ExtraSmall}
           customClass="sources-list-row--connect-btn"
           onClick={onButtonClick}
+          testID="connect-source-button"
         />
       </IndexList.Cell>
       <IndexList.Cell>{source.name}</IndexList.Cell>

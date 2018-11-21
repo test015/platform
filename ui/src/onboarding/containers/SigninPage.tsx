@@ -58,7 +58,7 @@ class SigninPage extends PureComponent<Props, State> {
       <SplashPage panelWidthPixels={300}>
         <SplashPage.Panel>
           <SplashPage.Logo />
-          <SplashPage.Header title="InfluxData" />
+          <SplashPage.Header title="InfluxDataBBB" />
           <Form onSubmit={this.handleSignIn}>
             <Form.Element
               label="Username"
@@ -66,6 +66,7 @@ class SigninPage extends PureComponent<Props, State> {
               errorMessage=""
             >
               <Input
+                name="username"
                 value={username}
                 onChange={this.handleUsername}
                 size={ComponentSize.Medium}
@@ -78,6 +79,7 @@ class SigninPage extends PureComponent<Props, State> {
               errorMessage=""
             >
               <Input
+                name="password"
                 value={password}
                 onChange={this.handlePassword}
                 size={ComponentSize.Medium}

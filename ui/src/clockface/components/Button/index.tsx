@@ -27,6 +27,7 @@ interface Props {
   tabIndex?: number
   customClass?: string
   type?: ButtonType
+  testID?: string
 }
 
 @ErrorHandling
@@ -41,7 +42,7 @@ class Button extends Component<Props> {
   }
 
   public render() {
-    const {onClick, text, titleText, tabIndex, type} = this.props
+    const {onClick, text, titleText, tabIndex, type, testID} = this.props
 
     return (
       <button
@@ -51,6 +52,7 @@ class Button extends Component<Props> {
         title={titleText || text}
         tabIndex={!!tabIndex ? tabIndex : 0}
         type={type}
+        data-test={testID}
       >
         {this.icon}
         {this.text}

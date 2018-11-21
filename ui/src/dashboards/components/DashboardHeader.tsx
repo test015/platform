@@ -111,6 +111,7 @@ class DashboardHeader extends Component<Props> {
           onClick={onAddCell}
           text="Add Cell"
           titleText="Add cell to dashboard"
+          testID="add-cell-button"
         />
       )
     }
