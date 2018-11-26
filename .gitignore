@@ -4,6 +4,7 @@ vendor
 .vs
 .tern-project
 .DS_Store
+*.test
 
 # binary databases
 influxd.bolt
