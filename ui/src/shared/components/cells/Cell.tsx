@@ -6,6 +6,7 @@ import _ from 'lodash'
 // Components
 import CellHeader from 'src/shared/components/cells/CellHeader'
 import CellContext from 'src/shared/components/cells/CellContext'
+import CellNoteOverlay from 'src/dashboards/components/cell_note/CellNoteOverlay'
 import ViewComponent from 'src/shared/components/cells/View'
 import {ErrorHandling} from 'src/shared/decorators/errors'
 
@@ -42,8 +43,25 @@ interface PassedProps {
 
 type Props = StateProps & DispatchProps & PassedProps
 
+enum OverlayState {
+  Visible = 'visible',
+  Hidden = 'hidden',
+}
+
+interface State {
+  noteEditor: OverlayState
+}
+
 @ErrorHandling
-class CellComponent extends Component<Props> {
+class CellComponent extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props)
+
+    this.state = {
+      noteEditor: OverlayState.Visible,
+    }
+  }
+
   public async componentDidMount() {
     const {viewStatus, cell, onReadView} = this.props
 
@@ -53,7 +71,14 @@ class CellComponent extends Component<Props> {
   }
 
   public render() {
-    const {isEditable, onEditCell, onDeleteCell, onCloneCell, cell} = this.props
+    const {
+      isEditable,
+      onEditCell,
+      onDeleteCell,
+      onCloneCell,
+      cell,
+      view,
+    } = this.props
 
     return (
       <>
@@ -66,6 +91,7 @@ class CellComponent extends Component<Props> {
           onEditCell={onEditCell}
           onCSVDownload={this.handleCSVDownload}
         />
+        <CellNoteOverlay view={view} />
         <div className="cell--view">{this.view}</div>
       </>
     )

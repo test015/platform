@@ -28,6 +28,7 @@ class CellContext extends PureComponent<Props> {
         <Context className="cell--context">
           <Context.Menu icon={IconFont.Pencil}>
             <Context.Item label="Configure" action={onEditCell} />
+            <Context.Item label="Add Note" action={onEditCell} />
             <Context.Item
               label="Download CSV"
               action={onCSVDownload}
