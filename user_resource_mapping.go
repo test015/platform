@@ -35,10 +35,10 @@ type UserResourceMappingService interface {
 
 // UserResourceMapping represents a mapping of a resource to its user
 type UserResourceMapping struct {
-	ResourceID   ID           `json:"resource_id"`
-	ResourceType ResourceType `json:"resource_type"`
-	UserID       ID           `json:"user_id"`
-	UserType     UserType     `json:"user_type"`
+	ResourceID   ID           `json:"resourceID"`
+	ResourceType ResourceType `json:"resourceType"`
+	UserID       ID           `json:"userID"`
+	UserType     UserType     `json:"userType"`
 }
 
 // Validate reports any validation errors for the mapping.
