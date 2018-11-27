@@ -74,7 +74,7 @@ func TestTaskHandler_handleGetTasks(t *testing.T) {
       },
       "id": "0000000000000001",
       "name": "task1",
-      "organizationId": "0000000000000001",
+      "organizationID": "0000000000000001",
       "status": "",
       "flux": "",
       "owner": {
@@ -92,7 +92,7 @@ func TestTaskHandler_handleGetTasks(t *testing.T) {
       },
       "id": "0000000000000002",
       "name": "task2",
-      "organizationId": "0000000000000002",
+      "organizationID": "0000000000000002",
       "status": "",
       "flux": "",
       "owner": {
@@ -185,7 +185,7 @@ func TestTaskHandler_handlePostTasks(t *testing.T) {
   },
   "id": "0000000000000001",
   "name": "task1",
-  "organizationId": "0000000000000001",
+  "organizationID": "0000000000000001",
   "status": "",
   "flux": "",
   "owner": {
