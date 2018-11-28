@@ -152,15 +152,17 @@ func (h *TelegrafHandler) handleGetTelegraf(w http.ResponseWriter, r *http.Reque
 		w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.toml\"", strings.Replace(strings.TrimSpace(tc.Name), " ", "_", -1)))
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(tc.TOML()))
+	case "application/toml":
+		w.Header().Set("Content-Type", "application/toml; charset=utf-8")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(tc.TOML()))
 	case "application/json":
+		fallthrough
+	default:
 		if err := encodeResponse(ctx, w, http.StatusOK, newTelegrafResponse(tc)); err != nil {
 			EncodeError(ctx, err, w)
 			return
 		}
-	default:
-		w.Header().Set("Content-Type", "application/toml; charset=utf-8")
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(tc.TOML()))
 	}
 }
 
