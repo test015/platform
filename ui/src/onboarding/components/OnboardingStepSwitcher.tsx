@@ -29,15 +29,15 @@ interface Props {
   onSetDataSources: typeof setDataSources
   setupParams: SetupParams
   dataSources: DataSource[]
-  stepTitle: string
+  currentStepIndex: number
 }
 
 @ErrorHandling
 class OnboardingStepSwitcher extends PureComponent<Props> {
   public render() {
     const {
+      currentStepIndex,
       onboardingStepProps,
-      stepTitle,
       setupParams,
       dataSources,
       onAddDataSource,
@@ -45,12 +45,12 @@ class OnboardingStepSwitcher extends PureComponent<Props> {
       onSetDataSources,
     } = this.props
 
-    switch (stepTitle) {
-      case 'Welcome':
+    switch (currentStepIndex) {
+      case 0:
         return <InitStep {...onboardingStepProps} />
-      case 'Admin Setup':
+      case 1:
         return <AdminStep {...onboardingStepProps} />
-      case 'Select Data Sources':
+      case 2:
         return (
           <SelectDataSourceStep
             {...onboardingStepProps}
@@ -61,14 +61,14 @@ class OnboardingStepSwitcher extends PureComponent<Props> {
             onSetDataSources={onSetDataSources}
           />
         )
-      case 'Configure Data Sources':
+      case 3:
         return (
           <ConfigureDataSourceSwitcher
             {...onboardingStepProps}
             dataSource={_.get(dataSources, '0.name', '')}
           />
         )
-      case 'Complete':
+      case 4:
         return <CompletionStep {...onboardingStepProps} />
       default:
         return <div />

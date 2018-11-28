@@ -72,8 +72,10 @@ class SelectDataSourceStep extends PureComponent<Props, State> {
 
   private get title(): string {
     const {bucket} = this.props
-
-    return `Select Data Source for Bucket ${bucket || ''}`
+    if (this.state.streaming === StreamingOptions.Show) {
+      return `Select Streaming Data Sources to add to ${bucket || ''}`
+    }
+    return `Select a Data Source to add to ${bucket || ''}`
   }
 
   private get selector(): JSX.Element {
