@@ -15,6 +15,7 @@ export enum SideBarTabStatus {
   Error = 'error',
   Success = 'success',
   Pending = 'pending',
+  Blank = 'blank',
 }
 
 interface Props {
@@ -28,22 +29,22 @@ class SideBar extends Component<Props> {
   public static Button = SideBarButton
 
   public render() {
-    const {title, visible} = this.props
-    if (!visible) {
-      return null
-    }
+    const {title} = this.props
+
     return (
       <div className={this.containerClassName}>
-        <h3 className="side-bar--title">{title}</h3>
-        <div className="side-bar--contents">
-          <div className="side-bar--tabs">{this.childTabs}</div>
-          <div className="side-bar--buttons">
-            <ComponentSpacer
-              direction={Direction.Vertical}
-              align={Alignment.Left}
-            >
-              {this.childButtons}
-            </ComponentSpacer>
+        <div className="side-bar--container">
+          <h3 className="side-bar--title">{title}</h3>
+          <div className="side-bar--contents">
+            <div className="side-bar--tabs">{this.childTabs}</div>
+            <div className="side-bar--buttons">
+              <ComponentSpacer
+                direction={Direction.Vertical}
+                align={Alignment.Left}
+              >
+                {this.childButtons}
+              </ComponentSpacer>
+            </div>
           </div>
         </div>
       </div>

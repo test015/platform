@@ -43,6 +43,7 @@ class OnboardingSideBar extends Component<Props> {
           text="Download Config File"
           titleText="Download Config File"
           color={ComponentColor.Secondary}
+          icon={IconFont.Download}
         />
         <SideBar.Button
           text="Add New Source"

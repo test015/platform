@@ -51,10 +51,15 @@ class SideBarTab extends Component<Props> {
       case TabStatus.Pending:
       case TabStatus.Success:
         icon = `side-bar--icon icon ${IconFont.Checkmark}`
+        break
       case TabStatus.Error:
         icon = `side-bar--icon icon ${IconFont.Remove}`
-      default:
+        break
+      case TabStatus.Default:
         icon = `side-bar--icon icon ${IconFont.CircleThick}`
+        break
+      default:
+        icon = `side-bar--icon`
     }
 
     return <span className={icon} />

@@ -118,22 +118,24 @@ class OnboardingWizard extends PureComponent<Props> {
     return (
       <WizardFullScreen>
         {this.progressHeader}
-        <div className="wizard-step--container">
+        <div className="wizard-contents">
           <OnboardingSideBar
             dataSources={dataSources}
             onTabClick={this.handleClickSideBarTab}
             title="Selected Sources"
             visible={this.sideBarVisible}
           />
-          <OnboardingStepSwitcher
-            currentStepIndex={currentStepIndex}
-            onboardingStepProps={this.onboardingStepProps}
-            setupParams={setupParams}
-            dataSources={dataSources}
-            onAddDataSource={onAddDataSource}
-            onRemoveDataSource={onRemoveDataSource}
-            onSetDataSources={onSetDataSources}
-          />
+          <div className="wizard-step--container">
+            <OnboardingStepSwitcher
+              currentStepIndex={currentStepIndex}
+              onboardingStepProps={this.onboardingStepProps}
+              setupParams={setupParams}
+              dataSources={dataSources}
+              onAddDataSource={onAddDataSource}
+              onRemoveDataSource={onRemoveDataSource}
+              onSetDataSources={onSetDataSources}
+            />
+          </div>
         </div>
       </WizardFullScreen>
     )
