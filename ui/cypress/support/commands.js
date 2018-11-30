@@ -10,7 +10,19 @@
 //
 //
 // -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
+
+function login() {
+  cy.fixture('user').then(user => {
+    cy.request({
+      method: 'POST',
+      url: '/api/v2/signin',
+      auth: {user: user.username, pass: user.password}
+    })
+  })
+}
+
+Cypress.Commands.add('login', login)
+
 //
 //
 // -- This is a child command --
