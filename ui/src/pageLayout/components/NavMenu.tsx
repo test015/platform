@@ -25,7 +25,7 @@ class NavMenu extends PureComponent<Props> {
     const {navItems} = this.props
 
     return (
-      <nav className="nav">
+      <nav className="nav" data-test="nav">
         {navItems.map(
           ({title, highlightWhen, icon, link, location, type, image}) => (
             <NavMenuItem
