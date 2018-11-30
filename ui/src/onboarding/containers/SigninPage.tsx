@@ -58,7 +58,7 @@ class SigninPage extends PureComponent<Props, State> {
       <SplashPage panelWidthPixels={300}>
         <SplashPage.Panel>
           <SplashPage.Logo />
-          <SplashPage.Header title="InfluxDataBBB" />
+          <SplashPage.Header title="InfluxData" />
           <Form onSubmit={this.handleSignIn}>
             <Form.Element
               label="Username"
