@@ -61,7 +61,11 @@ class Notification extends Component<Props, State> {
     } = this.props
 
     return (
-      <div className={this.containerClassname} style={this.notificationStyle}>
+      <div
+        className={this.containerClassname}
+        style={this.notificationStyle}
+        data-test={this.dataTest}
+      >
         <div
           className={this.notificationClassname}
           ref={this.handleNotificationRef}
@@ -72,6 +76,12 @@ class Notification extends Component<Props, State> {
         </div>
       </div>
     )
+  }
+
+  private get dataTest(): string {
+    const {type} = this.props.notification
+
+    return `notification-${type}`
   }
 
   private get notificationClassname(): string {

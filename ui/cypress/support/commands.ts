@@ -11,17 +11,35 @@
 //
 // -- This is a parent command --
 
-function login() {
+declare namespace Cypress {
+  interface Chainable<Subject> {
+    login: typeof login
+    getByDataTest: typeof getByDataTest
+    getByInputName: typeof getByInputName
+  }
+}
+
+const login = () => {
   cy.fixture('user').then(user => {
     cy.request({
       method: 'POST',
       url: '/api/v2/signin',
-      auth: {user: user.username, pass: user.password}
+      auth: {user: user.username, pass: user.password},
     })
   })
 }
 
+const getByDataTest = (dataTest: string): Cypress.Chainable => {
+  return cy.get(`[data-test="${dataTest}"]`)
+}
+
+const getByInputName = (name: string): Cypress.Chainable => {
+  return cy.get(`input[name=${name}]`)
+}
+
 Cypress.Commands.add('login', login)
+Cypress.Commands.add('getByDataTest', getByDataTest)
+Cypress.Commands.add('getByInputName', getByInputName)
 
 //
 //
