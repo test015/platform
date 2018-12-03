@@ -1,0 +1,43 @@
+@import "src/style/modules";
+
+$threesizinator--handle-width: 4px;
+$threesizinator--handle-length: 60px;
+$threesizinator--handle-margin: 5px;
+
+.threesizinator {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.threesizinator__row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.threesizinator__dragging {
+  cursor: ew-resize;
+}
+
+.threesizinator--handle {
+  border-radius: $threesizinator--handle-width / 2;
+  background: $g6-smoke;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.threesizinator__row .threesizinator--handle {
+  height: $threesizinator--handle-length;
+  width: $threesizinator--handle-width;
+  // TODO: Put this style on the container instead with a modifier class
+  cursor: ew-resize;
+  margin: 0 $threesizinator--handle-margin;
+}
+
+.threesizinator--division {
+  background: $c-moonstone;
+  opacity: 0.1;
+  flex-shrink: 0;
+  height: 100%;
+}
