@@ -71,6 +71,9 @@ $(CMDS): $(SOURCES)
 
 node_modules: ui/node_modules
 
+junit:
+	make -C ui junit
+
 chronograf_lint:
 	make -C ui lint
 
