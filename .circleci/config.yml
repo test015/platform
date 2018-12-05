@@ -23,7 +23,7 @@ jobs:
           paths:
             - ~/.cache/npm
 
-      - run: make junit
+      - run: make e2e
 
       - store_test_results:
           path: junit-results

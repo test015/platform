@@ -5,7 +5,7 @@ all: build
 node_modules: package-lock.json
 	npm ci
 
-junit: node_modules
+e2e: node_modules
 	npm run test:junit
 
 build: node_modules $(UISOURCES)
