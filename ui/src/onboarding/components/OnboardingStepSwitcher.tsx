@@ -14,6 +14,7 @@ import {ErrorHandling} from 'src/shared/decorators/errors'
 // Actions
 import {
   addTelegrafPlugin,
+  updateTelegrafPluginConfig,
   removeTelegrafPlugin,
   setDataLoadersType,
 } from 'src/onboarding/actions/dataLoaders'
@@ -26,6 +27,7 @@ import {OnboardingStepProps} from 'src/onboarding/containers/OnboardingWizard'
 interface Props {
   onboardingStepProps: OnboardingStepProps
   onAddTelegrafPlugin: typeof addTelegrafPlugin
+  onUpdateTelegrafPluginConfig: typeof updateTelegrafPluginConfig
   onRemoveTelegrafPlugin: typeof removeTelegrafPlugin
   onSetDataLoadersType: typeof setDataLoadersType
   setupParams: SetupParams
@@ -43,6 +45,7 @@ class OnboardingStepSwitcher extends PureComponent<Props> {
       dataLoaders,
       onSetDataLoadersType,
       onAddTelegrafPlugin,
+      onUpdateTelegrafPluginConfig,
       onRemoveTelegrafPlugin,
     } = this.props
 
@@ -64,7 +67,11 @@ class OnboardingStepSwitcher extends PureComponent<Props> {
         )
       case 3:
         return (
-          <ConfigureDataSourceStep {...onboardingStepProps} {...dataLoaders} />
+          <ConfigureDataSourceStep
+            {...onboardingStepProps}
+            {...dataLoaders}
+            onUpdateTelegrafPluginConfig={onUpdateTelegrafPluginConfig}
+          />
         )
       case 4:
         return <VerifyDataStep {...onboardingStepProps} {...dataLoaders} />

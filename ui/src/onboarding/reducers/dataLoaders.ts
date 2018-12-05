@@ -1,3 +1,9 @@
+// Libraries
+import _ from 'lodash'
+
+// Utils
+import {updateConfig, createNewPlugin} from 'src/onboarding/utils/pluginConfigs'
+
 // Types
 import {Action} from 'src/onboarding/actions/dataLoaders'
 import {
@@ -37,6 +43,27 @@ export default (state = INITIAL_STATE, action: Action): DataLoadersState => {
           ...state.telegrafPlugins,
           action.payload.telegrafPlugin,
         ],
+      }
+    case 'UPDATE_TELEGRAF_PLUGIN_CONFIG':
+      const updatedTelegrafPlugins = state.telegrafPlugins.map(tp => {
+        if (tp.name === action.payload.name) {
+          const plugin = _.get(tp, 'plugin', createNewPlugin(tp.name))
+
+          return {
+            ...tp,
+            plugin: updateConfig(
+              plugin,
+              action.payload.field,
+              action.payload.value
+            ),
+          }
+        }
+        return tp
+      })
+
+      return {
+        ...state,
+        telegrafPlugins: updatedTelegrafPlugins,
       }
     case 'REMOVE_TELEGRAF_PLUGIN':
       return {

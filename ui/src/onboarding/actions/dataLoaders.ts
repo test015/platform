@@ -11,6 +11,7 @@ import {RemoteDataState} from 'src/types'
 export type Action =
   | SetDataLoadersType
   | AddTelegrafPlugin
+  | UpdateTelegrafPluginConfig
   | RemoveTelegrafPlugin
   | SetActiveTelegrafPlugin
   | SetLineProtocolText
@@ -39,6 +40,20 @@ export const addTelegrafPlugin = (
 ): AddTelegrafPlugin => ({
   type: 'ADD_TELEGRAF_PLUGIN',
   payload: {telegrafPlugin},
+})
+
+interface UpdateTelegrafPluginConfig {
+  type: 'UPDATE_TELEGRAF_PLUGIN_CONFIG'
+  payload: {name: string; field: string; value: string}
+}
+
+export const updateTelegrafPluginConfig = (
+  name: string,
+  field: string,
+  value: string
+): UpdateTelegrafPluginConfig => ({
+  type: 'UPDATE_TELEGRAF_PLUGIN_CONFIG',
+  payload: {name, field, value},
 })
 
 interface RemoveTelegrafPlugin {

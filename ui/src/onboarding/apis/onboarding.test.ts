@@ -8,7 +8,7 @@ import {
 
 import AJAX from 'src/utils/ajax'
 
-import {telegrafConfig, token} from 'src/onboarding/resources'
+import {telegrafConfig, token} from 'src/onboarding/constants/resources'
 import {telegrafsAPI, authorizationsAPI} from 'src/onboarding/apis/mocks'
 
 jest.mock('src/utils/ajax', () => require('mocks/utils/ajax'))

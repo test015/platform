@@ -5,6 +5,11 @@ import _ from 'lodash'
 // Components
 import {ErrorHandling} from 'src/shared/decorators/errors'
 import LineProtocol from 'src/onboarding/components/configureStep/lineProtocol/LineProtocol'
+import PluginConfigSwitcher from 'src/onboarding/components/configureStep/PluginConfigSwitcher'
+import EmptyDataSourceState from 'src/onboarding/components/configureStep/EmptyDataSourceState'
+
+// Actions
+import {updateTelegrafPluginConfig} from 'src/onboarding/actions/dataLoaders'
 
 // Types
 import {TelegrafPlugin, DataLoaderType} from 'src/types/v2/dataLoaders'
@@ -12,6 +17,7 @@ import {TelegrafPlugin, DataLoaderType} from 'src/types/v2/dataLoaders'
 export interface Props {
   telegrafPlugins: TelegrafPlugin[]
   currentIndex: number
+  onUpdateTelegrafPluginConfig: typeof updateTelegrafPluginConfig
   dataLoaderType: DataLoaderType
   bucket: string
   org: string
@@ -20,29 +26,31 @@ export interface Props {
 @ErrorHandling
 class ConfigureDataSourceSwitcher extends PureComponent<Props> {
   public render() {
-    const {bucket, org} = this.props
-    switch (this.configurationStep) {
+    const {
+      bucket,
+      org,
+      telegrafPlugins,
+      currentIndex,
+      dataLoaderType,
+      onUpdateTelegrafPluginConfig,
+    } = this.props
+
+    switch (dataLoaderType) {
       case DataLoaderType.Streaming:
-        return <div />
+        return (
+          <PluginConfigSwitcher
+            onUpdateTelegrafPluginConfig={onUpdateTelegrafPluginConfig}
+            telegrafPlugins={telegrafPlugins}
+            currentIndex={currentIndex}
+          />
+        )
       case DataLoaderType.LineProtocol:
         return <LineProtocol bucket={bucket} org={org} />
       case DataLoaderType.CSV:
         return <div>{DataLoaderType.CSV}</div>
       default:
-        return <div>{this.configurationStep}</div>
+        return <EmptyDataSourceState />
     }
-  }
-
-  private get configurationStep() {
-    const {currentIndex, telegrafPlugins, dataLoaderType} = this.props
-    if (dataLoaderType === DataLoaderType.Streaming) {
-      return _.get(
-        telegrafPlugins,
-        `${currentIndex}.name`,
-        'Must select a data source'
-      )
-    }
-    return dataLoaderType
   }
 }
 

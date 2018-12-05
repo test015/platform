@@ -13,12 +13,16 @@ import {
 } from 'src/clockface'
 import ConfigureDataSourceSwitcher from 'src/onboarding/components/configureStep/ConfigureDataSourceSwitcher'
 
+// Actions
+import {updateTelegrafPluginConfig} from 'src/onboarding/actions/dataLoaders'
+
 // Types
 import {OnboardingStepProps} from 'src/onboarding/containers/OnboardingWizard'
 import {TelegrafPlugin, DataLoaderType} from 'src/types/v2/dataLoaders'
 
 export interface OwnProps extends OnboardingStepProps {
   telegrafPlugins: TelegrafPlugin[]
+  onUpdateTelegrafPluginConfig: typeof updateTelegrafPluginConfig
   type: DataLoaderType
 }
 
@@ -54,6 +58,7 @@ class ConfigureDataSourceStep extends PureComponent<Props> {
       type,
       params: {substepID},
       setupParams,
+      onUpdateTelegrafPluginConfig,
     } = this.props
 
     return (
@@ -62,6 +67,7 @@ class ConfigureDataSourceStep extends PureComponent<Props> {
           bucket={_.get(setupParams, 'bucket', '')}
           org={_.get(setupParams, 'org', '')}
           telegrafPlugins={telegrafPlugins}
+          onUpdateTelegrafPluginConfig={onUpdateTelegrafPluginConfig}
           dataLoaderType={type}
           currentIndex={+substepID}
         />

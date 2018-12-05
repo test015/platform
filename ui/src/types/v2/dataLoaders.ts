@@ -22,6 +22,17 @@ import {
   TelegrafPluginInputTail,
   TelegrafPluginOutputFile,
   TelegrafPluginOutputInfluxDBV2,
+  TelegrafPluginConfig,
+  TelegrafPluginInputDockerConfig,
+  TelegrafPluginInputFileConfig,
+  TelegrafPluginInputKubernetesConfig,
+  TelegrafPluginInputLogParserConfig,
+  TelegrafPluginInputProcstatConfig,
+  TelegrafPluginInputPrometheusConfig,
+  TelegrafPluginInputRedisConfig,
+  TelegrafPluginInputSyslogConfig,
+  TelegrafPluginOutputFileConfig,
+  TelegrafPluginOutputInfluxDBV2Config,
 } from 'src/api'
 
 export enum ConfigurationState {
@@ -35,6 +46,19 @@ export enum DataLoaderType {
   LineProtocol = 'Line Protocol',
   Empty = '',
 }
+
+export type PluginConfig =
+  | TelegrafPluginConfig
+  | TelegrafPluginInputDockerConfig
+  | TelegrafPluginInputFileConfig
+  | TelegrafPluginInputKubernetesConfig
+  | TelegrafPluginInputLogParserConfig
+  | TelegrafPluginInputProcstatConfig
+  | TelegrafPluginInputPrometheusConfig
+  | TelegrafPluginInputRedisConfig
+  | TelegrafPluginInputSyslogConfig
+  | TelegrafPluginOutputFileConfig
+  | TelegrafPluginOutputInfluxDBV2Config
 
 export type Plugin =
   | TelegrafPluginInputCpu
@@ -102,4 +126,20 @@ export enum LineProtocolStatus {
   Loading = 'loading',
   Success = 'success',
   Error = 'error',
+}
+
+export enum ConfigFieldType {
+  String = 'string',
+  StringArray = 'string array',
+  Uri = 'uri',
+  UriArray = 'uri array',
+  FileObjectArray = 'file object array',
+}
+
+export interface ConfigFields {
+  [field: string]: ConfigFieldType
+}
+
+export interface TelegrafPluginInfo {
+  [name: string]: {fields: ConfigFields; defaults: Plugin}
 }
