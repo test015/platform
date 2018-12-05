@@ -23,9 +23,7 @@ jobs:
           paths:
             - ~/.cache/npm
 
-      - run:
-        name: Running E2E tests with JUnit reporter
-        command: make junit
+      - run: make junit
 
       - store_test_results:
           path: junit-results
