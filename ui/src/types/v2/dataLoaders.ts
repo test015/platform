@@ -133,7 +133,6 @@ export enum ConfigFieldType {
   StringArray = 'string array',
   Uri = 'uri',
   UriArray = 'uri array',
-  FileObjectArray = 'file object array',
 }
 
 export interface ConfigFields {

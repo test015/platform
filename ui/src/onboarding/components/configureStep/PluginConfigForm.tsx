@@ -3,7 +3,8 @@ import React, {PureComponent, ChangeEvent} from 'react'
 import _ from 'lodash'
 
 // Components
-import {Form, Input} from 'src/clockface'
+import {Form} from 'src/clockface'
+import ConfigFieldSwitcher from 'src/onboarding/components/configureStep/ConfigFieldSwitcher'
 
 // Actions
 import {updateTelegrafPluginConfig} from 'src/onboarding/actions/dataLoaders'
@@ -40,15 +41,16 @@ class PluginConfigForm extends PureComponent<Props> {
       )
     }
 
-    return Object.entries(configFields).map(([k, v]) => {
+    return Object.entries(configFields).map(([fieldName, fieldType], i) => {
       return (
-        <Form.Element label={k} key={k}>
-          <Input
-            name={k}
-            onChange={this.handleUpdateConfigField}
-            value={_.get(telegrafPlugin, `plugin.config.${k}`, '')}
-          />
-        </Form.Element>
+        <ConfigFieldSwitcher
+          key={fieldName}
+          fieldName={fieldName}
+          fieldType={fieldType}
+          index={i}
+          onChange={this.handleUpdateConfigField}
+          value={_.get(telegrafPlugin, `plugin.config.${fieldName}`, '')}
+        />
       )
     })
   }

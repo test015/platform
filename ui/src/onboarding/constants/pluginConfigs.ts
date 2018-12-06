@@ -200,7 +200,7 @@ export const PLUGIN_OPTIONS: TelegrafPluginName[] = [
   TelegrafPluginInputDocker.NameEnum.Docker,
   // TelegrafPluginInputFile.NameEnum.File,
   TelegrafPluginInputKernel.NameEnum.Kernel,
-  // TelegrafPluginInputKubernetes.NameEnum.Kubernetes,
+  TelegrafPluginInputKubernetes.NameEnum.Kubernetes,
   // TelegrafPluginInputLogParser.NameEnum.Logparser,
   // TelegrafPluginInputMem.NameEnum.Mem,
   // TelegrafPluginInputNet.NameEnum.Net,
