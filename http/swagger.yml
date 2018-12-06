@@ -5353,8 +5353,6 @@ components:
     AnalyzeQueryResponse:
       type: object
       properties:
-        valid:
-          type: boolean
         errors:
           type: array
           items:
