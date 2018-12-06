@@ -1,6 +1,20 @@
 import {BuilderConfig} from 'src/types/v2'
 import {FUNCTIONS} from 'src/shared/constants/queryBuilder'
 
+const DEFAULT_WINDOW_INTERVAL = '10s'
+
+const WINDOW_INTERVALS = {
+  '5m': '10s',
+  '15m': '10s',
+  '1h': '1m',
+  '6h': '5m',
+  '12h': '10m',
+  '24h': '20m',
+  '2d': '1h',
+  '7d': '1h',
+  '30d': '6h',
+}
+
 export function isConfigValid(builderConfig: BuilderConfig): boolean {
   const {buckets, measurements} = builderConfig
   const isConfigValid = buckets.length >= 1 && measurements.length >= 1
@@ -59,7 +73,12 @@ function buildQueryHelper(
 
   const fn = FUNCTIONS.find(f => f.name === functionName)
 
-  if (fn) {
+  if (fn && fn.aggregate) {
+    query += `
+  |> window(every: ${WINDOW_INTERVALS[duration] || DEFAULT_WINDOW_INTERVAL})
+  ${fn.flux}
+  |> group(columns: ["_value", "_time", "_start", "_stop"], mode: "except")`
+  } else if (fn) {
     query += `\n  ${fn.flux}`
   }
 
