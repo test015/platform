@@ -48,7 +48,7 @@ export const createTelegrafConfig = async (): Promise<Telegraf> => {
   }
   const telegrafRequest: TelegrafRequest = {
     name: 'testName',
-    agent: {interval: 1},
+    agent: {collectionInterval: 1},
     plugins: [plugin],
   }
   const {data} = await telegrafsAPI.telegrafsPost('123', telegrafRequest)
