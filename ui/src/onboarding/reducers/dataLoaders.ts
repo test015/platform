@@ -7,20 +7,11 @@ import {updateConfig, createNewPlugin} from 'src/onboarding/utils/pluginConfigs'
 // Types
 import {Action} from 'src/onboarding/actions/dataLoaders'
 import {
-  TelegrafPlugin,
   DataLoaderType,
   LineProtocolTab,
+  DataLoadersState,
 } from 'src/types/v2/dataLoaders'
 import {RemoteDataState} from 'src/types'
-
-export interface DataLoadersState {
-  telegrafPlugins: TelegrafPlugin[]
-  type: DataLoaderType
-  lineProtocolText: string
-  activeLPTab: LineProtocolTab
-  lpStatus: RemoteDataState
-  telegrafConfigID: string
-}
 
 export const INITIAL_STATE: DataLoadersState = {
   telegrafPlugins: [],

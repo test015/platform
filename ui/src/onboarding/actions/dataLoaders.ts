@@ -155,7 +155,6 @@ export const setTelegrafPluginAsync = (
   const influxDB2Out = {
     name: 'influxdb_v2',
     type: 'output',
-    comment: 'wooooooooo',
     config: {
       urls: ['http://127.0.0.1:9999'],
       token: authToken,
@@ -165,10 +164,21 @@ export const setTelegrafPluginAsync = (
   }
 
   if (telegrafConfigID) {
-    const response = await telegrafsAPI.telegrafsTelegrafIDGet(telegrafConfigID)
+    const response = await telegrafsAPI.telegrafsTelegrafIDGet(
+      telegrafConfigID,
+      {headers: {Accept: 'application/json'}}
+    )
     const existingConfig = response.data
     const {plugins} = existingConfig
-    const updatedConfig = {...existingConfig, plugins: [...plugins, plugin]}
+    const updatedConfig = {
+      ...existingConfig,
+      plugins: plugins.map(p => {
+        if (p.name === plugin.name) {
+          return plugin
+        }
+        return p
+      }),
+    }
     const {data} = await telegrafsAPI.telegrafsTelegrafIDPut(
       telegrafConfigID,
       updatedConfig

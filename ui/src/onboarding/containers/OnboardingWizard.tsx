@@ -33,7 +33,7 @@ import {StepStatus} from 'src/clockface/constants/wizard'
 // Types
 import {Links} from 'src/types/v2/links'
 import {SetupParams} from 'src/onboarding/apis'
-import {TelegrafPlugin, DataLoaderType} from 'src/types/v2/dataLoaders'
+import {DataLoadersState, DataLoaderType} from 'src/types/v2/dataLoaders'
 import {Notification, NotificationFunc} from 'src/types'
 import {AppState} from 'src/types/v2'
 import OnboardingSideBar from 'src/onboarding/components/OnboardingSideBar'
@@ -78,16 +78,11 @@ interface DispatchProps {
   onSetActiveTelegrafPlugin: typeof setActiveTelegrafPlugin
 }
 
-interface DataLoadersProps {
-  telegrafPlugins: TelegrafPlugin[]
-  type: DataLoaderType
-}
-
 interface StateProps {
   links: Links
   stepStatuses: StepStatus[]
   setupParams: SetupParams
-  dataLoaders: DataLoadersProps
+  dataLoaders: DataLoadersState
 }
 
 type Props = OwnProps & StateProps & DispatchProps & WithRouterProps
@@ -113,7 +108,7 @@ class OnboardingWizard extends PureComponent<Props> {
     const {
       currentStepIndex,
       dataLoaders,
-      dataLoaders: {telegrafPlugins},
+      dataLoaders: {telegrafPlugins, telegrafConfigID},
       onSetDataLoadersType,
       onAddTelegrafPlugin,
       onUpdateTelegrafPluginConfig,
@@ -131,6 +126,7 @@ class OnboardingWizard extends PureComponent<Props> {
           <OnboardingSideBar
             notify={notify}
             telegrafPlugins={telegrafPlugins}
+            telegrafConfigID={telegrafConfigID}
             onTabClick={this.handleClickSideBarTab}
             title="Selected Sources"
             visible={this.sideBarVisible}

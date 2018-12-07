@@ -34,6 +34,16 @@ import {
   TelegrafPluginOutputFileConfig,
   TelegrafPluginOutputInfluxDBV2Config,
 } from 'src/api'
+import {RemoteDataState} from 'src/types'
+
+export interface DataLoadersState {
+  telegrafPlugins: TelegrafPlugin[]
+  type: DataLoaderType
+  lineProtocolText: string
+  activeLPTab: LineProtocolTab
+  telegrafConfigID: string
+  lpStatus: RemoteDataState
+}
 
 export enum ConfigurationState {
   Unconfigured = 'unconfigured',
