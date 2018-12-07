@@ -3,13 +3,7 @@ import React, {PureComponent, ChangeEvent} from 'react'
 import _ from 'lodash'
 
 // Components
-import {
-  Form,
-  Button,
-  ComponentColor,
-  ComponentSize,
-  ButtonType,
-} from 'src/clockface'
+import {Form} from 'src/clockface'
 import ConfigFieldSwitcher from 'src/onboarding/components/configureStep/ConfigFieldSwitcher'
 
 // Actions
@@ -45,18 +39,7 @@ class PluginConfigForm extends PureComponent<Props> {
     return (
       <>
         <h3>{_.startCase(name)}</h3>
-        <Form onSubmit={this.handleSave}>
-          {this.noConfiguration}
-          {this.formFields}
-          <Form.Footer>
-            <Button
-              color={ComponentColor.Primary}
-              text="Save Plugin"
-              size={ComponentSize.Medium}
-              type={ButtonType.Submit}
-            />
-          </Form.Footer>
-        </Form>
+        <Form onSubmit={this.handleSave}>{this.formFields}</Form>
       </>
     )
   }
@@ -65,23 +48,11 @@ class PluginConfigForm extends PureComponent<Props> {
     this.props.onSave(this.props.telegrafPlugin.name, this.props.authToken)
   }
 
-  private get noConfiguration(): JSX.Element {
-    const {configFields} = this.props
-
-    if (!configFields) {
-      return (
-        <div>
-          <p>No configuration required.</p>
-        </div>
-      )
-    }
-  }
-
-  private get formFields(): JSX.Element[] {
+  private get formFields(): JSX.Element[] | JSX.Element {
     const {configFields, telegrafPlugin} = this.props
 
     if (!configFields) {
-      return
+      return <p>No configuration required.</p>
     }
 
     return Object.entries(configFields).map(([fieldName, fieldType], i) => {
