@@ -7,15 +7,25 @@ import {Form} from 'src/clockface'
 import ConfigFieldSwitcher from 'src/onboarding/components/configureStep/ConfigFieldSwitcher'
 
 // Actions
-import {updateTelegrafPluginConfig} from 'src/onboarding/actions/dataLoaders'
+import {
+  updateTelegrafPluginConfig,
+  addTelegrafPluginConfigFieldValue,
+  removeTelegrafPluginConfigFieldValue,
+} from 'src/onboarding/actions/dataLoaders'
 
 // Types
-import {TelegrafPlugin, ConfigFields} from 'src/types/v2/dataLoaders'
+import {
+  TelegrafPlugin,
+  ConfigFields,
+  ConfigFieldType,
+} from 'src/types/v2/dataLoaders'
 
 interface Props {
   telegrafPlugin: TelegrafPlugin
   configFields: ConfigFields
   onUpdateTelegrafPluginConfig: typeof updateTelegrafPluginConfig
+  onAddTelegrafPluginConfigFieldValue: typeof addTelegrafPluginConfigFieldValue
+  onRemoveTelegrafPluginConfigFieldValue: typeof removeTelegrafPluginConfigFieldValue
 }
 
 class PluginConfigForm extends PureComponent<Props> {
@@ -49,10 +59,49 @@ class PluginConfigForm extends PureComponent<Props> {
           fieldType={fieldType}
           index={i}
           onChange={this.handleUpdateConfigField}
-          value={_.get(telegrafPlugin, `plugin.config.${fieldName}`, '')}
+          value={this.getFieldValue(telegrafPlugin, fieldName, fieldType)}
+          addTagValue={this.handleAddConfigFieldValue}
+          removeTagValue={this.handleRemoveConfigFieldValue}
         />
       )
     })
+  }
+
+  private handleAddConfigFieldValue = (
+    value: string,
+    fieldName: string
+  ): void => {
+    const {onAddTelegrafPluginConfigFieldValue, telegrafPlugin} = this.props
+
+    onAddTelegrafPluginConfigFieldValue(telegrafPlugin.name, fieldName, value)
+  }
+
+  private handleRemoveConfigFieldValue = (value: string, fieldName: string) => {
+    const {onRemoveTelegrafPluginConfigFieldValue, telegrafPlugin} = this.props
+
+    onRemoveTelegrafPluginConfigFieldValue(
+      telegrafPlugin.name,
+      fieldName,
+      value
+    )
+  }
+
+  private getFieldValue(
+    telegrafPlugin: TelegrafPlugin,
+    fieldName: string,
+    fieldType: ConfigFieldType
+  ): string | string[] {
+    let defaultEmpty: string | string[]
+    if (
+      fieldType === ConfigFieldType.String ||
+      fieldType === ConfigFieldType.Uri
+    ) {
+      defaultEmpty = ''
+    } else {
+      defaultEmpty = []
+    }
+
+    return _.get(telegrafPlugin, `plugin.config.${fieldName}`, defaultEmpty)
   }
 
   private handleUpdateConfigField = (e: ChangeEvent<HTMLInputElement>) => {

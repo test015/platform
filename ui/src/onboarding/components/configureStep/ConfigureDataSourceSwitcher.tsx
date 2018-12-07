@@ -9,7 +9,11 @@ import PluginConfigSwitcher from 'src/onboarding/components/configureStep/Plugin
 import EmptyDataSourceState from 'src/onboarding/components/configureStep/EmptyDataSourceState'
 
 // Actions
-import {updateTelegrafPluginConfig} from 'src/onboarding/actions/dataLoaders'
+import {
+  updateTelegrafPluginConfig,
+  addTelegrafPluginConfigFieldValue,
+  removeTelegrafPluginConfigFieldValue,
+} from 'src/onboarding/actions/dataLoaders'
 
 // Types
 import {TelegrafPlugin, DataLoaderType} from 'src/types/v2/dataLoaders'
@@ -18,6 +22,8 @@ export interface Props {
   telegrafPlugins: TelegrafPlugin[]
   currentIndex: number
   onUpdateTelegrafPluginConfig: typeof updateTelegrafPluginConfig
+  onAddTelegrafPluginConfigFieldValue: typeof addTelegrafPluginConfigFieldValue
+  onRemoveTelegrafPluginConfigFieldValue: typeof removeTelegrafPluginConfigFieldValue
   dataLoaderType: DataLoaderType
   bucket: string
   org: string
@@ -33,6 +39,8 @@ class ConfigureDataSourceSwitcher extends PureComponent<Props> {
       currentIndex,
       dataLoaderType,
       onUpdateTelegrafPluginConfig,
+      onAddTelegrafPluginConfigFieldValue,
+      onRemoveTelegrafPluginConfigFieldValue,
     } = this.props
 
     switch (dataLoaderType) {
@@ -40,8 +48,14 @@ class ConfigureDataSourceSwitcher extends PureComponent<Props> {
         return (
           <PluginConfigSwitcher
             onUpdateTelegrafPluginConfig={onUpdateTelegrafPluginConfig}
+            onRemoveTelegrafPluginConfigFieldValue={
+              onRemoveTelegrafPluginConfigFieldValue
+            }
             telegrafPlugins={telegrafPlugins}
             currentIndex={currentIndex}
+            onAddTelegrafPluginConfigFieldValue={
+              onAddTelegrafPluginConfigFieldValue
+            }
           />
         )
       case DataLoaderType.LineProtocol:

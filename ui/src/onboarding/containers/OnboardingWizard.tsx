@@ -21,6 +21,8 @@ import {
   setDataLoadersType,
   addTelegrafPlugin,
   updateTelegrafPluginConfig,
+  addTelegrafPluginConfigFieldValue,
+  removeTelegrafPluginConfigFieldValue,
   removeTelegrafPlugin,
   setActiveTelegrafPlugin,
 } from 'src/onboarding/actions/dataLoaders'
@@ -70,6 +72,8 @@ interface DispatchProps {
   onSetDataLoadersType: typeof setDataLoadersType
   onAddTelegrafPlugin: typeof addTelegrafPlugin
   onUpdateTelegrafPluginConfig: typeof updateTelegrafPluginConfig
+  onAddTelegrafPluginConfigFieldValue: typeof addTelegrafPluginConfigFieldValue
+  onRemoveTelegrafPluginConfigFieldValue: typeof removeTelegrafPluginConfigFieldValue
   onRemoveTelegrafPlugin: typeof removeTelegrafPlugin
   onSetActiveTelegrafPlugin: typeof setActiveTelegrafPlugin
 }
@@ -113,6 +117,8 @@ class OnboardingWizard extends PureComponent<Props> {
       onSetDataLoadersType,
       onAddTelegrafPlugin,
       onUpdateTelegrafPluginConfig,
+      onAddTelegrafPluginConfigFieldValue,
+      onRemoveTelegrafPluginConfigFieldValue,
       onRemoveTelegrafPlugin,
       setupParams,
       notify,
@@ -139,6 +145,12 @@ class OnboardingWizard extends PureComponent<Props> {
               onAddTelegrafPlugin={onAddTelegrafPlugin}
               onUpdateTelegrafPluginConfig={onUpdateTelegrafPluginConfig}
               onRemoveTelegrafPlugin={onRemoveTelegrafPlugin}
+              onAddTelegrafPluginConfigFieldValue={
+                onAddTelegrafPluginConfigFieldValue
+              }
+              onRemoveTelegrafPluginConfigFieldValue={
+                onRemoveTelegrafPluginConfigFieldValue
+              }
             />
           </div>
         </div>
@@ -265,6 +277,8 @@ const mdtp: DispatchProps = {
   onSetDataLoadersType: setDataLoadersType,
   onAddTelegrafPlugin: addTelegrafPlugin,
   onUpdateTelegrafPluginConfig: updateTelegrafPluginConfig,
+  onAddTelegrafPluginConfigFieldValue: addTelegrafPluginConfigFieldValue,
+  onRemoveTelegrafPluginConfigFieldValue: removeTelegrafPluginConfigFieldValue,
   onRemoveTelegrafPlugin: removeTelegrafPlugin,
   onSetActiveTelegrafPlugin: setActiveTelegrafPlugin,
 }

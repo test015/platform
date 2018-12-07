@@ -16,11 +16,11 @@ export const getConfigFields = (
 
 export const updateConfig = <T extends Plugin>(
   plugin: T,
-  key: string,
-  value: string
+  fieldName: string,
+  value: string | string[]
 ): T => {
   return Object.assign({}, plugin, {
-    config: Object.assign({}, plugin.config, {[key]: value}),
+    config: Object.assign({}, plugin.config, {[fieldName]: value}),
   })
 }
 

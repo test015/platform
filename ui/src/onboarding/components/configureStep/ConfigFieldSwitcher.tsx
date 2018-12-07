@@ -5,6 +5,7 @@ import _ from 'lodash'
 // Components
 import {Form, Input} from 'src/clockface'
 import URIFormElement from 'src/shared/components/URIFormElement'
+import ArrayFormElement from 'src/onboarding/components/configureStep/ArrayFormElement'
 
 // Types
 import {ConfigFieldType} from 'src/types/v2/dataLoaders'
@@ -14,7 +15,9 @@ interface Props {
   fieldType: ConfigFieldType
   index: number
   onChange: (e: ChangeEvent<HTMLElement>) => void
-  value: string
+  addTagValue: (item: string, fieldName: string) => void
+  removeTagValue: (item: string, fieldName: string) => void
+  value: string | string[]
 }
 
 class ConfigFieldSwitcher extends PureComponent<Props> {
@@ -23,25 +26,34 @@ class ConfigFieldSwitcher extends PureComponent<Props> {
 
     switch (fieldType) {
       case ConfigFieldType.Uri:
-      case ConfigFieldType.UriArray:
         return (
           <URIFormElement
             name={fieldName}
             key={name}
             autoFocus={this.autoFocus}
             onChange={onChange}
-            value={value}
+            value={value as string}
+          />
+        )
+      case ConfigFieldType.UriArray:
+      case ConfigFieldType.StringArray:
+        return (
+          <ArrayFormElement
+            fieldName={fieldName}
+            addTagValue={this.props.addTagValue}
+            removeTagValue={this.props.removeTagValue}
+            autoFocus={this.autoFocus}
+            value={value as string[]}
           />
         )
       case ConfigFieldType.String:
-      case ConfigFieldType.StringArray:
         return (
           <Form.Element label={fieldName} key={fieldName}>
             <Input
               name={fieldName}
               autoFocus={this.autoFocus}
               onChange={onChange}
-              value={value}
+              value={value as string}
             />
           </Form.Element>
         )

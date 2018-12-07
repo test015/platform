@@ -10,7 +10,11 @@ import EmptyDataSourceState from 'src/onboarding/components/configureStep/EmptyD
 import {getConfigFields} from 'src/onboarding/utils/pluginConfigs'
 
 // Actions
-import {updateTelegrafPluginConfig} from 'src/onboarding/actions/dataLoaders'
+import {
+  updateTelegrafPluginConfig,
+  addTelegrafPluginConfigFieldValue,
+  removeTelegrafPluginConfigFieldValue,
+} from 'src/onboarding/actions/dataLoaders'
 
 // Types
 import {TelegrafPlugin} from 'src/types/v2/dataLoaders'
@@ -18,18 +22,29 @@ import {TelegrafPlugin} from 'src/types/v2/dataLoaders'
 interface Props {
   telegrafPlugins: TelegrafPlugin[]
   onUpdateTelegrafPluginConfig: typeof updateTelegrafPluginConfig
+  onAddTelegrafPluginConfigFieldValue: typeof addTelegrafPluginConfigFieldValue
+  onRemoveTelegrafPluginConfigFieldValue: typeof removeTelegrafPluginConfigFieldValue
   currentIndex: number
 }
 
 class PluginConfigSwitcher extends PureComponent<Props> {
   public render() {
-    const {onUpdateTelegrafPluginConfig} = this.props
+    const {
+      onUpdateTelegrafPluginConfig,
+      onAddTelegrafPluginConfigFieldValue,
+      onRemoveTelegrafPluginConfigFieldValue,
+    } = this.props
+
     if (this.currentTelegrafPlugin) {
       return (
         <PluginConfigForm
           telegrafPlugin={this.currentTelegrafPlugin}
           onUpdateTelegrafPluginConfig={onUpdateTelegrafPluginConfig}
           configFields={this.configFields}
+          onAddTelegrafPluginConfigFieldValue={
+            onAddTelegrafPluginConfigFieldValue
+          }
+          onRemoveTelegrafPluginConfigFieldValue={onRemoveTelegrafPluginConfigFieldValue}
         />
       )
     }

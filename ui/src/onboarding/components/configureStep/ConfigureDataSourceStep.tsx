@@ -14,7 +14,11 @@ import {
 import ConfigureDataSourceSwitcher from 'src/onboarding/components/configureStep/ConfigureDataSourceSwitcher'
 
 // Actions
-import {updateTelegrafPluginConfig} from 'src/onboarding/actions/dataLoaders'
+import {
+  updateTelegrafPluginConfig,
+  addTelegrafPluginConfigFieldValue,
+  removeTelegrafPluginConfigFieldValue,
+} from 'src/onboarding/actions/dataLoaders'
 
 // Types
 import {OnboardingStepProps} from 'src/onboarding/containers/OnboardingWizard'
@@ -24,6 +28,8 @@ export interface OwnProps extends OnboardingStepProps {
   telegrafPlugins: TelegrafPlugin[]
   onUpdateTelegrafPluginConfig: typeof updateTelegrafPluginConfig
   type: DataLoaderType
+  onAddTelegrafPluginConfigFieldValue: typeof addTelegrafPluginConfigFieldValue
+  onRemoveTelegrafPluginConfigFieldValue: typeof removeTelegrafPluginConfigFieldValue
 }
 
 interface RouterProps {
@@ -59,6 +65,8 @@ class ConfigureDataSourceStep extends PureComponent<Props> {
       params: {substepID},
       setupParams,
       onUpdateTelegrafPluginConfig,
+      onAddTelegrafPluginConfigFieldValue,
+      onRemoveTelegrafPluginConfigFieldValue
     } = this.props
 
     return (
@@ -68,6 +76,10 @@ class ConfigureDataSourceStep extends PureComponent<Props> {
           org={_.get(setupParams, 'org', '')}
           telegrafPlugins={telegrafPlugins}
           onUpdateTelegrafPluginConfig={onUpdateTelegrafPluginConfig}
+          onAddTelegrafPluginConfigFieldValue={
+            onAddTelegrafPluginConfigFieldValue
+          }
+          onRemoveTelegrafPluginConfigFieldValue={onRemoveTelegrafPluginConfigFieldValue}
           dataLoaderType={type}
           currentIndex={+substepID}
         />

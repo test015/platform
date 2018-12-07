@@ -85,7 +85,7 @@ export const telegrafPluginsInfo: TelegrafPluginInfo = {
     },
   },
   [TelegrafPluginInputLogParser.NameEnum.Logparser]: {
-    fields: {files: ConfigFieldType.UriArray},
+    fields: {files: ConfigFieldType.StringArray},
     defaults: {
       name: TelegrafPluginInputLogParser.NameEnum.Logparser,
       type: TelegrafPluginInputLogParser.TypeEnum.Input,
@@ -201,7 +201,7 @@ export const PLUGIN_OPTIONS: TelegrafPluginName[] = [
   // TelegrafPluginInputFile.NameEnum.File,
   TelegrafPluginInputKernel.NameEnum.Kernel,
   TelegrafPluginInputKubernetes.NameEnum.Kubernetes,
-  // TelegrafPluginInputLogParser.NameEnum.Logparser,
+  TelegrafPluginInputLogParser.NameEnum.Logparser,
   // TelegrafPluginInputMem.NameEnum.Mem,
   // TelegrafPluginInputNet.NameEnum.Net,
   // TelegrafPluginInputNetResponse.NameEnum.NetResponse,

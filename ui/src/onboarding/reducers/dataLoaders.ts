@@ -65,6 +65,58 @@ export default (state = INITIAL_STATE, action: Action): DataLoadersState => {
         ...state,
         telegrafPlugins: updatedTelegrafPlugins,
       }
+    case 'ADD_TELEGRAF_PLUGIN_CONFIG_FIELD_VALUE':
+      return {
+        ...state,
+        telegrafPlugins: state.telegrafPlugins.map(tp => {
+          if (tp.name === action.payload.pluginName) {
+            const plugin = _.get(tp, 'plugin', createNewPlugin(tp.name))
+
+            const updatedConfigFieldValue = [
+              ...plugin.config[action.payload.fieldName],
+              action.payload.value,
+            ]
+
+            return {
+              ...tp,
+              plugin: updateConfig(
+                plugin,
+                action.payload.fieldName,
+                updatedConfigFieldValue
+              ),
+            }
+          }
+          return tp
+        }),
+      }
+    case 'REMOVE_TELEGRAF_PLUGIN_CONFIG_FIELD_VALUE':
+      return {
+        ...state,
+        telegrafPlugins: state.telegrafPlugins.map(tp => {
+          if (tp.name === action.payload.pluginName) {
+            const plugin = _.get(tp, 'plugin', createNewPlugin(tp.name))
+
+            const configFieldValues = _.get(
+              plugin,
+              `config.${action.payload.fieldName}`,
+              []
+            )
+            const filteredConfigFieldValue = configFieldValues.filter(
+              v => v !== action.payload.value
+            )
+
+            return {
+              ...tp,
+              plugin: updateConfig(
+                plugin,
+                action.payload.fieldName,
+                filteredConfigFieldValue
+              ),
+            }
+          }
+          return tp
+        }),
+      }
     case 'REMOVE_TELEGRAF_PLUGIN':
       return {
         ...state,

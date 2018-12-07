@@ -12,6 +12,8 @@ export type Action =
   | SetDataLoadersType
   | AddTelegrafPlugin
   | UpdateTelegrafPluginConfig
+  | AddTelegrafPluginConfigFieldValue
+  | RemoveTelegrafPluginConfigFieldValue
   | RemoveTelegrafPlugin
   | SetActiveTelegrafPlugin
   | SetLineProtocolText
@@ -54,6 +56,43 @@ export const updateTelegrafPluginConfig = (
 ): UpdateTelegrafPluginConfig => ({
   type: 'UPDATE_TELEGRAF_PLUGIN_CONFIG',
   payload: {name, field, value},
+})
+
+interface AddTelegrafPluginConfigFieldValue {
+  type: 'ADD_TELEGRAF_PLUGIN_CONFIG_FIELD_VALUE'
+  payload: {
+    pluginName: string
+    fieldName: string
+    value: string
+  }
+}
+
+export const addTelegrafPluginConfigFieldValue = (
+  pluginName: string,
+  fieldName: string,
+  value: string
+) => ({
+  type: 'ADD_TELEGRAF_PLUGIN_CONFIG_FIELD_VALUE',
+  payload: {pluginName, fieldName, value},
+})
+
+interface RemoveTelegrafPluginConfigFieldValue {
+  type: 'REMOVE_TELEGRAF_PLUGIN_CONFIG_FIELD_VALUE'
+  payload: {
+    pluginName: string
+    fieldName: string
+    value: string
+    index: number
+  }
+}
+
+export const removeTelegrafPluginConfigFieldValue = (
+  pluginName: string,
+  fieldName: string,
+  value: string
+) => ({
+  type: 'REMOVE_TELEGRAF_PLUGIN_CONFIG_FIELD_VALUE',
+  payload: {pluginName, fieldName, value},
 })
 
 interface RemoveTelegrafPlugin {
