@@ -89,7 +89,16 @@ class TimeMachineQueryBuilder extends PureComponent<Props, State> {
 
   public componentDidUpdate(prevProps: Props) {
     if (prevProps.queryURL !== this.props.queryURL) {
+      this.handleSelectBuckets([])
       this.findAndSetBuckets()
+    }
+
+    if (prevProps.sourceType !== this.props.sourceType) {
+      // V1 sources execute InfluxQL, while V2 sources execute Flux. Since
+      // function selections for a Flux query may not be valid for an InfluxQL
+      // query (and vice versa), we reset the function selections whenever the
+      // sourceType changes
+      this.handleSelectFunctions([])
     }
   }
 
