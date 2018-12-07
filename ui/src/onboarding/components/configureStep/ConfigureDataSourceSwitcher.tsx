@@ -14,6 +14,7 @@ import {
   updateTelegrafPluginConfig,
   addTelegrafPluginConfigFieldValue,
   removeTelegrafPluginConfigFieldValue,
+  setTelegrafPluginAsync,
 } from 'src/onboarding/actions/dataLoaders'
 
 // Types
@@ -25,6 +26,7 @@ export interface Props {
   onUpdateTelegrafPluginConfig: typeof updateTelegrafPluginConfig
   onAddTelegrafPluginConfigFieldValue: typeof addTelegrafPluginConfigFieldValue
   onRemoveTelegrafPluginConfigFieldValue: typeof removeTelegrafPluginConfigFieldValue
+  onSaveTelegrafPlugin: typeof setTelegrafPluginAsync
   dataLoaderType: DataLoaderType
   bucket: string
   org: string
@@ -41,6 +43,7 @@ class ConfigureDataSourceSwitcher extends PureComponent<Props> {
       telegrafPlugins,
       currentIndex,
       dataLoaderType,
+      onSaveTelegrafPlugin,
       onUpdateTelegrafPluginConfig,
       onAddTelegrafPluginConfigFieldValue,
       onRemoveTelegrafPluginConfigFieldValue,
@@ -61,6 +64,7 @@ class ConfigureDataSourceSwitcher extends PureComponent<Props> {
                 onAddTelegrafPluginConfigFieldValue={
                   onAddTelegrafPluginConfigFieldValue
                 }
+                onSaveTelegrafPlugin={onSaveTelegrafPlugin}
                 authToken={authToken}
               />
             )}

@@ -18,6 +18,7 @@ import {
   updateTelegrafPluginConfig,
   addTelegrafPluginConfigFieldValue,
   removeTelegrafPluginConfigFieldValue,
+  setTelegrafPluginAsync,
 } from 'src/onboarding/actions/dataLoaders'
 
 // Types
@@ -30,6 +31,7 @@ export interface OwnProps extends OnboardingStepProps {
   type: DataLoaderType
   onAddTelegrafPluginConfigFieldValue: typeof addTelegrafPluginConfigFieldValue
   onRemoveTelegrafPluginConfigFieldValue: typeof removeTelegrafPluginConfigFieldValue
+  onSaveTelegrafPlugin: typeof setTelegrafPluginAsync
 }
 
 interface RouterProps {
@@ -67,6 +69,7 @@ class ConfigureDataSourceStep extends PureComponent<Props> {
       onUpdateTelegrafPluginConfig,
       onAddTelegrafPluginConfigFieldValue,
       onRemoveTelegrafPluginConfigFieldValue,
+      onSaveTelegrafPlugin,
     } = this.props
 
     return (
@@ -83,6 +86,7 @@ class ConfigureDataSourceStep extends PureComponent<Props> {
           onRemoveTelegrafPluginConfigFieldValue={
             onRemoveTelegrafPluginConfigFieldValue
           }
+          onSaveTelegrafPlugin={onSaveTelegrafPlugin}
           dataLoaderType={type}
           currentIndex={+substepID}
         />

@@ -1,7 +1,6 @@
 // Libraries
 import React, {PureComponent, ChangeEvent} from 'react'
 import _ from 'lodash'
-import {connect} from 'react-redux'
 
 // Components
 import {
@@ -34,7 +33,7 @@ interface Props {
   onUpdateTelegrafPluginConfig: typeof updateTelegrafPluginConfig
   onAddTelegrafPluginConfigFieldValue: typeof addTelegrafPluginConfigFieldValue
   onRemoveTelegrafPluginConfigFieldValue: typeof removeTelegrafPluginConfigFieldValue
-  onSave: any
+  onSave: typeof setTelegrafPluginAsync
   authToken: string
 }
 
@@ -146,11 +145,4 @@ class PluginConfigForm extends PureComponent<Props> {
   }
 }
 
-const mdtp = {
-  onSave: setTelegrafPluginAsync,
-}
-
-export default connect(
-  null,
-  mdtp
-)(PluginConfigForm)
+export default PluginConfigForm
