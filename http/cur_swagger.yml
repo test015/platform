@@ -1810,7 +1810,7 @@ paths:
               $ref: "#/components/schemas/Query"
     responses:
         '200':
-          description: query results
+          description: query analyze results. Errors will be empty if the query is valid.
           content:
             application/json:
               schema:
@@ -4814,16 +4814,16 @@ components:
             $ref: "#/components/schemas/TelegrafRequestPlugin"
     TelegrafRequestPlugin:
       type: object
-      discriminator: 
+      discriminator:
         propertyName: "name"
-      required: 
+      required:
         - name
       properties:
         name:
           type: string
     TelegrafPluginInputCpu:
       type: object
-      required: 
+      required:
         - name
         - type
         - config
@@ -4868,7 +4868,7 @@ components:
     TelegrafPluginInputDiskio:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -4883,15 +4883,15 @@ components:
           type: string
         config:
           $ref: "#/components/schemas/TelegrafPluginConfig"
-    TelegrafPluginInputDiskioRequest: 
+    TelegrafPluginInputDiskioRequest:
       type: object
       allOf:
         - $ref: "#/components/schemas/TelegrafRequestPlugin"
         - $ref: "#/components/schemas/TelegrafPluginInputDiskio"
-    TelegrafPluginInputDocker: 
-      type: 
+    TelegrafPluginInputDocker:
+      type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -4914,7 +4914,7 @@ components:
     TelegrafPluginInputFile:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -4937,7 +4937,7 @@ components:
     TelegrafPluginInputKernel:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -4960,7 +4960,7 @@ components:
     TelegrafPluginInputKubernetes:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -4983,7 +4983,7 @@ components:
     TelegrafPluginInputLogParser:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -5006,7 +5006,7 @@ components:
     TelegrafPluginInputMem:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -5029,7 +5029,7 @@ components:
     TelegrafPluginInputNetResponse:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -5049,10 +5049,10 @@ components:
       allOf:
         - $ref: "#/components/schemas/TelegrafRequestPlugin"
         - $ref: "#/components/schemas/TelegrafPluginInputNetResponse"
-    TelegrafPluginInputNet: 
+    TelegrafPluginInputNet:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -5075,7 +5075,7 @@ components:
     TelegrafPluginInputNgnix:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -5098,7 +5098,7 @@ components:
     TelegrafPluginInputProcesses:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -5121,7 +5121,7 @@ components:
     TelegrafPluginInputProcstat:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -5144,7 +5144,7 @@ components:
     TelegrafPluginInputPrometheus:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -5167,7 +5167,7 @@ components:
     TelegrafPluginInputRedis:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -5190,7 +5190,7 @@ components:
     TelegrafPluginInputSyslog:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -5213,7 +5213,7 @@ components:
     TelegrafPluginInputSwap:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -5236,7 +5236,7 @@ components:
     TelegrafPluginInputSystem:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -5259,7 +5259,7 @@ components:
     TelegrafPluginInputTail:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -5282,7 +5282,7 @@ components:
     TelegrafPluginOutputFile:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -5305,7 +5305,7 @@ components:
     TelegrafPluginOutputInfluxDBV2:
       type:
         object
-      required: 
+      required:
         - name
         - type
         - config
@@ -5364,7 +5364,7 @@ components:
       type: object
     TelegrafPluginInputDockerConfig:
       type: object
-      required: 
+      required:
         - endpoint
       properties:
         endpoint:
