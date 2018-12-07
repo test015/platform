@@ -2501,12 +2501,6 @@ export interface Task {
      */
     cron?: string;
     /**
-     * How long to wait before running the task
-     * @type {string}
-     * @memberof Task
-     */
-    offset?: string;
-    /**
      * A simple task repetition schedule; parsed from Flux.
      * @type {string}
      * @memberof Task
@@ -2536,6 +2530,12 @@ export interface Task {
      * @memberof Task
      */
     name: string;
+    /**
+     * How long to wait before running the task
+     * @type {string}
+     * @memberof Task
+     */
+    offset?: string;
     /**
      * The ID of the organization that owns this Task.
      * @type {string}
@@ -4437,7 +4437,7 @@ export interface TelegrafRequestAgent {
      * @type {number}
      * @memberof TelegrafRequestAgent
      */
-    interval?: number;
+    collectionInterval?: number;
 }
 
 /**

@@ -25,11 +25,13 @@ interface Props {
   onAddTelegrafPluginConfigFieldValue: typeof addTelegrafPluginConfigFieldValue
   onRemoveTelegrafPluginConfigFieldValue: typeof removeTelegrafPluginConfigFieldValue
   currentIndex: number
+  authToken: string
 }
 
 class PluginConfigSwitcher extends PureComponent<Props> {
   public render() {
     const {
+      authToken,
       onUpdateTelegrafPluginConfig,
       onAddTelegrafPluginConfigFieldValue,
       onRemoveTelegrafPluginConfigFieldValue,
@@ -38,13 +40,16 @@ class PluginConfigSwitcher extends PureComponent<Props> {
     if (this.currentTelegrafPlugin) {
       return (
         <PluginConfigForm
+          authToken={authToken}
           telegrafPlugin={this.currentTelegrafPlugin}
           onUpdateTelegrafPluginConfig={onUpdateTelegrafPluginConfig}
           configFields={this.configFields}
           onAddTelegrafPluginConfigFieldValue={
             onAddTelegrafPluginConfigFieldValue
           }
-          onRemoveTelegrafPluginConfigFieldValue={onRemoveTelegrafPluginConfigFieldValue}
+          onRemoveTelegrafPluginConfigFieldValue={
+            onRemoveTelegrafPluginConfigFieldValue
+          }
         />
       )
     }

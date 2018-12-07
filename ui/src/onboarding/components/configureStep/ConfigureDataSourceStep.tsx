@@ -66,7 +66,7 @@ class ConfigureDataSourceStep extends PureComponent<Props> {
       setupParams,
       onUpdateTelegrafPluginConfig,
       onAddTelegrafPluginConfigFieldValue,
-      onRemoveTelegrafPluginConfigFieldValue
+      onRemoveTelegrafPluginConfigFieldValue,
     } = this.props
 
     return (
@@ -74,12 +74,15 @@ class ConfigureDataSourceStep extends PureComponent<Props> {
         <ConfigureDataSourceSwitcher
           bucket={_.get(setupParams, 'bucket', '')}
           org={_.get(setupParams, 'org', '')}
+          username={_.get(setupParams, 'username', '')}
           telegrafPlugins={telegrafPlugins}
           onUpdateTelegrafPluginConfig={onUpdateTelegrafPluginConfig}
           onAddTelegrafPluginConfigFieldValue={
             onAddTelegrafPluginConfigFieldValue
           }
-          onRemoveTelegrafPluginConfigFieldValue={onRemoveTelegrafPluginConfigFieldValue}
+          onRemoveTelegrafPluginConfigFieldValue={
+            onRemoveTelegrafPluginConfigFieldValue
+          }
           dataLoaderType={type}
           currentIndex={+substepID}
         />

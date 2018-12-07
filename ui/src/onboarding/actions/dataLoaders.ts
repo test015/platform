@@ -1,15 +1,29 @@
+// Libraries
+import _ from 'lodash'
+
+// Apis
+import {writeLineProtocol} from 'src/onboarding/apis/index'
+import {telegrafsAPI} from 'src/utils/api'
+
+// Utils
+import {createNewPlugin} from 'src/onboarding/utils/pluginConfigs'
+
 // Types
 import {
   TelegrafPlugin,
   DataLoaderType,
   LineProtocolTab,
+  TelegrafPluginName,
+  Plugin,
 } from 'src/types/v2/dataLoaders'
-
-import {writeLineProtocol} from 'src/onboarding/apis/index'
+import {AppState} from 'src/types/v2'
 import {RemoteDataState} from 'src/types'
+
+type GetState = () => AppState
 
 export type Action =
   | SetDataLoadersType
+  | SetTelegrafConfigID
   | AddTelegrafPlugin
   | UpdateTelegrafPluginConfig
   | AddTelegrafPluginConfigFieldValue
@@ -19,6 +33,7 @@ export type Action =
   | SetLineProtocolText
   | SetActiveLPTab
   | SetLPStatus
+  | UpdateTelegrafPlugin
 
 interface SetDataLoadersType {
   type: 'SET_DATA_LOADERS_TYPE'
@@ -58,6 +73,16 @@ export const updateTelegrafPluginConfig = (
   payload: {name, field, value},
 })
 
+interface UpdateTelegrafPlugin {
+  type: 'UPDATE_TELEGRAF_PLUGIN'
+  payload: {plugin: Plugin}
+}
+
+export const updateTelegrafPlugin = (plugin: Plugin): UpdateTelegrafPlugin => ({
+  type: 'UPDATE_TELEGRAF_PLUGIN',
+  payload: {plugin},
+})
+
 interface AddTelegrafPluginConfigFieldValue {
   type: 'ADD_TELEGRAF_PLUGIN_CONFIG_FIELD_VALUE'
   payload: {
@@ -94,6 +119,72 @@ export const removeTelegrafPluginConfigFieldValue = (
   type: 'REMOVE_TELEGRAF_PLUGIN_CONFIG_FIELD_VALUE',
   payload: {pluginName, fieldName, value},
 })
+
+interface SetTelegrafConfigID {
+  type: 'SET_TELEGRAF_CONFIG_ID'
+  payload: {id: string}
+}
+
+export const setTelegrafConfigID = (id: string): SetTelegrafConfigID => ({
+  type: 'SET_TELEGRAF_CONFIG_ID',
+  payload: {id},
+})
+
+export const setTelegrafPluginAsync = (
+  telegrafPluginName: TelegrafPluginName,
+  authToken: string
+) => async (dispatch, getState: GetState) => {
+  const {
+    onboarding: {
+      dataLoaders: {telegrafConfigID, telegrafPlugins},
+      steps: {
+        setupParams: {org, bucket},
+      },
+    },
+  } = getState()
+
+  const telegrafPlugin = telegrafPlugins.find(
+    tp => tp.name === telegrafPluginName
+  )
+
+  const plugin = _.get(
+    telegrafPlugin,
+    'plugin',
+    createNewPlugin(telegrafPluginName)
+  )
+  const influxDB2Out = {
+    name: 'influxdb_v2',
+    type: 'output',
+    comment: 'wooooooooo',
+    config: {
+      urls: ['http://127.0.0.1:9999'],
+      token: authToken,
+      organization: org,
+      bucket,
+    },
+  }
+
+  if (telegrafConfigID) {
+    const response = await telegrafsAPI.telegrafsTelegrafIDGet(telegrafConfigID)
+    const existingConfig = response.data
+    const {plugins} = existingConfig
+    const updatedConfig = {...existingConfig, plugins: [...plugins, plugin]}
+    const {data} = await telegrafsAPI.telegrafsTelegrafIDPut(
+      telegrafConfigID,
+      updatedConfig
+    )
+    const updated = data.plugins.find(p => p.name === plugin.name)
+    dispatch(updateTelegrafPlugin(updated as Plugin))
+  } else {
+    const body = {
+      name: 'new config',
+      agent: {collectionInterval: 15},
+      plugins: [plugin, influxDB2Out],
+    }
+    const created = await telegrafsAPI.telegrafsPost(org, body)
+    dispatch(setTelegrafConfigID(created.data.id))
+  }
+}
 
 interface RemoveTelegrafPlugin {
   type: 'REMOVE_TELEGRAF_PLUGIN'

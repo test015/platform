@@ -19,6 +19,7 @@ export interface DataLoadersState {
   lineProtocolText: string
   activeLPTab: LineProtocolTab
   lpStatus: RemoteDataState
+  telegrafConfigID: string
 }
 
 export const INITIAL_STATE: DataLoadersState = {
@@ -27,6 +28,7 @@ export const INITIAL_STATE: DataLoadersState = {
   lineProtocolText: '',
   activeLPTab: LineProtocolTab.UploadFile,
   lpStatus: RemoteDataState.NotStarted,
+  telegrafConfigID: null,
 }
 
 export default (state = INITIAL_STATE, action: Action): DataLoadersState => {
@@ -36,6 +38,11 @@ export default (state = INITIAL_STATE, action: Action): DataLoadersState => {
         ...state,
         type: action.payload.type,
       }
+    case 'SET_TELEGRAF_CONFIG_ID':
+      return {
+        ...state,
+        telegrafConfigID: action.payload.id,
+      }
     case 'ADD_TELEGRAF_PLUGIN':
       return {
         ...state,
@@ -44,26 +51,38 @@ export default (state = INITIAL_STATE, action: Action): DataLoadersState => {
           action.payload.telegrafPlugin,
         ],
       }
-    case 'UPDATE_TELEGRAF_PLUGIN_CONFIG':
-      const updatedTelegrafPlugins = state.telegrafPlugins.map(tp => {
-        if (tp.name === action.payload.name) {
-          const plugin = _.get(tp, 'plugin', createNewPlugin(tp.name))
-
-          return {
-            ...tp,
-            plugin: updateConfig(
-              plugin,
-              action.payload.field,
-              action.payload.value
-            ),
-          }
-        }
-        return tp
-      })
-
+    case 'UPDATE_TELEGRAF_PLUGIN':
       return {
         ...state,
-        telegrafPlugins: updatedTelegrafPlugins,
+        telegrafPlugins: state.telegrafPlugins.map(tp => {
+          if (tp.name === action.payload.plugin.name) {
+            return {
+              ...tp,
+              plugin: action.payload.plugin,
+            }
+          }
+
+          return tp
+        }),
+      }
+    case 'UPDATE_TELEGRAF_PLUGIN_CONFIG':
+      return {
+        ...state,
+        telegrafPlugins: state.telegrafPlugins.map(tp => {
+          if (tp.name === action.payload.name) {
+            const plugin = _.get(tp, 'plugin', createNewPlugin(tp.name))
+
+            return {
+              ...tp,
+              plugin: updateConfig(
+                plugin,
+                action.payload.field,
+                action.payload.value
+              ),
+            }
+          }
+          return tp
+        }),
       }
     case 'ADD_TELEGRAF_PLUGIN_CONFIG_FIELD_VALUE':
       return {

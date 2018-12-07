@@ -7,6 +7,7 @@ import {ErrorHandling} from 'src/shared/decorators/errors'
 import LineProtocol from 'src/onboarding/components/configureStep/lineProtocol/LineProtocol'
 import PluginConfigSwitcher from 'src/onboarding/components/configureStep/PluginConfigSwitcher'
 import EmptyDataSourceState from 'src/onboarding/components/configureStep/EmptyDataSourceState'
+import FetchAuthToken from 'src/onboarding/components/verifyStep/FetchAuthToken'
 
 // Actions
 import {
@@ -27,6 +28,7 @@ export interface Props {
   dataLoaderType: DataLoaderType
   bucket: string
   org: string
+  username: string
 }
 
 @ErrorHandling
@@ -35,6 +37,7 @@ class ConfigureDataSourceSwitcher extends PureComponent<Props> {
     const {
       bucket,
       org,
+      username,
       telegrafPlugins,
       currentIndex,
       dataLoaderType,
@@ -46,17 +49,22 @@ class ConfigureDataSourceSwitcher extends PureComponent<Props> {
     switch (dataLoaderType) {
       case DataLoaderType.Streaming:
         return (
-          <PluginConfigSwitcher
-            onUpdateTelegrafPluginConfig={onUpdateTelegrafPluginConfig}
-            onRemoveTelegrafPluginConfigFieldValue={
-              onRemoveTelegrafPluginConfigFieldValue
-            }
-            telegrafPlugins={telegrafPlugins}
-            currentIndex={currentIndex}
-            onAddTelegrafPluginConfigFieldValue={
-              onAddTelegrafPluginConfigFieldValue
-            }
-          />
+          <FetchAuthToken bucket={bucket} username={username}>
+            {authToken => (
+              <PluginConfigSwitcher
+                onUpdateTelegrafPluginConfig={onUpdateTelegrafPluginConfig}
+                onRemoveTelegrafPluginConfigFieldValue={
+                  onRemoveTelegrafPluginConfigFieldValue
+                }
+                telegrafPlugins={telegrafPlugins}
+                currentIndex={currentIndex}
+                onAddTelegrafPluginConfigFieldValue={
+                  onAddTelegrafPluginConfigFieldValue
+                }
+                authToken={authToken}
+              />
+            )}
+          </FetchAuthToken>
         )
       case DataLoaderType.LineProtocol:
         return <LineProtocol bucket={bucket} org={org} />
