@@ -4,7 +4,7 @@ import _ from 'lodash'
 
 // Components
 import {Form} from 'src/clockface'
-import ConfigFieldSwitcher from 'src/onboarding/components/configureStep/ConfigFieldSwitcher'
+import ConfigFieldSwitcher from 'src/onboarding/components/configureStep/streaming/ConfigFieldSwitcher'
 
 // Actions
 import {

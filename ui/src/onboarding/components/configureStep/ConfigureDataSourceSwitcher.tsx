@@ -5,7 +5,7 @@ import _ from 'lodash'
 // Components
 import {ErrorHandling} from 'src/shared/decorators/errors'
 import LineProtocol from 'src/onboarding/components/configureStep/lineProtocol/LineProtocol'
-import PluginConfigSwitcher from 'src/onboarding/components/configureStep/PluginConfigSwitcher'
+import PluginConfigSwitcher from 'src/onboarding/components/configureStep/streaming/PluginConfigSwitcher'
 import EmptyDataSourceState from 'src/onboarding/components/configureStep/EmptyDataSourceState'
 
 // Actions

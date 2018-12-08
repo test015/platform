@@ -5,7 +5,7 @@ import _ from 'lodash'
 // Components
 import {Form, Input} from 'src/clockface'
 import URIFormElement from 'src/shared/components/URIFormElement'
-import ArrayFormElement from 'src/onboarding/components/configureStep/ArrayFormElement'
+import ArrayFormElement from 'src/onboarding/components/configureStep/streaming/ArrayFormElement'
 
 // Types
 import {ConfigFieldType} from 'src/types/v2/dataLoaders'

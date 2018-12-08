@@ -3,7 +3,7 @@ import React, {PureComponent} from 'react'
 import _ from 'lodash'
 
 // Components
-import PluginConfigForm from 'src/onboarding/components/configureStep/PluginConfigForm'
+import PluginConfigForm from 'src/onboarding/components/configureStep/streaming/PluginConfigForm'
 import EmptyDataSourceState from 'src/onboarding/components/configureStep/EmptyDataSourceState'
 
 // Utils

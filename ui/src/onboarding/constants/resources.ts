@@ -1,6 +1,8 @@
 // Types
 import {OnboardingStepProps} from 'src/onboarding/containers/OnboardingWizard'
 import {links} from 'mocks/dummyData'
+import {ConfigurationState} from 'src/types/v2/dataLoaders'
+import {TelegrafPluginInputCpu} from 'src/api'
 
 export const defaultOnboardingStepProps: OnboardingStepProps = {
   links,
@@ -28,6 +30,12 @@ export const cpuPlugin = {
   type: 'input',
   comment: 'this is a test',
   config: {},
+}
+
+export const telegrafPlugin = {
+  name: TelegrafPluginInputCpu.NameEnum.Cpu,
+  configured: ConfigurationState.Unconfigured,
+  active: true,
 }
 
 export const influxDB2Plugin = {
