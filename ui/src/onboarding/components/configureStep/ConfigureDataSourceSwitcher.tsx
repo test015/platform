@@ -7,14 +7,12 @@ import {ErrorHandling} from 'src/shared/decorators/errors'
 import LineProtocol from 'src/onboarding/components/configureStep/lineProtocol/LineProtocol'
 import PluginConfigSwitcher from 'src/onboarding/components/configureStep/PluginConfigSwitcher'
 import EmptyDataSourceState from 'src/onboarding/components/configureStep/EmptyDataSourceState'
-import FetchAuthToken from 'src/onboarding/components/verifyStep/FetchAuthToken'
 
 // Actions
 import {
   updateTelegrafPluginConfig,
   addTelegrafPluginConfigFieldValue,
   removeTelegrafPluginConfigFieldValue,
-  setTelegrafPluginAsync,
 } from 'src/onboarding/actions/dataLoaders'
 
 // Types
@@ -26,8 +24,8 @@ export interface Props {
   onUpdateTelegrafPluginConfig: typeof updateTelegrafPluginConfig
   onAddTelegrafPluginConfigFieldValue: typeof addTelegrafPluginConfigFieldValue
   onRemoveTelegrafPluginConfigFieldValue: typeof removeTelegrafPluginConfigFieldValue
-  onSaveTelegrafPlugin: typeof setTelegrafPluginAsync
   dataLoaderType: DataLoaderType
+  authToken: string
   bucket: string
   org: string
   username: string
@@ -39,11 +37,11 @@ class ConfigureDataSourceSwitcher extends PureComponent<Props> {
     const {
       bucket,
       org,
-      username,
+      authToken,
       telegrafPlugins,
       currentIndex,
       dataLoaderType,
-      onSaveTelegrafPlugin,
+
       onUpdateTelegrafPluginConfig,
       onAddTelegrafPluginConfigFieldValue,
       onRemoveTelegrafPluginConfigFieldValue,
@@ -52,23 +50,18 @@ class ConfigureDataSourceSwitcher extends PureComponent<Props> {
     switch (dataLoaderType) {
       case DataLoaderType.Streaming:
         return (
-          <FetchAuthToken bucket={bucket} username={username}>
-            {authToken => (
-              <PluginConfigSwitcher
-                onUpdateTelegrafPluginConfig={onUpdateTelegrafPluginConfig}
-                onRemoveTelegrafPluginConfigFieldValue={
-                  onRemoveTelegrafPluginConfigFieldValue
-                }
-                telegrafPlugins={telegrafPlugins}
-                currentIndex={currentIndex}
-                onAddTelegrafPluginConfigFieldValue={
-                  onAddTelegrafPluginConfigFieldValue
-                }
-                onSaveTelegrafPlugin={onSaveTelegrafPlugin}
-                authToken={authToken}
-              />
-            )}
-          </FetchAuthToken>
+          <PluginConfigSwitcher
+            onUpdateTelegrafPluginConfig={onUpdateTelegrafPluginConfig}
+            onRemoveTelegrafPluginConfigFieldValue={
+              onRemoveTelegrafPluginConfigFieldValue
+            }
+            telegrafPlugins={telegrafPlugins}
+            currentIndex={currentIndex}
+            onAddTelegrafPluginConfigFieldValue={
+              onAddTelegrafPluginConfigFieldValue
+            }
+            authToken={authToken}
+          />
         )
       case DataLoaderType.LineProtocol:
         return <LineProtocol bucket={bucket} org={org} />

@@ -10,6 +10,7 @@ import ConfigureDataSourceStep from 'src/onboarding/components/configureStep/Con
 import CompletionStep from 'src/onboarding/components/CompletionStep'
 import VerifyDataStep from 'src/onboarding/components/verifyStep/VerifyDataStep'
 import {ErrorHandling} from 'src/shared/decorators/errors'
+import FetchAuthToken from 'src/onboarding/components/verifyStep/FetchAuthToken'
 
 // Actions
 import {
@@ -19,7 +20,7 @@ import {
   setDataLoadersType,
   addTelegrafPluginConfigFieldValue,
   removeTelegrafPluginConfigFieldValue,
-  setTelegrafPluginAsync,
+  createTelegrafConfigAsync,
 } from 'src/onboarding/actions/dataLoaders'
 
 // Types
@@ -38,7 +39,7 @@ interface Props {
   setupParams: SetupParams
   dataLoaders: {telegrafPlugins: TelegrafPlugin[]; type: DataLoaderType}
   currentStepIndex: number
-  onSaveTelegrafPlugin: typeof setTelegrafPluginAsync
+  onSaveTelegrafConfig: typeof createTelegrafConfigAsync
 }
 
 @ErrorHandling
@@ -51,7 +52,7 @@ class OnboardingStepSwitcher extends PureComponent<Props> {
       dataLoaders,
       onSetDataLoadersType,
       onAddTelegrafPlugin,
-      onSaveTelegrafPlugin,
+      onSaveTelegrafConfig,
       onUpdateTelegrafPluginConfig,
       onRemoveTelegrafPlugin,
       onAddTelegrafPluginConfigFieldValue,
@@ -76,18 +77,26 @@ class OnboardingStepSwitcher extends PureComponent<Props> {
         )
       case 3:
         return (
-          <ConfigureDataSourceStep
-            {...onboardingStepProps}
-            {...dataLoaders}
-            onUpdateTelegrafPluginConfig={onUpdateTelegrafPluginConfig}
-            onAddTelegrafPluginConfigFieldValue={
-              onAddTelegrafPluginConfigFieldValue
-            }
-            onRemoveTelegrafPluginConfigFieldValue={
-              onRemoveTelegrafPluginConfigFieldValue
-            }
-            onSaveTelegrafPlugin={onSaveTelegrafPlugin}
-          />
+          <FetchAuthToken
+            bucket={_.get(setupParams, 'bucket', '')}
+            username={_.get(setupParams, 'username', '')}
+          >
+            {authToken => (
+              <ConfigureDataSourceStep
+                {...onboardingStepProps}
+                {...dataLoaders}
+                authToken={authToken}
+                onUpdateTelegrafPluginConfig={onUpdateTelegrafPluginConfig}
+                onAddTelegrafPluginConfigFieldValue={
+                  onAddTelegrafPluginConfigFieldValue
+                }
+                onRemoveTelegrafPluginConfigFieldValue={
+                  onRemoveTelegrafPluginConfigFieldValue
+                }
+                onSaveTelegrafConfig={onSaveTelegrafConfig}
+              />
+            )}
+          </FetchAuthToken>
         )
       case 4:
         return <VerifyDataStep {...onboardingStepProps} {...dataLoaders} />

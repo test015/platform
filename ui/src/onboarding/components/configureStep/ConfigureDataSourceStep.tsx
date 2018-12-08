@@ -18,8 +18,14 @@ import {
   updateTelegrafPluginConfig,
   addTelegrafPluginConfigFieldValue,
   removeTelegrafPluginConfigFieldValue,
-  setTelegrafPluginAsync,
+  createTelegrafConfigAsync,
 } from 'src/onboarding/actions/dataLoaders'
+
+// Constants
+import {
+  TelegrafConfigCreationSuccess,
+  TelegrafConfigCreationError,
+} from 'src/shared/copy/notifications'
 
 // Types
 import {OnboardingStepProps} from 'src/onboarding/containers/OnboardingWizard'
@@ -31,7 +37,8 @@ export interface OwnProps extends OnboardingStepProps {
   type: DataLoaderType
   onAddTelegrafPluginConfigFieldValue: typeof addTelegrafPluginConfigFieldValue
   onRemoveTelegrafPluginConfigFieldValue: typeof removeTelegrafPluginConfigFieldValue
-  onSaveTelegrafPlugin: typeof setTelegrafPluginAsync
+  onSaveTelegrafConfig: typeof createTelegrafConfigAsync
+  authToken: string
 }
 
 interface RouterProps {
@@ -64,12 +71,12 @@ class ConfigureDataSourceStep extends PureComponent<Props> {
     const {
       telegrafPlugins,
       type,
+      authToken,
       params: {substepID},
       setupParams,
       onUpdateTelegrafPluginConfig,
       onAddTelegrafPluginConfigFieldValue,
       onRemoveTelegrafPluginConfigFieldValue,
-      onSaveTelegrafPlugin,
     } = this.props
 
     return (
@@ -86,9 +93,9 @@ class ConfigureDataSourceStep extends PureComponent<Props> {
           onRemoveTelegrafPluginConfigFieldValue={
             onRemoveTelegrafPluginConfigFieldValue
           }
-          onSaveTelegrafPlugin={onSaveTelegrafPlugin}
           dataLoaderType={type}
           currentIndex={+substepID}
+          authToken={authToken}
         />
         <div className="wizard-button-container">
           <div className="wizard-button-bar">
@@ -132,17 +139,30 @@ class ConfigureDataSourceStep extends PureComponent<Props> {
     onSetCurrentStepIndex(stepStatuses.length - 1)
   }
 
-  private handleNext = () => {
+  private handleNext = async () => {
     const {
       onIncrementCurrentStepIndex,
       telegrafPlugins,
+      authToken,
+      notify,
       params: {substepID, stepID},
       router,
+      type,
+      onSaveTelegrafConfig,
     } = this.props
 
     const index = +substepID
 
     if (index >= telegrafPlugins.length - 1) {
+      if (type === DataLoaderType.Streaming) {
+        try {
+          await onSaveTelegrafConfig(authToken)
+          notify(TelegrafConfigCreationSuccess)
+        } catch (error) {
+          notify(TelegrafConfigCreationError)
+        }
+      }
+
       onIncrementCurrentStepIndex()
     } else {
       router.push(`/onboarding/${stepID}/${index + 1}`)

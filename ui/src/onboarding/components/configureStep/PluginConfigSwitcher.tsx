@@ -14,7 +14,6 @@ import {
   updateTelegrafPluginConfig,
   addTelegrafPluginConfigFieldValue,
   removeTelegrafPluginConfigFieldValue,
-  setTelegrafPluginAsync,
 } from 'src/onboarding/actions/dataLoaders'
 
 // Types
@@ -25,7 +24,6 @@ interface Props {
   onUpdateTelegrafPluginConfig: typeof updateTelegrafPluginConfig
   onAddTelegrafPluginConfigFieldValue: typeof addTelegrafPluginConfigFieldValue
   onRemoveTelegrafPluginConfigFieldValue: typeof removeTelegrafPluginConfigFieldValue
-  onSaveTelegrafPlugin: typeof setTelegrafPluginAsync
   currentIndex: number
   authToken: string
 }
@@ -35,7 +33,7 @@ class PluginConfigSwitcher extends PureComponent<Props> {
     const {
       authToken,
       onUpdateTelegrafPluginConfig,
-      onSaveTelegrafPlugin,
+
       onAddTelegrafPluginConfigFieldValue,
       onRemoveTelegrafPluginConfigFieldValue,
     } = this.props
@@ -53,7 +51,6 @@ class PluginConfigSwitcher extends PureComponent<Props> {
           onRemoveTelegrafPluginConfigFieldValue={
             onRemoveTelegrafPluginConfigFieldValue
           }
-          onSave={onSaveTelegrafPlugin}
         />
       )
     }

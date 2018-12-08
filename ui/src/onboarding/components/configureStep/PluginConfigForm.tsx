@@ -11,7 +11,6 @@ import {
   updateTelegrafPluginConfig,
   addTelegrafPluginConfigFieldValue,
   removeTelegrafPluginConfigFieldValue,
-  setTelegrafPluginAsync,
 } from 'src/onboarding/actions/dataLoaders'
 
 // Types
@@ -27,7 +26,6 @@ interface Props {
   onUpdateTelegrafPluginConfig: typeof updateTelegrafPluginConfig
   onAddTelegrafPluginConfigFieldValue: typeof addTelegrafPluginConfigFieldValue
   onRemoveTelegrafPluginConfigFieldValue: typeof removeTelegrafPluginConfigFieldValue
-  onSave: typeof setTelegrafPluginAsync
   authToken: string
 }
 
@@ -39,13 +37,9 @@ class PluginConfigForm extends PureComponent<Props> {
     return (
       <>
         <h3>{_.startCase(name)}</h3>
-        <Form onSubmit={this.handleSave}>{this.formFields}</Form>
+        <Form>{this.formFields}</Form>
       </>
     )
-  }
-
-  private handleSave = () => {
-    this.props.onSave(this.props.telegrafPlugin.name, this.props.authToken)
   }
 
   private get formFields(): JSX.Element[] | JSX.Element {

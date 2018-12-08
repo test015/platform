@@ -13,11 +13,11 @@ import {
   TelegrafPlugin,
   DataLoaderType,
   LineProtocolTab,
-  TelegrafPluginName,
   Plugin,
 } from 'src/types/v2/dataLoaders'
 import {AppState} from 'src/types/v2'
 import {RemoteDataState} from 'src/types'
+import {TelegrafPluginOutputInfluxDBV2} from 'src/api'
 
 type GetState = () => AppState
 
@@ -130,31 +130,26 @@ export const setTelegrafConfigID = (id: string): SetTelegrafConfigID => ({
   payload: {id},
 })
 
-export const setTelegrafPluginAsync = (
-  telegrafPluginName: TelegrafPluginName,
-  authToken: string
-) => async (dispatch, getState: GetState) => {
+export const createTelegrafConfigAsync = (authToken: string) => async (
+  dispatch,
+  getState: GetState
+) => {
   const {
     onboarding: {
-      dataLoaders: {telegrafConfigID, telegrafPlugins},
+      dataLoaders: {telegrafPlugins},
       steps: {
         setupParams: {org, bucket},
       },
     },
   } = getState()
 
-  const telegrafPlugin = telegrafPlugins.find(
-    tp => tp.name === telegrafPluginName
+  const plugins = telegrafPlugins.map(
+    tp => tp.plugin || createNewPlugin(tp.name)
   )
 
-  const plugin = _.get(
-    telegrafPlugin,
-    'plugin',
-    createNewPlugin(telegrafPluginName)
-  )
   const influxDB2Out = {
-    name: 'influxdb_v2',
-    type: 'output',
+    name: TelegrafPluginOutputInfluxDBV2.NameEnum.InfluxdbV2,
+    type: TelegrafPluginOutputInfluxDBV2.TypeEnum.Output,
     config: {
       urls: ['http://127.0.0.1:9999'],
       token: authToken,
@@ -163,37 +158,15 @@ export const setTelegrafPluginAsync = (
     },
   }
 
-  if (telegrafConfigID) {
-    const response = await telegrafsAPI.telegrafsTelegrafIDGet(
-      telegrafConfigID,
-      {headers: {Accept: 'application/json'}}
-    )
-    const existingConfig = response.data
-    const {plugins} = existingConfig
-    const updatedConfig = {
-      ...existingConfig,
-      plugins: plugins.map(p => {
-        if (p.name === plugin.name) {
-          return plugin
-        }
-        return p
-      }),
-    }
-    const {data} = await telegrafsAPI.telegrafsTelegrafIDPut(
-      telegrafConfigID,
-      updatedConfig
-    )
-    const updated = data.plugins.find(p => p.name === plugin.name)
-    dispatch(updateTelegrafPlugin(updated as Plugin))
-  } else {
-    const body = {
-      name: 'new config',
-      agent: {collectionInterval: 15},
-      plugins: [plugin, influxDB2Out],
-    }
-    const created = await telegrafsAPI.telegrafsPost(org, body)
-    dispatch(setTelegrafConfigID(created.data.id))
+  plugins.push(influxDB2Out)
+
+  const body = {
+    name: 'new config',
+    agent: {collectionInterval: 15},
+    plugins,
   }
+  const created = await telegrafsAPI.telegrafsPost(org, body)
+  dispatch(setTelegrafConfigID(created.data.id))
 }
 
 interface RemoveTelegrafPlugin {
