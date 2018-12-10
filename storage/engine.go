@@ -165,6 +165,9 @@ func (e *Engine) WithLogger(log *zap.Logger) {
 // PrometheusCollectors returns all the prometheus collectors associated with
 // the engine and its components.
 func (e *Engine) PrometheusCollectors() []prometheus.Collector {
+	e.mu.RLock()
+	defer e.mu.RUnlock()
+
 	var metrics []prometheus.Collector
 	metrics = append(metrics, tsdb.PrometheusCollectors()...)
 	metrics = append(metrics, tsi1.PrometheusCollectors()...)
