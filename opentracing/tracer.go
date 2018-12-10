@@ -25,6 +25,7 @@ const (
 	traceIDKey     = "trace_id"
 	spanIDKey      = "span_id"
 	startKey       = "start"
+	operationKey   = "operation"
 	stopKey        = "stop"
 	durationKey    = "duration"
 	childOfKey     = "child_of"
@@ -210,11 +211,7 @@ func (s *Span) FinishWithOptions(opts opentracing.FinishOptions) {
 	if err != nil {
 		panic(err)
 	}
-	bb, err := point.MarshalBinary()
-	if err != nil {
-		panic(err)
-	}
-	buff.Write(bb)
+	buff.Write([]byte(point.String()))
 
 	err = batch.Write(context.Background(), s.tracer.OrgID, s.tracer.BucketID, buff)
 	if err != nil {
@@ -227,7 +224,10 @@ func (s *Span) Context() opentracing.SpanContext {
 }
 
 func (s *Span) SetOperationName(operationName string) opentracing.Span {
-	s.opName = operationName
+	s.tags = append(s.tags, models.Tag{
+		Key:   []byte(operationKey),
+		Value: []byte(operationName),
+	})
 	return s
 }
 
