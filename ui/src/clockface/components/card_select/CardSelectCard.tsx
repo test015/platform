@@ -1,8 +1,13 @@
 // Libraries
-import React, {PureComponent} from 'react'
+import React, {PureComponent, StatelessComponent} from 'react'
 import classnames from 'classnames'
 import {ErrorHandling} from 'src/shared/decorators/errors'
 import ProtoboardIcon from 'src/clockface/components/card_select/ProtoboardIcon'
+
+interface ImageComponent {
+  height: number
+  width?: number
+}
 
 interface Props {
   id: string
@@ -12,6 +17,7 @@ interface Props {
   checked?: boolean
   disabled?: boolean
   onClick: () => void
+  imageComponent: StatelessComponent<ImageComponent>
 }
 
 @ErrorHandling
@@ -23,7 +29,6 @@ class CardSelectCard extends PureComponent<Props> {
 
   public render() {
     const {id, label, checked, name, disabled} = this.props
-
     return (
       <div
         data-toggle="card_toggle"
@@ -60,11 +65,15 @@ class CardSelectCard extends PureComponent<Props> {
     )
   }
 
-  private get cardImage() {
-    const {image, label} = this.props
+  private get cardImage(): JSX.Element {
+    const {imageComponent, image, label} = this.props
 
     if (image) {
       return <img src={image} alt={`${label} icon`} />
+    }
+
+    if (imageComponent) {
+      return React.createElement(imageComponent, {height: 50})
     }
 
     return <ProtoboardIcon displayText={label} />

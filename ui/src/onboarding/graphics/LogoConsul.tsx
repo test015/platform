@@ -3,7 +3,7 @@ import React, {SFC} from 'react'
 
 interface Props {
   width?: number
-  height?: number
+  height: number
 }
 
 const LogoConsul: SFC<Props> = ({height, width}) => {
