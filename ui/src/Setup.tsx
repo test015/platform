@@ -58,7 +58,7 @@ export class Setup extends PureComponent<Props, State> {
     })
 
     if (!isSetupAllowed) {
-      return
+      // return
     }
 
     router.push('/onboarding/0')
