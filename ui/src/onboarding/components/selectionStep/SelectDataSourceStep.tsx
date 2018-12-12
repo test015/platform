@@ -77,16 +77,16 @@ class SelectDataSourceStep extends PureComponent<Props, State> {
           <div className="wizard-button-bar">
             <Button
               color={ComponentColor.Default}
-              text="Back"
+              text={this.backButtonText}
               size={ComponentSize.Medium}
               onClick={this.handleClickBack}
             />
             <Button
               color={ComponentColor.Primary}
-              text="Next"
+              text={this.nextButtonText}
               size={ComponentSize.Medium}
               onClick={this.handleClickNext}
-              status={ComponentStatus.Default}
+              status={this.nextButtonStatus}
               titleText={'Next'}
             />
           </div>
@@ -94,6 +94,44 @@ class SelectDataSourceStep extends PureComponent<Props, State> {
         </div>
       </div>
     )
+  }
+
+  private get nextButtonStatus(): ComponentStatus {
+    if (this.props.type === DataLoaderType.Empty) {
+      return ComponentStatus.Disabled
+    }
+    return ComponentStatus.Default
+  }
+
+  private get nextButtonText(): string {
+    const {type, telegrafPlugins} = this.props
+
+    switch (type) {
+      case DataLoaderType.CSV:
+        return 'Continue to CSV Configuration'
+      case DataLoaderType.Streaming:
+        if (this.isStreaming) {
+          if (telegrafPlugins.length) {
+            return `Continue to ${telegrafPlugins[0].name}`
+          }
+          return 'Continue to Plugin Configuration'
+        }
+        return 'Continue to Streaming Selection'
+      case DataLoaderType.LineProtocol:
+        return 'Continue to Line Protocol Configuration'
+      case DataLoaderType.Empty:
+        return 'Continue to Configuration'
+    }
+  }
+
+  private get backButtonText(): string {
+    if (this.props.type === DataLoaderType.Streaming) {
+      if (this.isStreaming) {
+        return 'Back to Data Source Selection'
+      }
+    }
+
+    return 'Back to Admin Setup'
   }
 
   private get title(): string {
@@ -164,6 +202,16 @@ class SelectDataSourceStep extends PureComponent<Props, State> {
   }
 
   private handleClickBack = () => {
+    const {
+      router,
+      params: {stepID},
+    } = this.props
+
+    if (this.isStreaming) {
+      router.push(`/onboarding/${stepID}/`)
+      return
+    }
+
     this.props.onDecrementCurrentStepIndex()
   }
 

@@ -74,9 +74,11 @@ export class OnboardingWizardPage extends PureComponent<Props, State> {
   }
 
   private handleDecrementStepIndex = () => {
-    const {router} = this.props
+    const {
+      params: {stepID},
+    } = this.props
 
-    router.goBack()
+    this.setStepIndex(+stepID - 1)
   }
 
   private handleIncrementStepIndex = () => {

@@ -51,13 +51,13 @@ class VerifyDataStep extends PureComponent<Props> {
           <div className="wizard-button-bar">
             <Button
               color={ComponentColor.Default}
-              text="Back"
+              text="Back to Configuration"
               size={ComponentSize.Medium}
               onClick={this.handleDecrementStep}
             />
             <Button
               color={ComponentColor.Primary}
-              text="Next"
+              text="Continue to Completion"
               size={ComponentSize.Medium}
               onClick={onIncrementCurrentStepIndex}
               status={ComponentStatus.Default}

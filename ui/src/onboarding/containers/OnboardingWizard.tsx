@@ -208,7 +208,9 @@ class OnboardingWizard extends PureComponent<Props> {
   }
 
   private handleNewSourceClick = () => {
-    const {onSetCurrentSubStepIndex} = this.props
+    const {onSetCurrentSubStepIndex, onSetActiveTelegrafPlugin} = this.props
+
+    onSetActiveTelegrafPlugin('')
     onSetCurrentSubStepIndex(2, 'streaming')
   }
 
