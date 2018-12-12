@@ -4,9 +4,8 @@ import (
 	"context"
 	"testing"
 
+	bolt "github.com/coreos/bbolt"
 	"github.com/influxdata/platform"
-	bolt "github.com/influxdata/platform/bolt"
-	"github.com/influxdata/platform/kv"
 	platformtesting "github.com/influxdata/platform/testing"
 )
 
