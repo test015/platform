@@ -34,7 +34,7 @@ export default class TokenList extends PureComponent<Props, State> {
 
   public render() {
     const {auths} = this.props
-    const {isTokenOverlayVisible} = this.state
+    const {isTokenOverlayVisible, authInView} = this.state
 
     return (
       <>
@@ -56,10 +56,17 @@ export default class TokenList extends PureComponent<Props, State> {
           </IndexList.Body>
         </IndexList>
         <OverlayTechnology visible={isTokenOverlayVisible}>
-          <ViewTokenOverlay auth={this.props.auths[0]} />
+          <ViewTokenOverlay
+            auth={authInView}
+            onDismissOverlay={this.handleDismissOverlay}
+          />
         </OverlayTechnology>
       </>
     )
+  }
+
+  private handleDismissOverlay = () => {
+    this.setState({isTokenOverlayVisible: false})
   }
 
   private handleClickDescription = (authID: string): void => {
