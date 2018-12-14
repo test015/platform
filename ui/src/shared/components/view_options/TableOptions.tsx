@@ -8,6 +8,7 @@ import ThresholdList from 'src/shared/components/view_options/options/ThresholdL
 import ColumnOptions from 'src/shared/components/ColumnsOptions'
 import FixFirstColumn from 'src/shared/components/view_options/options/FixFirstColumn'
 import TimeFormat from 'src/shared/components/view_options/options/TimeFormat'
+import TimeAxis from 'src/shared/components/view_options/options/TimeAxis'
 
 // Actions
 import {
@@ -67,7 +68,7 @@ export class TableOptions extends Component<Props, {}> {
       onSetDecimalPlaces,
     } = this.props
 
-    const {fixFirstColumn} = tableOptions
+    const {fixFirstColumn, verticalTimeAxis} = tableOptions
     const colorConfigs: ColorConfig[] = colors.map(color => ({
       color,
     }))
@@ -91,6 +92,10 @@ export class TableOptions extends Component<Props, {}> {
               onDecimalPlacesChange={onSetDecimalPlaces}
             />
           )}
+          <TimeAxis
+            verticalTimeAxis={verticalTimeAxis}
+            onToggleVerticalTimeAxis={this.handleToggleVerticalTimeAxis}
+          />
           <ColumnOptions
             columns={fieldOptions}
             onMoveColumn={this.handleMoveColumn}
@@ -124,6 +129,11 @@ export class TableOptions extends Component<Props, {}> {
     const {onSetTableOptions, tableOptions} = this.props
     const fixFirstColumn = !tableOptions.fixFirstColumn
     onSetTableOptions({...tableOptions, fixFirstColumn})
+  }
+
+  private handleToggleVerticalTimeAxis = (verticalTimeAxis: boolean): void => {
+    const {tableOptions, onSetTableOptions} = this.props
+    onSetTableOptions({...tableOptions, verticalTimeAxis})
   }
 }
 
