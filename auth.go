@@ -4,7 +4,7 @@ import (
 	"context"
 )
 
-// Authorization is a authorization. 🎉
+// Authorization is an authorization. 🎉
 type Authorization struct {
 	ID          ID           `json:"id,omitempty"`
 	Token       string       `json:"token"`

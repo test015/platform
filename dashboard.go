@@ -54,7 +54,7 @@ type Dashboard struct {
 	Meta        DashboardMeta `json:"meta"`
 }
 
-// Dashboard meta contains meta information about dashboards
+// DashboardMeta contains meta information about dashboards
 type DashboardMeta struct {
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`

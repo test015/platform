@@ -70,15 +70,15 @@ type UserResourceMappingFilter struct {
 	UserType     UserType
 }
 
-var ownerActions = []action{WriteAction, CreateAction, DeleteAction}
-var memberActions = []action{ReadAction}
+var ownerActions = []Action{WriteAction, CreateAction, DeleteAction}
+var memberActions = []Action{ReadAction}
 
 // ToPermission converts a user resource mapping into a set of permissions.
 func (m *UserResourceMapping) ToPermissions() []Permission {
 	// TODO(desa): we'll have to do something more fine-grained eventually
 	// but this should be good enough for now.
 	ps := []Permission{}
-	r := resource(fmt.Sprintf("%s/%s", m.ResourceType, m.ResourceID))
+	r := Resource(fmt.Sprintf("%s/%s", m.ResourceType, m.ResourceID))
 	if m.UserType == Owner {
 		for _, a := range ownerActions {
 			p := Permission{

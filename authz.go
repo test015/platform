@@ -92,6 +92,8 @@ type Permission struct {
 	Resource Resource `json:"resource"`
 	ID       *ID      `json:"id,omitempty"`
 	Name     *string  `json:"name,omitempty"`
+	OrgName  *string  `json:"orgName,omitempty"`
+	OrgID    *ID      `json:"orgID,omitempty"`
 }
 
 func (p Permission) String() string {
@@ -146,6 +148,19 @@ func NewPermissionAtID(id ID, name string, a Action, r Resource) (*Permission, e
 	return p, p.Valid()
 }
 
+func NewPermissionAtOrgID(id ID, name string, orgID ID, orgName string, a Action, r Resource) (*Permission, error) {
+	p := &Permission{
+		Action:   a,
+		Resource: r,
+		ID:       &id,
+		Name:     &name,
+		OrgID:    &orgID,
+		OrgName:  &orgName,
+	}
+
+	return p, p.Valid()
+}
+
 // OperPermissions are the default permissions for those who setup the application
 func OperPermissions() []Permission {
 	ps := []Permission{}
@@ -156,20 +171,4 @@ func OperPermissions() []Permission {
 	}
 
 	return ps
-}
-
-// ReadBucketPermission constructs a permission for querying a bucket.
-func ReadBucketPermission(id ID) Permission {
-	return Permission{
-		Action:   ReadAction,
-		Resource: BucketsResource,
-	}
-}
-
-// WriteBucketPermission constructs a permission for writing to a bucket.
-func WriteBucketPermission(id ID) Permission {
-	return Permission{
-		Action:   WriteAction,
-		Resource: BucketsResource,
-	}
 }

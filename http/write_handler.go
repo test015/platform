@@ -127,7 +127,12 @@ func (h *WriteHandler) handleWrite(w http.ResponseWriter, r *http.Request) {
 		bucket = b
 	}
 
-	if !a.Allowed(platform.WriteBucketPermission(bucket.ID)) {
+	p, err := platform.NewPermissionAtID(bucket.ID, bucket.Name, platform.WriteAction, platform.BucketsResource)
+	if err != nil {
+		EncodeError(ctx, fmt.Errorf("could not create permission", req.Bucket), w)
+	}
+
+	if !a.Allowed(*p) {
 		EncodeError(ctx, errors.Forbiddenf("insufficient permissions for write"), w)
 		return
 	}
