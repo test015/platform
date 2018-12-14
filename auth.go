@@ -10,6 +10,8 @@ type Authorization struct {
 	Token       string       `json:"token"`
 	Status      Status       `json:"status"`
 	Description string       `json:"description"`
+	OrgName     string       `json:"orgName,omitempty"`
+	OrgID       ID           `json:"orgID,omitempty"`
 	User        string       `json:"user,omitempty"`
 	UserID      ID           `json:"userID,omitempty"`
 	Permissions []Permission `json:"permissions,omitempty"`

@@ -3524,7 +3524,13 @@ components:
                 - RFC3339
                 - RFC3339Nano
     Permission:
+      required: [action, resource]
       properties:
+        id:
+          type: string
+        name:
+          description: only exists if Permission.id field exists
+          type: string
         action:
           type: string
           enum:
@@ -3535,16 +3541,12 @@ components:
         resource:
           type: string
           enum:
-            - user
-            - org
-            - task/:id
-            - bucket/:id
-            - dashboard/:id
-            - org/:id
-            - org/:id/task
-            - org/:id/bucket
-            - org/:id/source
-            - org/:id/dashboard
+            - users
+            - orgs
+            - tasks
+            - buckets
+            - dashboards
+            - sources
     Authorization:
       properties:
         links:
@@ -3581,6 +3583,10 @@ components:
           type: string
         description:
           description: user defined description of the authorization
+          type: string
+        orgID:
+          type: string
+        orgName:
           type: string
         permissions:
           type: array

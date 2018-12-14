@@ -11,7 +11,7 @@ import PermissionsWidget, {
 // Types
 import {Authorization, Permission} from 'src/api'
 
-const {Org, User, Bucketid} = Permission.ResourceEnum
+const {Orgs, Users, Buckets, Tasks} = Permission.ResourceEnum
 const {Write, Create, Read, Delete} = Permission.ActionEnum
 
 export interface TestPermission {
@@ -19,21 +19,42 @@ export interface TestPermission {
   actions: Permission.ActionEnum[]
   id?: string
   name?: string
+  orgID?: string
+  orgName?: string
 }
 
 const testPerms: TestPermission[] = [
   {
-    resource: User,
+    resource: Users,
     actions: [Write, Read, Create, Delete],
   },
   {
-    resource: Org,
+    resource: Orgs,
+    id: '1',
+    name: 'myorg',
     actions: [Read, Delete],
   },
   {
-    resource: Bucketid,
-    id: 'bucket/1234',
+    resource: Buckets,
+    id: '2',
     name: 'telegraf',
+    orgID: '1',
+    orgName: 'myorg',
+    actions: [Read],
+  },
+  {
+    resource: Tasks, // resource will be Task `task`
+    name: 'task1',
+    orgID: '1',
+    orgName: 'myorg',
+    actions: [Read],
+  },
+  {
+    resource: Tasks, // resource will be Task `task`
+    id: '2',
+    name: 'task1',
+    orgID: '2',
+    orgName: 'yourorg',
     actions: [Read],
   },
 ]
@@ -106,7 +127,11 @@ export default class ViewTokenOverlay extends PureComponent<Props> {
   }
 
   private title = (permission): string => {
-    return permission.name || permission.resource
+    if (permission.name) {
+      return `${permission.resource}:${permission.name}`
+    }
+
+    return `${permission.resource}:*`
   }
 
   private handleDismiss = () => {

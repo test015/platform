@@ -97,13 +97,13 @@ func (s *Service) Generate(ctx context.Context, req *platform.OnboardingRequest)
 		UserID:      u.ID,
 		Description: onboardingTokenDesc,
 		Permissions: []platform.Permission{
-			platform.CreateUserPermission,
-			platform.DeleteUserPermission,
-			{
-				Resource: platform.OrganizationResource,
-				Action:   platform.WriteAction,
-			},
-			platform.WriteBucketPermission(bucket.ID),
+			platform.CreateUsersPermission,
+			platform.DeleteUsersPermission,
+			platform.WriteBucketsPermission,
+			platform.WriteOrgsPermission,
+			platform.WriteTasksPermission,
+			platform.WriteDashboardsPermission,
+			platform.WriteSourcesPermission,
 		},
 	}
 	if err = s.CreateAuthorization(ctx, auth); err != nil {

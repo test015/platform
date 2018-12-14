@@ -95,6 +95,18 @@ export interface Authorization {
     links?: AuthorizationLinks;
     /**
      * 
+     * @type {string}
+     * @memberof Authorization
+     */
+    orgID?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Authorization
+     */
+    orgName?: string;
+    /**
+     * 
      * @type {Array<Permission>}
      * @memberof Authorization
      */
@@ -1725,13 +1737,25 @@ export interface Permission {
      * @type {string}
      * @memberof Permission
      */
-    action?: Permission.ActionEnum;
+    action: Permission.ActionEnum;
     /**
      * 
      * @type {string}
      * @memberof Permission
      */
-    resource?: Permission.ResourceEnum;
+    id?: string;
+    /**
+     * only exists if Permission.id field exists
+     * @type {string}
+     * @memberof Permission
+     */
+    name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Permission
+     */
+    resource: Permission.ResourceEnum;
 }
 
 /**
@@ -1754,16 +1778,12 @@ export namespace Permission {
      * @enum {string}
      */
     export enum ResourceEnum {
-        User = 'user',
-        Org = 'org',
-        Taskid = 'task/:id',
-        Bucketid = 'bucket/:id',
-        Dashboardid = 'dashboard/:id',
-        Orgid = 'org/:id',
-        Orgidtask = 'org/:id/task',
-        Orgidbucket = 'org/:id/bucket',
-        Orgidsource = 'org/:id/source',
-        Orgiddashboard = 'org/:id/dashboard'
+        Users = 'users',
+        Orgs = 'orgs',
+        Tasks = 'tasks',
+        Buckets = 'buckets',
+        Dashboards = 'dashboards',
+        Sources = 'sources'
     }
 }
 
