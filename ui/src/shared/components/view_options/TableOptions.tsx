@@ -9,6 +9,10 @@ import ColumnOptions from 'src/shared/components/ColumnsOptions'
 import FixFirstColumn from 'src/shared/components/view_options/options/FixFirstColumn'
 import TimeFormat from 'src/shared/components/view_options/options/TimeFormat'
 import TimeAxis from 'src/shared/components/view_options/options/TimeAxis'
+import SortBy from 'src/shared/components/view_options/options/SortBy'
+
+// Constants
+import {DEFAULT_TIME_FIELD} from 'src/dashboards/constants'
 
 // Actions
 import {
@@ -68,7 +72,7 @@ export class TableOptions extends Component<Props, {}> {
       onSetDecimalPlaces,
     } = this.props
 
-    const {fixFirstColumn, verticalTimeAxis} = tableOptions
+    const {fixFirstColumn, verticalTimeAxis, sortBy} = tableOptions
     const colorConfigs: ColorConfig[] = colors.map(color => ({
       color,
     }))
@@ -77,6 +81,11 @@ export class TableOptions extends Component<Props, {}> {
       <>
         <div className="col-xs-6">
           <h5 className="display-options--header">Table Controls</h5>
+          <SortBy
+            selected={sortBy || DEFAULT_TIME_FIELD}
+            fieldOptions={fieldOptions}
+            onChange={this.handleChangeSortBy}
+          />
           <TimeFormat
             timeFormat={timeFormat}
             onTimeFormatChange={onSetTimeFormat}
@@ -109,6 +118,11 @@ export class TableOptions extends Component<Props, {}> {
         </div>
       </>
     )
+  }
+
+  private handleChangeSortBy = (sortBy: FieldOption) => {
+    const {tableOptions, onSetTableOptions} = this.props
+    onSetTableOptions({...tableOptions, sortBy})
   }
 
   private handleMoveColumn = (dragIndex: number, hoverIndex: number) => {
