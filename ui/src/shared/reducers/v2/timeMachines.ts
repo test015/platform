@@ -21,6 +21,7 @@ import {
   QueryEditMode,
   QueryView,
   QueryViewProperties,
+  ExctractWorkingView,
 } from 'src/types/v2/dashboards'
 import {Action} from 'src/shared/actions/v2/timeMachines'
 import {TimeMachineTab} from 'src/types/v2/timeMachine'
@@ -471,6 +472,27 @@ export const timeMachineReducer = (
       }
 
       return {...state, draftQueries}
+    }
+
+    case 'SET_FIELD_OPTIONS': {
+      const workingView = state.view as ExctractWorkingView<
+        typeof action.payload
+      >
+      const {fieldOptions} = action.payload
+      const properties = {...workingView.properties, fieldOptions}
+      const view = {...state.view, properties}
+
+      return {...state, view}
+    }
+    case 'SET_TABLE_OPTIONS': {
+      const workingView = state.view as ExctractWorkingView<
+        typeof action.payload
+      >
+      const {tableOptions} = action.payload
+      const properties = {...workingView.properties, tableOptions}
+      const view = {...state.view, properties}
+
+      return {...state, view}
     }
   }
 

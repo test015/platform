@@ -7,6 +7,7 @@ import DraggableColumn from 'src/shared/components/draggable_column/DraggableCol
 import {FieldOption} from 'src/types/v2/dashboards'
 
 interface Props {
+  className?: string
   columns: FieldOption[]
   onMoveColumn: (dragIndex: number, hoverIndex: number) => void
   onUpdateColumn: (column: FieldOption) => void
@@ -14,12 +15,12 @@ interface Props {
 
 class ColumnsOptions extends Component<Props> {
   public render() {
-    const {columns} = this.props
+    const {columns, className} = this.props
 
     return (
       <>
         <label className="form-label">Table Columns</label>
-        <div className="logs-options--columns">
+        <div className={className}>
           {columns.map((c, i) => this.getDraggableColumn(c, i))}
         </div>
       </>

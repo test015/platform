@@ -96,6 +96,7 @@ class OptionsOverlay extends Component<Props, State> {
             </div>
             <div className="col-sm-7">
               <ColumnsOptions
+                className="logs-options--columns"
                 columns={columns}
                 onMoveColumn={this.handleMoveColumn}
                 onUpdateColumn={this.handleUpdateColumn}

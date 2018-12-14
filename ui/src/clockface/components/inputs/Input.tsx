@@ -15,6 +15,7 @@ export enum InputType {
   Number = 'number',
   Password = 'password',
   Email = 'email',
+  Checkbox = 'checkbox',
 }
 
 export enum AutoComplete {
@@ -48,6 +49,7 @@ interface Props {
   maxLength?: number
   tabIndex?: number
   dataTest?: string
+  checked?: boolean
 }
 
 class Input extends Component<Props> {
