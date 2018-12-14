@@ -26,7 +26,7 @@ interface State {
 }
 
 @ErrorHandling
-class GraphOptionsTimeFormat extends PureComponent<Props, State> {
+class TimeFormat extends PureComponent<Props, State> {
   public state: State = {
     customFormat: false,
     format: this.props.timeFormat || DEFAULT_TIME_FORMAT,
@@ -99,4 +99,4 @@ class GraphOptionsTimeFormat extends PureComponent<Props, State> {
   }
 }
 
-export default GraphOptionsTimeFormat
+export default TimeFormat

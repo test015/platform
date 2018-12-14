@@ -48,6 +48,7 @@ export type Action =
   | UpdateActiveQueryNameAction
   | SetFieldOptionsAction
   | SetTableOptionsAction
+  | SetTimeFormatAction
 
 interface SetActiveTimeMachineAction {
   type: 'SET_ACTIVE_TIME_MACHINE'
@@ -415,4 +416,16 @@ export const setTableOptions = (
 ): SetTableOptionsAction => ({
   type: 'SET_TABLE_OPTIONS',
   payload: {tableOptions},
+})
+
+interface SetTimeFormatAction {
+  type: 'SET_TIME_FORMAT'
+  payload: {
+    timeFormat: string
+  }
+}
+
+export const setTimeFormat = (timeFormat: string): SetTimeFormatAction => ({
+  type: 'SET_TIME_FORMAT',
+  payload: {timeFormat},
 })

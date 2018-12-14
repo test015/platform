@@ -494,6 +494,17 @@ export const timeMachineReducer = (
 
       return {...state, view}
     }
+
+    case 'SET_TIME_FORMAT': {
+      const workingView = state.view as ExctractWorkingView<
+        typeof action.payload
+      >
+      const {timeFormat} = action.payload
+      const properties = {...workingView.properties, timeFormat}
+      const view = {...state.view, properties}
+
+      return {...state, view}
+    }
   }
 
   return state

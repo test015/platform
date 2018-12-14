@@ -7,6 +7,7 @@ import DecimalPlacesOption from 'src/shared/components/view_options/options/Deci
 import ThresholdList from 'src/shared/components/view_options/options/ThresholdList'
 import ColumnOptions from 'src/shared/components/ColumnsOptions'
 import FixFirstColumn from 'src/shared/components/view_options/options/FixFirstColumn'
+import TimeFormat from 'src/shared/components/view_options/options/TimeFormat'
 
 // Actions
 import {
@@ -14,6 +15,7 @@ import {
   setColors,
   setFieldOptions,
   setTableOptions,
+  setTimeFormat,
 } from 'src/shared/actions/v2/timeMachines'
 
 // Utils
@@ -38,6 +40,7 @@ interface StateProps {
   decimalPlaces: DecimalPlaces
   fieldOptions: FieldOption[]
   tableOptions: ViewTableOptions
+  timeFormat: string
 }
 
 interface DispatchProps {
@@ -45,6 +48,7 @@ interface DispatchProps {
   onSetColors: typeof setColors
   onSetFieldOptions: typeof setFieldOptions
   onSetTableOptions: typeof setTableOptions
+  onSetTimeFormat: typeof setTimeFormat
 }
 
 type Props = DispatchProps & StateProps
@@ -53,12 +57,14 @@ type Props = DispatchProps & StateProps
 export class TableOptions extends Component<Props, {}> {
   public render() {
     const {
-      onSetDecimalPlaces,
-      decimalPlaces,
       colors,
+      timeFormat,
       onSetColors,
       fieldOptions,
       tableOptions,
+      decimalPlaces,
+      onSetTimeFormat,
+      onSetDecimalPlaces,
     } = this.props
 
     const {fixFirstColumn} = tableOptions
@@ -70,6 +76,10 @@ export class TableOptions extends Component<Props, {}> {
       <>
         <div className="col-xs-6">
           <h5 className="display-options--header">Table Controls</h5>
+          <TimeFormat
+            timeFormat={timeFormat}
+            onTimeFormatChange={onSetTimeFormat}
+          />
           <FixFirstColumn
             fixed={fixFirstColumn}
             onToggleFixFirstColumn={this.handleToggleFixFirstColumn}
@@ -96,7 +106,7 @@ export class TableOptions extends Component<Props, {}> {
     )
   }
 
-  private handleMoveColumn = (dragIndex, hoverIndex) => {
+  private handleMoveColumn = (dragIndex: number, hoverIndex: number) => {
     const fieldOptions = move(this.props.fieldOptions, dragIndex, hoverIndex)
     this.props.onSetFieldOptions(fieldOptions)
   }
@@ -119,9 +129,15 @@ export class TableOptions extends Component<Props, {}> {
 
 const mstp = (state: AppState) => {
   const view = getActiveTimeMachine(state).view as NewView<TableView>
-  const {colors, decimalPlaces, fieldOptions, tableOptions} = view.properties
+  const {
+    colors,
+    decimalPlaces,
+    fieldOptions,
+    tableOptions,
+    timeFormat,
+  } = view.properties
 
-  return {colors, decimalPlaces, fieldOptions, tableOptions}
+  return {colors, decimalPlaces, fieldOptions, tableOptions, timeFormat}
 }
 
 const mdtp: DispatchProps = {
@@ -129,6 +145,7 @@ const mdtp: DispatchProps = {
   onSetColors: setColors,
   onSetFieldOptions: setFieldOptions,
   onSetTableOptions: setTableOptions,
+  onSetTimeFormat: setTimeFormat,
 }
 
 export default connect<StateProps, DispatchProps>(
