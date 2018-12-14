@@ -38,18 +38,18 @@ import {move} from 'src/shared/utils/move'
 
 interface StateProps {
   colors: Color[]
-  decimalPlaces: DecimalPlaces
-  fieldOptions: FieldOption[]
-  tableOptions: ViewTableOptions
   timeFormat: string
+  fieldOptions: FieldOption[]
+  decimalPlaces: DecimalPlaces
+  tableOptions: ViewTableOptions
 }
 
 interface DispatchProps {
-  onSetDecimalPlaces: typeof setDecimalPlaces
   onSetColors: typeof setColors
+  onSetTimeFormat: typeof setTimeFormat
   onSetFieldOptions: typeof setFieldOptions
   onSetTableOptions: typeof setTableOptions
-  onSetTimeFormat: typeof setTimeFormat
+  onSetDecimalPlaces: typeof setDecimalPlaces
 }
 
 type Props = DispatchProps & StateProps
