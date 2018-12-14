@@ -4,12 +4,12 @@ import HTML5Backend from 'react-dnd-html5-backend'
 
 import DraggableColumn from 'src/shared/components/draggable_column/DraggableColumn'
 
-import {LogsTableColumn} from 'src/types/logs'
+import {FieldOption} from 'src/types/v2/dashboards'
 
 interface Props {
-  columns: LogsTableColumn[]
+  columns: FieldOption[]
   onMoveColumn: (dragIndex: number, hoverIndex: number) => void
-  onUpdateColumn: (column: LogsTableColumn) => void
+  onUpdateColumn: (column: FieldOption) => void
 }
 
 class ColumnsOptions extends Component<Props> {
@@ -26,7 +26,7 @@ class ColumnsOptions extends Component<Props> {
     )
   }
 
-  private getDraggableColumn(column: LogsTableColumn, i: number): JSX.Element {
+  private getDraggableColumn(column: FieldOption, i: number): JSX.Element {
     const {onMoveColumn, onUpdateColumn} = this.props
     return (
       <DraggableColumn
