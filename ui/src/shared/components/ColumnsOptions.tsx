@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {DragDropContext} from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
-import DraggableColumn from 'src/logs/components/draggable_column/DraggableColumn'
+import DraggableColumn from 'src/shared/components/draggable_column/DraggableColumn'
 
 import {LogsTableColumn} from 'src/types/logs'
 
@@ -28,20 +28,18 @@ class ColumnsOptions extends Component<Props> {
 
   private getDraggableColumn(column: LogsTableColumn, i: number): JSX.Element {
     const {onMoveColumn, onUpdateColumn} = this.props
-    if (column.internalName !== 'time') {
-      return (
-        <DraggableColumn
-          key={column.internalName}
-          index={i}
-          id={column.internalName}
-          internalName={column.internalName}
-          displayName={column.displayName}
-          visible={column.visible}
-          onUpdateColumn={onUpdateColumn}
-          onMoveColumn={onMoveColumn}
-        />
-      )
-    }
+    return (
+      <DraggableColumn
+        key={column.internalName}
+        index={i}
+        id={column.internalName}
+        internalName={column.internalName}
+        displayName={column.displayName}
+        visible={column.visible}
+        onUpdateColumn={onUpdateColumn}
+        onMoveColumn={onMoveColumn}
+      />
+    )
   }
 }
 
