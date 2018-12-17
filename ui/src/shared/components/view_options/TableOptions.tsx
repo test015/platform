@@ -12,7 +12,6 @@ import TimeAxis from 'src/shared/components/view_options/options/TimeAxis'
 import SortBy from 'src/shared/components/view_options/options/SortBy'
 
 // Constants
-import {DEFAULT_TIME_FIELD} from 'src/dashboards/constants'
 import {THRESHOLD_TYPE_BASE} from 'src/shared/constants/thresholds'
 
 // Actions
