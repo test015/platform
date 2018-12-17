@@ -2,8 +2,11 @@ import React, {Component} from 'react'
 import {DragDropContext} from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
+// Components
 import DraggableColumn from 'src/shared/components/draggable_column/DraggableColumn'
+import {Form} from 'src/clockface'
 
+// Types
 import {FieldOption} from 'src/types/v2/dashboards'
 
 interface Props {
@@ -18,12 +21,11 @@ class ColumnsOptions extends Component<Props> {
     const {columns, className} = this.props
 
     return (
-      <>
-        <label className="form-label">Table Columns</label>
+      <Form.Element label="Table Columns">
         <div className={className}>
           {columns.map((c, i) => this.getDraggableColumn(c, i))}
         </div>
-      </>
+      </Form.Element>
     )
   }
 
