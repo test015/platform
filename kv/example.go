@@ -56,7 +56,10 @@ func (c *ExampleService) FindUserByID(ctx context.Context, id platform.ID) (*pla
 	})
 
 	if err != nil {
-		return nil, err
+		return nil, &platform.Error{
+			Op:  platform.OpFindUserByID,
+			Err: err,
+		}
 	}
 
 	return u, nil
@@ -118,6 +121,7 @@ func (c *ExampleService) findUserByName(ctx context.Context, tx Tx, n string) (*
 		return nil, &platform.Error{
 			Code: platform.ENotFound,
 			Msg:  "user not found",
+			Op:   platform.OpFindUser,
 		}
 	}
 	if err != nil {
@@ -161,7 +165,10 @@ func (c *ExampleService) FindUser(ctx context.Context, filter platform.UserFilte
 	}
 
 	if u == nil {
-		return nil, fmt.Errorf("user not found")
+		return nil, &platform.Error{
+			Code: platform.ENotFound,
+			Msg:  "user not found",
+		}
 	}
 
 	return u, nil
@@ -187,10 +194,14 @@ func filterExamplesFn(filter platform.UserFilter) func(u *platform.User) bool {
 // Filters using ID, or Name should be efficient.
 // Other filters will do a linear scan across all examples searching for a match.
 func (c *ExampleService) FindUsers(ctx context.Context, filter platform.UserFilter, opt ...platform.FindOptions) ([]*platform.User, int, error) {
+	op := platform.OpFindUsers
 	if filter.ID != nil {
 		u, err := c.FindUserByID(ctx, *filter.ID)
 		if err != nil {
-			return nil, 0, err
+			return nil, 0, &platform.Error{
+				Err: err,
+				Op:  op,
+			}
 		}
 
 		return []*platform.User{u}, 1, nil
@@ -199,7 +210,10 @@ func (c *ExampleService) FindUsers(ctx context.Context, filter platform.UserFilt
 	if filter.Name != nil {
 		u, err := c.FindUserByName(ctx, *filter.Name)
 		if err != nil {
-			return nil, 0, err
+			return nil, 0, &platform.Error{
+				Err: err,
+				Op:  op,
+			}
 		}
 
 		return []*platform.User{u}, 1, nil
@@ -225,18 +239,30 @@ func (c *ExampleService) FindUsers(ctx context.Context, filter platform.UserFilt
 
 // CreateUser creates a platform example and sets b.ID.
 func (c *ExampleService) CreateUser(ctx context.Context, u *platform.User) error {
-	return c.kv.Update(func(tx Tx) error {
+	err := c.kv.Update(func(tx Tx) error {
 		unique := c.uniqueExampleName(ctx, tx, u)
 
 		if !unique {
 			// TODO: make standard error
-			return fmt.Errorf("user with name %s already exists", u.Name)
+			return &platform.Error{
+				Code: platform.EConflict,
+				Msg:  fmt.Sprintf("user with name %s already exists", u.Name),
+			}
 		}
 
 		u.ID = c.idGenerator.ID()
 
 		return c.putUser(ctx, tx, u)
 	})
+
+	if err != nil {
+		return &platform.Error{
+			Err: err,
+			Op:  platform.OpCreateUser,
+		}
+	}
+
+	return nil
 }
 
 // PutUser will put a example without setting an ID.
@@ -326,7 +352,14 @@ func (c *ExampleService) UpdateUser(ctx context.Context, id platform.ID, upd pla
 		return nil
 	})
 
-	return u, err
+	if err != nil {
+		return nil, &platform.Error{
+			Err: err,
+			Op:  platform.OpUpdateUser,
+		}
+	}
+
+	return u, nil
 }
 
 func (c *ExampleService) updateUser(ctx context.Context, tx Tx, id platform.ID, upd platform.UserUpdate) (*platform.User, error) {
@@ -358,9 +391,18 @@ func (c *ExampleService) updateUser(ctx context.Context, tx Tx, id platform.ID, 
 
 // DeleteUser deletes a example and prunes it from the index.
 func (c *ExampleService) DeleteUser(ctx context.Context, id platform.ID) error {
-	return c.kv.Update(func(tx Tx) error {
+	err := c.kv.Update(func(tx Tx) error {
 		return c.deleteUser(ctx, tx, id)
 	})
+
+	if err != nil {
+		return &platform.Error{
+			Op:  platform.OpDeleteUser,
+			Err: err,
+		}
+	}
+
+	return nil
 }
 
 func (c *ExampleService) deleteUser(ctx context.Context, tx Tx, id platform.ID) error {

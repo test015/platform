@@ -10,7 +10,7 @@ import (
 	platformtesting "github.com/influxdata/platform/testing"
 )
 
-func initExampleService(f platformtesting.UserFields, t *testing.T) (platform.UserService, func()) {
+func initExampleService(f platformtesting.UserFields, t *testing.T) (platform.UserService, string, func()) {
 	s := inmem.NewKVStore()
 	svc := kv.NewExampleService(s, f.IDGenerator)
 	if err := svc.Initialize(); err != nil {
@@ -23,7 +23,7 @@ func initExampleService(f platformtesting.UserFields, t *testing.T) (platform.Us
 			t.Fatalf("failed to populate users")
 		}
 	}
-	return svc, func() {
+	return svc, "", func() {
 		for _, u := range f.Users {
 			if err := svc.DeleteUser(ctx, u.ID); err != nil {
 				t.Logf("failed to remove users: %v", err)

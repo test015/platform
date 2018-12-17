@@ -41,7 +41,7 @@ func TestKVStore(t *testing.T) {
 	platformtesting.KVStore(initKVStore, t)
 }
 
-func initExampleService(f platformtesting.UserFields, t *testing.T) (platform.UserService, func()) {
+func initExampleService(f platformtesting.UserFields, t *testing.T) (platform.UserService, string, func()) {
 	s, closeFn, err := NewTestKVStore()
 	if err != nil {
 		t.Fatalf("failed to create new kv store: %v", err)
@@ -57,7 +57,7 @@ func initExampleService(f platformtesting.UserFields, t *testing.T) (platform.Us
 			t.Fatalf("failed to populate users")
 		}
 	}
-	return svc, func() {
+	return svc, "", func() {
 		defer closeFn()
 		for _, u := range f.Users {
 			if err := svc.DeleteUser(ctx, u.ID); err != nil {

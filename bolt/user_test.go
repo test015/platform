@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	bolt "github.com/coreos/bbolt"
 	"github.com/influxdata/platform"
+	"github.com/influxdata/platform/bolt"
 	platformtesting "github.com/influxdata/platform/testing"
 )
 
@@ -14,21 +14,18 @@ func initUserService(f platformtesting.UserFields, t *testing.T) (platform.UserS
 	if err != nil {
 		t.Fatalf("failed to create new kv store: %v", err)
 	}
-	svc := kv.NewUserService(s, f.IDGenerator)
-	if err := svc.Initialize(); err != nil {
-		t.Fatalf("error initializing user service: %v", err)
-	}
+	c.IDGenerator = f.IDGenerator
 
 	ctx := context.Background()
 	for _, u := range f.Users {
-		if err := svc.PutUser(ctx, u); err != nil {
+		if err := c.PutUser(ctx, u); err != nil {
 			t.Fatalf("failed to populate users")
 		}
 	}
 	return c, bolt.OpPrefix, func() {
 		defer closeFn()
 		for _, u := range f.Users {
-			if err := svc.DeleteUser(ctx, u.ID); err != nil {
+			if err := c.DeleteUser(ctx, u.ID); err != nil {
 				t.Logf("failed to remove users: %v", err)
 			}
 		}
