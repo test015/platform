@@ -13,6 +13,7 @@ import SortBy from 'src/shared/components/view_options/options/SortBy'
 
 // Constants
 import {DEFAULT_TIME_FIELD} from 'src/dashboards/constants'
+import {THRESHOLD_TYPE_BASE} from 'src/shared/constants/thresholds'
 
 // Actions
 import {
@@ -62,7 +63,6 @@ type Props = DispatchProps & StateProps
 export class TableOptions extends Component<Props, {}> {
   public render() {
     const {
-      colors,
       timeFormat,
       onSetColors,
       fieldOptions,
@@ -111,7 +111,7 @@ export class TableOptions extends Component<Props, {}> {
             onUpdateColumn={this.handleUpdateColumn}
           />
           <ThresholdList
-            colorConfigs={colorConfigs}
+            colorConfigs={this.colorConfigs}
             onUpdateColors={onSetColors}
             onValidateNewColor={() => true}
           />
@@ -148,6 +148,23 @@ export class TableOptions extends Component<Props, {}> {
   private handleToggleVerticalTimeAxis = (verticalTimeAxis: boolean): void => {
     const {tableOptions, onSetTableOptions} = this.props
     onSetTableOptions({...tableOptions, verticalTimeAxis})
+  }
+
+  private get colorConfigs(): ColorConfig[] {
+    return this.props.colors.map(color => {
+      const isBase = color.id === THRESHOLD_TYPE_BASE
+
+      const config: ColorConfig = {
+        color,
+        isBase,
+      }
+
+      if (isBase) {
+        config.label = 'Base'
+      }
+
+      return config
+    })
   }
 }
 

@@ -18,13 +18,13 @@ const SortBy = ({fieldOptions, onChange, selected}: Props) => {
         customClass="dropdown-stretch"
         onChange={onChange}
       >
-        {fieldOptions.map(({internalName, displayName}) => (
+        {fieldOptions.map(field => (
           <Dropdown.Item
-            key={internalName}
-            id={internalName}
-            value={internalName}
+            key={field.internalName}
+            id={field.internalName}
+            value={field}
           >
-            {displayName}
+            {field.displayName}
           </Dropdown.Item>
         ))}
       </Dropdown>
