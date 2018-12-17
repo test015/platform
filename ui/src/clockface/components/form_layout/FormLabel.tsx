@@ -15,7 +15,8 @@ class FormLabel extends Component<Props> {
 
     return (
       <label className="form--label">
-        {label} {children}
+        {label}
+        {children}
       </label>
     )
   }

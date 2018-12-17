@@ -22,7 +22,6 @@ import {
   QueryView,
   QueryViewProperties,
   ExtractWorkingView,
-  TableView,
 } from 'src/types/v2/dashboards'
 import {Action} from 'src/shared/actions/v2/timeMachines'
 import {TimeMachineTab} from 'src/types/v2/timeMachine'
@@ -485,7 +484,6 @@ export const timeMachineReducer = (
 
       return {...state, view}
     }
-    case state.view.properties.type:
     case 'SET_TABLE_OPTIONS': {
       const workingView = state.view as ExtractWorkingView<
         typeof action.payload
