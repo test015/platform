@@ -2,7 +2,7 @@
 import React, {SFC} from 'react'
 
 // Components
-import {Radio, ButtonShape} from 'src/clockface'
+import {Radio, ButtonShape, Form} from 'src/clockface'
 
 interface Props {
   verticalTimeAxis: boolean
@@ -10,8 +10,7 @@ interface Props {
 }
 
 const TimeAxis: SFC<Props> = ({verticalTimeAxis, onToggleVerticalTimeAxis}) => (
-  <div className="form-group col-xs-12 col-sm-6">
-    <label>Time Axis</label>
+  <Form.Element label="Time Axis">
     <Radio shape={ButtonShape.StretchToFit}>
       <Radio.Button
         id="graph-time-axis--vertical"
@@ -32,7 +31,7 @@ const TimeAxis: SFC<Props> = ({verticalTimeAxis, onToggleVerticalTimeAxis}) => (
         Horizontal
       </Radio.Button>
     </Radio>
-  </div>
+  </Form.Element>
 )
 
 export default TimeAxis
