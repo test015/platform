@@ -7,7 +7,7 @@ import Container from 'src/clockface/components/overlays/OverlayContainer'
 import Heading from 'src/clockface/components/overlays/OverlayHeading'
 import Body from 'src/clockface/components/overlays/OverlayBody'
 import SeverityOptions from 'src/logs/components/options_overlay/SeverityOptions'
-import ColumnsOptions from 'src/shared/components/ColumnsOptions'
+import ColumnsOptions from 'src/shared/components/columns_options/ColumnsOptions'
 
 // Utils
 import {move} from 'src/shared/utils/move'

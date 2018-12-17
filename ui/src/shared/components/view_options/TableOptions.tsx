@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 // Components
 import DecimalPlacesOption from 'src/shared/components/view_options/options/DecimalPlaces'
 import ThresholdList from 'src/shared/components/view_options/options/ThresholdList'
-import ColumnOptions from 'src/shared/components/ColumnsOptions'
+import ColumnOptions from 'src/shared/components/columns_options/ColumnsOptions'
 import FixFirstColumn from 'src/shared/components/view_options/options/FixFirstColumn'
 import TimeFormat from 'src/shared/components/view_options/options/TimeFormat'
 import TimeAxis from 'src/shared/components/view_options/options/TimeAxis'
