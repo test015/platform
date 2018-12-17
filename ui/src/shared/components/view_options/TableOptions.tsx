@@ -73,16 +73,13 @@ export class TableOptions extends Component<Props, {}> {
     } = this.props
 
     const {fixFirstColumn, verticalTimeAxis, sortBy} = tableOptions
-    const colorConfigs: ColorConfig[] = colors.map(color => ({
-      color,
-    }))
 
     return (
       <>
         <div className="col-xs-6">
           <h5 className="display-options--header">Table Controls</h5>
           <SortBy
-            selected={sortBy || DEFAULT_TIME_FIELD}
+            selected={sortBy}
             fieldOptions={fieldOptions}
             onChange={this.handleChangeSortBy}
           />
