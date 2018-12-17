@@ -129,9 +129,7 @@ export type QueryView = WorkingView<QueryViewProperties>
  *    type xyViewPayload = typeof someXYAction.payload
  *    const workingXYView = state.view as ExtractWorkingView<xyViewPayload>
  */
-export type ExctractWorkingView<T> = WorkingView<
-  Extract<QueryViewProperties, T>
->
+export type ExtractWorkingView<T> = WorkingView<Extract<QueryViewProperties, T>>
 
 export interface EmptyView {
   type: ViewShape.Empty
