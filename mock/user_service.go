@@ -17,6 +17,20 @@ type UserService struct {
 	DeleteUserFn   func(context.Context, platform.ID) error
 }
 
+// NewUserService returns a mock UserService where its methods will return zero values.
+func NewUserService() *UserService {
+	return &UserService{
+		FindUserByIDFn: func(context.Context, platform.ID) (*platform.User, error) { return nil, nil },
+		FindUserFn:     func(context.Context, platform.UserFilter) (*platform.User, error) { return nil, nil },
+		FindUsersFn: func(context.Context, platform.UserFilter, ...platform.FindOptions) ([]*platform.User, int, error) {
+			return nil, 0, nil
+		},
+		CreateUserFn: func(context.Context, *platform.User) error { return nil },
+		UpdateUserFn: func(context.Context, platform.ID, platform.UserUpdate) (*platform.User, error) { return nil, nil },
+		DeleteUserFn: func(context.Context, platform.ID) error { return nil },
+	}
+}
+
 func (s *UserService) FindUserByID(ctx context.Context, id platform.ID) (*platform.User, error) {
 	return s.FindUserByIDFn(ctx, id)
 }
